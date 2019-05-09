@@ -1,160 +1,135 @@
 import pygame
 
-
-pygame.init()
-clock = pygame.time.Clock()
+from Pong.paddel import PADDEL
 
 
-#Color
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
+class SPIELFELD:
 
-#Resolution
-RESOLUTION = (1280, 720)
-WIDTH, HEIGHT = RESOLUTION
+    pygame.init()
+    clock = pygame.time.Clock()
 
-#Screen
-screen = pygame.display.set_mode(RESOLUTION)
-pygame.display.set_caption("Pong")
+    # Color
+    RED = (255, 0, 0)
+    GREEN = (0, 255, 0)
+    BLUE = (0, 0, 255)
 
-#Font
-score_font = pygame.font.SysFont("Clear Sans Regular", 30)
+    RESOLUTION = (1280, 720)
+    WIDTH, HEIGHT = RESOLUTION
 
-#Rect
-left_rect_posX = 50
-left_rect_posY = 50
+    screen = pygame.display.set_mode(RESOLUTION)
+    pygame.display.set_caption("Pong")
 
-right_rect_posX = 1220
-right_rect_posY = 50
+    score_font = pygame.font.SysFont("Clear Sans Regular", 30)
+    left_paddel = PADDEL(50, 50)
+    right_paddel = PADDEL(1220, 50)
 
-left_rect_HEIGHT = 150
-right_rect_HEIGHT = 150
+    circle_start_posX = int(WIDTH / 2)
+    circle_start_posY = int(HEIGHT / 2)
 
+    circle_posY = circle_start_posY
+    circle_posX = circle_start_posX
 
-left_rect_can_move_upwards = True
-left_rect_can_move_downwards = True
-right_rect_can_move_upwards = True
-right_rect_can_move_downwards = True
+    # Score
+    score_left = 0
+    score_right = 0
 
-#Circle
-circle_start_posX = int(WIDTH / 2)
-circle_start_posY = int(HEIGHT / 2)
+    # Input map
+    inputMap = [False, False, False, False]
 
-circle_posY = circle_start_posY
-circle_posX = circle_start_posX
+    # Circle movement factor
+    cmfX = 450
+    cmfY = 450
 
-#Score
-score_left = 0
-score_right = 0
+    # Main Loop
+    cancel = False
 
-#Input map
-inputMap = [False, False, False, False]
+    while not cancel:
+        pressed_down = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                cancel = True
+                pygame.quit()
 
-#Rect movement factor
-rmf = 10
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_DOWN:
+                    inputMap[0] = True
+                if event.key == pygame.K_UP:
+                    inputMap[1] = True
+                if event.key == pygame.K_s:
+                    inputMap[2] = True
+                if event.key == pygame.K_w:
+                    inputMap[3] = True
 
-#Circle movement factor
-cmfX = 450
-cmfY = 450
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_DOWN:
+                    inputMap[0] = False
+                if event.key == pygame.K_UP:
+                    inputMap[1] = False
+                if event.key == pygame.K_s:
+                    inputMap[2] = False
+                if event.key == pygame.K_w:
+                    inputMap[3] = False
 
-#Main Loop
-cancel = False
+        # Game logic
+        if right_paddel.getypos() < 0 - right_paddel.getheight / 2:
+            right_paddel.setcmu(False)
+        else:
+            right_paddel.setcmu(True)
+        if right_paddel.getypos() > HEIGHT - right_paddel.getheight / 2:
+            right_paddel.setcmd(False)
+        else:
+            right_paddel.setcmd(True)
+        if left_paddel.getypos() < 0 - left_paddel.getheight / 2:
+            left_paddel.setcmu(False)
+        else:
+            left_paddel.setcmu(True)
+        if left_paddel.getypos() > HEIGHT - left_paddel.getheight / 2:
+            left_paddel.setcmd(False)
+            left_paddel.setcmd(True)
 
-while not cancel:
-    pressed_down = False
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            cancel = True
-            pygame.quit()
+        if right_paddel.getcmd() and inputMap[0]:
+            right_paddel.moveydown()
+        if right_paddel.getcmu() and inputMap[1]:
+            right_paddel.moveyup()
+        if left_paddel.getcmd() and inputMap[2]:
+            left_paddel.moveydown()
+        if left_paddel.getcmu() and inputMap[3]:
+            left_paddel.moveyup()
 
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_DOWN:
-                inputMap[0] = True
-            if event.key == pygame.K_UP:
-                inputMap[1] = True
-            if event.key == pygame.K_s:
-                inputMap[2] = True
-            if event.key == pygame.K_w:
-                inputMap[3] = True
+        # Circle movement
+        circle_time_passed = clock.tick(60)
+        circle_time_sec = circle_time_passed / 1000.0
+        circle_posX += cmfX * circle_time_sec
+        circle_posY += cmfY * circle_time_sec
 
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_DOWN:
-                inputMap[0] = False
-            if event.key == pygame.K_UP:
-                inputMap[1] = False
-            if event.key == pygame.K_s:
-                inputMap[2] = False
-            if event.key == pygame.K_w:
-                inputMap[3] = False
+        # Circle collision
+        if circle_posY > HEIGHT or circle_posY < 0:
+            cmfY = -cmfY
+        if circle_posX > right_paddel.getxpos() or circle_posX < left_paddel.getxpos():
+            if circle_posY > right_paddel.getxpos() and circle_posY < right_paddel.getxpos() + right_paddel.getheight:
+                cmfX = -cmfX
+            if circle_posY > left_paddel.getypos() and circle_posY < left_paddel.getypos() + left_paddel.getheight:
+                cmfX = -cmfX
 
-    #Game logic
-    if right_rect_posY < 0 - right_rect_HEIGHT / 2:
-        right_rect_can_move_upwards   = False
-    else:
-        right_rect_can_move_upwards   = True
-    if right_rect_posY > HEIGHT - right_rect_HEIGHT / 2:
-        right_rect_can_move_downwards = False
-    else:
-        right_rect_can_move_downwards = True
-    if left_rect_posY < 0 - left_rect_HEIGHT / 2:
-        left_rect_can_move_upwards    = False
-    else:
-        left_rect_can_move_upwards    = True
-    if left_rect_posY > HEIGHT - left_rect_HEIGHT / 2:
-        left_rect_can_move_downwards  = False
-    else:
-        left_rect_can_move_downwards  = True
+        if circle_posX > WIDTH:
+            score_left += 1
+            circle_posX = circle_start_posX
+            circle_posY = circle_start_posY
 
+        if circle_posX < 0:
+            score_right += 1
+            circle_posX = circle_start_posX
+            circle_posY = circle_start_posY
 
-    if right_rect_can_move_downwards:
-        if inputMap[0]: right_rect_posY += rmf
-    if right_rect_can_move_upwards:
-        if inputMap[1]: right_rect_posY -= rmf
-    if left_rect_can_move_downwards:
-        if inputMap[2]: left_rect_posY  += rmf
-    if left_rect_can_move_upwards:
-        if inputMap[3]: left_rect_posY  -= rmf
+        def updatescreen(self, scoreleft, scorright):
+            self.screen.fill(self.GREEN)
 
-    #Circle movement
-    circle_time_passed = clock.tick(60)
-    circle_time_sec = circle_time_passed / 1000.0
-    circle_posX += cmfX * circle_time_sec
-    circle_posY += cmfY * circle_time_sec
+            pygame.draw.rect(self.screen, self.BLUE, [self.left_paddel.getxpos(), self.left_paddel.getypos(), 10, self.left_paddel.getheight])
+            pygame.draw.rect(self.screen, self.BLUE, [self.right_paddel.getxpos(), self.right_paddel.getxpos(), 10, self.right_paddel.getheight])
+            pygame.draw.rect(self.screen, self.RED, [self.circle_posX, self.circle_posY, 20, 20])
 
-    #Circle collision
-    if circle_posY > HEIGHT or circle_posY < 0:
-        cmfY = -cmfY
-    if circle_posX > right_rect_posX or circle_posX < left_rect_posX:
-        if circle_posY > right_rect_posY and circle_posY < right_rect_posY + right_rect_HEIGHT:
-            cmfX = -cmfX
-        if circle_posY > left_rect_posY and circle_posY < left_rect_posY + left_rect_HEIGHT:
-            cmfX = -cmfX
+            self.screen.blit(self.score_font.render(str(self.scoreleft), True, self.BLUE), (self.WIDTH / 4, 50))
+            self.screen.blit(self.score_font.render(str(self.scoreright), True, self.BLUE), (self.WIDTH / 1.25, 50))
 
-    # Endgame
-    if circle_posX > WIDTH:
-        score_left += 1
-        circle_posX = circle_start_posX
-        circle_posY = circle_start_posY
+            pygame.display.flip()
 
-    if circle_posX < 0:
-        score_right += 1
-        circle_posX = circle_start_posX
-        circle_posY = circle_start_posY
-
-    #Clear screen
-    screen.fill(GREEN)
-
-    #Drawing code
-    pygame.draw.rect(   screen, BLUE, [left_rect_posX, left_rect_posY, 10, left_rect_HEIGHT])
-    pygame.draw.rect(   screen, BLUE, [right_rect_posX, right_rect_posY, 10, right_rect_HEIGHT])
-    pygame.draw.rect(   screen, RED, [circle_posX, circle_posY, 20, 20])
-
-    screen.blit(score_font.render(str(score_left), True, BLUE), (WIDTH / 4, 50))
-    screen.blit(score_font.render(str(score_right), True, BLUE), (WIDTH / 1.25, 50))
-
-    #Update screen
-    pygame.display.flip()
-
-    #Frames per second
-clock.tick(60)

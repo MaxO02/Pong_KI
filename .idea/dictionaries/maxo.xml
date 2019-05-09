@@ -1,0 +1,19 @@
+<component name="ProjectDictionaryState">
+  <dictionary name="maxo">
+    <words>
+      <w>canmovedown</w>
+      <w>canmoveup</w>
+      <w>changecanmovedown</w>
+      <w>changecanmoveup</w>
+      <w>getcmu</w>
+      <w>getmf</w>
+      <w>getxpos</w>
+      <w>getypos</w>
+      <w>moveydown</w>
+      <w>moveyup</w>
+      <w>newypos</w>
+      <w>paddel</w>
+      <w>setypos</w>
+    </words>
+  </dictionary>
+</component>
