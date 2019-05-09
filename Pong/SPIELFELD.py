@@ -1,17 +1,16 @@
 import pygame
 
+from Pong.BALL import BALL
 from Pong.paddel import PADDEL
 
 
 class SPIELFELD:
 
     pygame.init()
-    clock = pygame.time.Clock()
 
-    # Color
-    RED = (255, 0, 0)
-    GREEN = (0, 255, 0)
-    BLUE = (0, 0, 255)
+    red = (255, 0, 0)
+    green = (0, 255, 0)
+    blue = (0, 0, 255)
 
     RESOLUTION = (1280, 720)
     WIDTH, HEIGHT = RESOLUTION
@@ -20,21 +19,12 @@ class SPIELFELD:
     pygame.display.set_caption("Pong")
 
     score_font = pygame.font.SysFont("Clear Sans Regular", 30)
-    left_paddel = PADDEL(50, 50)
-    right_paddel = PADDEL(1220, 50)
+    leftpaddel = PADDEL(50, 50)
+    rightpaddel = PADDEL(1220, 50)
 
-    circle_start_posX = int(WIDTH / 2)
-    circle_start_posY = int(HEIGHT / 2)
+    ball = BALL(int(WIDTH / 2), int(HEIGHT / 2))
 
-    circle_posY = circle_start_posY
-    circle_posX = circle_start_posX
-
-    # Score
-    score_left = 0
-    score_right = 0
-
-    # Input map
-    inputMap = [False, False, False, False]
+    
 
     # Circle movement factor
     cmfX = 450
@@ -43,58 +33,32 @@ class SPIELFELD:
     # Main Loop
     cancel = False
 
-    while not cancel:
-        pressed_down = False
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                cancel = True
-                pygame.quit()
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_DOWN:
-                    inputMap[0] = True
-                if event.key == pygame.K_UP:
-                    inputMap[1] = True
-                if event.key == pygame.K_s:
-                    inputMap[2] = True
-                if event.key == pygame.K_w:
-                    inputMap[3] = True
-
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_DOWN:
-                    inputMap[0] = False
-                if event.key == pygame.K_UP:
-                    inputMap[1] = False
-                if event.key == pygame.K_s:
-                    inputMap[2] = False
-                if event.key == pygame.K_w:
-                    inputMap[3] = False
-
-        # Game logic
-        if right_paddel.getypos() < 0 - right_paddel.getheight / 2:
-            right_paddel.setcmu(False)
+    def movepaddel(self, inputMap):
+        
+        if self.self.rightpaddel.getypos() < 0 - self.rightpaddel.getheight / 2:
+            self.rightpaddel.setcmu(False)
         else:
-            right_paddel.setcmu(True)
-        if right_paddel.getypos() > HEIGHT - right_paddel.getheight / 2:
-            right_paddel.setcmd(False)
+            self.rightpaddel.setcmu(True)
+        if self.rightpaddel.getypos() > self.HEIGHT - self.rightpaddel.getheight / 2:
+            self.rightpaddel.setcmd(False)
         else:
-            right_paddel.setcmd(True)
-        if left_paddel.getypos() < 0 - left_paddel.getheight / 2:
-            left_paddel.setcmu(False)
+            self.rightpaddel.setcmd(True)
+        if self.leftpaddel.getypos() < 0 - self.leftpaddel.getheight / 2:
+            self.leftpaddel.setcmu(False)
         else:
-            left_paddel.setcmu(True)
-        if left_paddel.getypos() > HEIGHT - left_paddel.getheight / 2:
-            left_paddel.setcmd(False)
-            left_paddel.setcmd(True)
+            self.leftpaddel.setcmu(True)
+        if self.leftpaddel.getypos() > self.HEIGHT - self.leftpaddel.getheight / 2:
+            self.leftpaddel.setcmd(False)
+            self.leftpaddel.setcmd(True)
 
-        if right_paddel.getcmd() and inputMap[0]:
-            right_paddel.moveydown()
-        if right_paddel.getcmu() and inputMap[1]:
-            right_paddel.moveyup()
-        if left_paddel.getcmd() and inputMap[2]:
-            left_paddel.moveydown()
-        if left_paddel.getcmu() and inputMap[3]:
-            left_paddel.moveyup()
+        if self.rightpaddel.getcmd() and inputMap[0]:
+            self.rightpaddel.moveydown()
+        if self.rightpaddel.getcmu() and inputMap[1]:
+            self.rightpaddel.moveyup()
+        if self.leftpaddel.getcmd() and inputMap[2]:
+            self.leftpaddel.moveydown()
+        if self.leftpaddel.getcmu() and inputMap[3]:
+            self.leftpaddel.moveyup()
 
         # Circle movement
         circle_time_passed = clock.tick(60)
@@ -105,10 +69,10 @@ class SPIELFELD:
         # Circle collision
         if circle_posY > HEIGHT or circle_posY < 0:
             cmfY = -cmfY
-        if circle_posX > right_paddel.getxpos() or circle_posX < left_paddel.getxpos():
-            if circle_posY > right_paddel.getxpos() and circle_posY < right_paddel.getxpos() + right_paddel.getheight:
+        if circle_posX > self.rightpaddel.getxpos() or circle_posX < self.leftpaddel.getxpos():
+            if circle_posY > self.rightpaddel.getxpos() and circle_posY < self.rightpaddel.getxpos() + self.rightpaddel.getheight:
                 cmfX = -cmfX
-            if circle_posY > left_paddel.getypos() and circle_posY < left_paddel.getypos() + left_paddel.getheight:
+            if circle_posY > self.leftpaddel.getypos() and circle_posY < self.leftpaddel.getypos() + self.leftpaddel.getheight:
                 cmfX = -cmfX
 
         if circle_posX > WIDTH:
@@ -122,14 +86,14 @@ class SPIELFELD:
             circle_posY = circle_start_posY
 
         def updatescreen(self, scoreleft, scorright):
-            self.screen.fill(self.GREEN)
+            self.screen.fill(self.green)
 
-            pygame.draw.rect(self.screen, self.BLUE, [self.left_paddel.getxpos(), self.left_paddel.getypos(), 10, self.left_paddel.getheight])
-            pygame.draw.rect(self.screen, self.BLUE, [self.right_paddel.getxpos(), self.right_paddel.getxpos(), 10, self.right_paddel.getheight])
-            pygame.draw.rect(self.screen, self.RED, [self.circle_posX, self.circle_posY, 20, 20])
+            pygame.draw.rect(self.screen, self.blue, [self.self.leftpaddel.getxpos(), self.self.leftpaddel.getypos(), 10, self.self.leftpaddel.getheight])
+            pygame.draw.rect(self.screen, self.blue, [self.self.rightpaddel.getxpos(), self.self.rightpaddel.getxpos(), 10, self.self.rightpaddel.getheight])
+            pygame.draw.rect(self.screen, self.red, [self.circle_posX, self.circle_posY, 20, 20])
 
-            self.screen.blit(self.score_font.render(str(self.scoreleft), True, self.BLUE), (self.WIDTH / 4, 50))
-            self.screen.blit(self.score_font.render(str(self.scoreright), True, self.BLUE), (self.WIDTH / 1.25, 50))
+            self.screen.blit(self.score_font.render(str(self.scoreleft), True, self.blue), (self.WIDTH / 4, 50))
+            self.screen.blit(self.score_font.render(str(self.scoreright), True, self.blue), (self.WIDTH / 1.25, 50))
 
             pygame.display.flip()
 
