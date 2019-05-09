@@ -49,20 +49,18 @@ class SPIELFELD:
         if self.leftpaddel.getcmu() and inputmap[3]:
             self.leftpaddel.moveyup()
 
-        # Circle movement
-        #circle_time_passed = clock.tick(60)
-        #circle_time_sec = circle_time_passed / 1000.0
-        #circle_posX += cmfX * circle_time_sec
-        #circle_posY += cmfY * circle_time_sec
+    def ballhandeling(self, clocktick):
 
-        # Circle collision
-        #if circle_posY > HEIGHT or circle_posY < 0:
-        #    cmfY = -cmfY
-        #if circle_posX > self.rightpaddel.getxpos() or circle_posX < self.leftpaddel.getxpos():
-        #    if circle_posY > self.rightpaddel.getxpos() and circle_posY < self.rightpaddel.getxpos() + self.rightpaddel.getheight:
-        #        cmfX = -cmfX
-        #    if circle_posY > self.leftpaddel.getypos() and circle_posY < self.leftpaddel.getypos() + self.leftpaddel.getheight:
-        #        cmfX = -cmfX
+        self.ball.movex(clocktick / 1000.0)
+        self.ball.movey(clocktick / 1000.0)
+
+        if self.ball.getypos() > self.HEIGHT or self.ball.getypos() < 0:
+            self.ball.changeydirection()
+        if self.ball.getxpos() > self.rightpaddel.getxpos() or self.ball.getxpos() < self.leftpaddel.getxpos():
+            if self.rightpaddel.getxpos() <  self.ball.getypos() < self.rightpaddel.getxpos() + self.rightpaddel.getheight():
+                self.ball.changexdirection()
+            if  self.leftpaddel.getypos() < self.ball.getypos() < self.leftpaddel.getypos() + self.leftpaddel.getheight():
+                self.ball.changexdirection()
 
         if self.ball.getxpos() > self.WIDTH:
             self.tmm.goalleft()

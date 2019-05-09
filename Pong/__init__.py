@@ -8,14 +8,17 @@ class THEMAINMASTER:
         pygame.init()
         self.clock = pygame.time.Clock()
 
-        self.scoreleft = 6
-        self.scoreright = 3
+        self.scoreleft = 0
+        self.scoreright = 0
 
         inputMap = [False, False, False, False]
 
         cancel = False
 
         while not cancel:
+            if self.scoreright == 10 or self.scoreleft == 10:
+                break
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     cancel = True
@@ -42,7 +45,7 @@ class THEMAINMASTER:
                         inputMap[3] = False
 
             spf.movepaddel(inputMap)
-
+            spf.ballhandeling(self.clock.tick(60))
             spf.updatescreen(self.scoreleft, self.scoreright)
 
             self.clock.tick(60)
