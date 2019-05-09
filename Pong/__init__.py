@@ -2,20 +2,20 @@ from Pong.SPIELFELD import SPIELFELD
 import pygame
 class THEMAINMASTER:
     def __init__(self):
-        spf = SPIELFELD()
+
+        spf = SPIELFELD(self)
 
         pygame.init()
-        clock = pygame.time.Clock()
+        self.clock = pygame.time.Clock()
 
-        self.scoreleft = 0
-        self.scoreright = 0
+        self.scoreleft = 6
+        self.scoreright = 3
 
         inputMap = [False, False, False, False]
 
         cancel = False
 
         while not cancel:
-            pressed_down = False
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     cancel = True
@@ -43,6 +43,17 @@ class THEMAINMASTER:
 
             spf.movepaddel(inputMap)
 
-            spf.updatescreen(self.scoreleft, self.scorright)
-            clock.tick(60)
+            spf.updatescreen(self.scoreleft, self.scoreright)
 
+            self.clock.tick(60)
+
+    def goalright(self):
+        self.scoreright += 1
+
+    def goalleft(self):
+        self.scoreleft += 1
+
+    def getscreen(self):
+        return self.screen
+
+tmm = THEMAINMASTER()

@@ -9,10 +9,13 @@
       <w>getmf</w>
       <w>getxpos</w>
       <w>getypos</w>
+      <w>leftpaddel</w>
       <w>moveydown</w>
       <w>moveyup</w>
       <w>newypos</w>
       <w>paddel</w>
+      <w>rightpaddel</w>
+      <w>scoreright</w>
       <w>setypos</w>
     </words>
   </dictionary>
