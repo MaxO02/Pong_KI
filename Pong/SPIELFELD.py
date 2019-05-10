@@ -57,7 +57,7 @@ class SPIELFELD:
         if self.ball.getypos() > self.HEIGHT or self.ball.getypos() < 0:
             self.ball.changeydirection()
         if self.ball.getxpos() > self.rightpaddel.getxpos() or self.ball.getxpos() < self.leftpaddel.getxpos():
-            if self.rightpaddel.getxpos() <  self.ball.getypos() < self.rightpaddel.getxpos() + self.rightpaddel.getheight():
+            if self.rightpaddel.getypos() <  self.ball.getypos() < self.rightpaddel.getypos() + self.rightpaddel.getheight():
                 self.ball.changexdirection()
             if  self.leftpaddel.getypos() < self.ball.getypos() < self.leftpaddel.getypos() + self.leftpaddel.getheight():
                 self.ball.changexdirection()
