@@ -59,4 +59,6 @@ class THEMAINMASTER:
     def getscreen(self):
         return self.screen
 
-tmm = THEMAINMASTER()
+    
+if __name__ == '__main__':    
+    tmm = THEMAINMASTER()
