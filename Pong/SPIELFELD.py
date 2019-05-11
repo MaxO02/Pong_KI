@@ -51,8 +51,7 @@ class SPIELFELD:
 
     def ballhandeling(self, clocktick):
 
-        self.ball.movex(clocktick / 1000.0)
-        self.ball.movey(clocktick / 1000.0)
+        self.ball.move(clocktick / 1000.0)
 
         if self.ball.getypos() > self.HEIGHT or self.ball.getypos() < 0:
             self.ball.changeydirection()
