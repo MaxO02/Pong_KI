@@ -27,21 +27,19 @@ class THEMAINMASTER:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_DOWN:
                         inputMap[0] = True
-                    if event.key == pygame.K_UP:
-                        inputMap[1] = True
-                    if event.key == pygame.K_s:
-                        inputMap[2] = True
-                    if event.key == pygame.K_w:
-                        inputMap[3] = True
-
-                if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_DOWN:
+                    else:
                         inputMap[0] = False
                     if event.key == pygame.K_UP:
+                        inputMap[1] = True
+                    else:
                         inputMap[1] = False
                     if event.key == pygame.K_s:
+                        inputMap[2] = True
+                    else:
                         inputMap[2] = False
                     if event.key == pygame.K_w:
+                        inputMap[3] = True
+                    else:
                         inputMap[3] = False
 
             spf.movepaddel(inputMap)
