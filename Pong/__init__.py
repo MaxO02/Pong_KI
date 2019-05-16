@@ -25,22 +25,10 @@ class THEMAINMASTER:
                     pygame.quit()
 
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_DOWN:
-                        inputMap[0] = True
-                    else:
-                        inputMap[0] = False
-                    if event.key == pygame.K_UP:
-                        inputMap[1] = True
-                    else:
-                        inputMap[1] = False
-                    if event.key == pygame.K_s:
-                        inputMap[2] = True
-                    else:
-                        inputMap[2] = False
-                    if event.key == pygame.K_w:
-                        inputMap[3] = True
-                    else:
-                        inputMap[3] = False
+                        inputMap[0] = event.key == pygame.K_DOWN
+                        inputMap[1] = event.key == pygame.K_UP
+                        inputMap[2] = event.key == pygame.K_s
+                        inputMap[3] = event.key == pygame.K_w
 
             spf.movepaddel(inputMap)
             spf.ballhandeling(self.clock.tick(60))
