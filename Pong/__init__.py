@@ -12,11 +12,10 @@ class THEMAINMASTER:
         self.scoreright = 0
 
         inputMap = [False, False, False, False]
-
         cancel = False
 
         while not cancel:
-            if self.scoreright == 10 or self.scoreleft == 10:
+            if self.scoreright == 5 or self.scoreleft == 5:
                 break
 
             for event in pygame.event.get():
