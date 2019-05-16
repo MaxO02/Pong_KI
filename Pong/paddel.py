@@ -1,33 +1,33 @@
 class PADDEL:
 
-    def __init__(self, posx, posy):
-        self.posix = posx
-        self.posiy = posy
+    def __init__(self, positionx, positiony):
+        self.posx = positionx
+        self.posy = positiony
         self.mf = 10
         self.canmoveup = True
         self.canmovedown = True
         self.height = 150
 
     def getxpos(self):
-        return self.posix
+        return self.posx
 
     def getypos(self):
-        return self.posiy
+        return self.posy
 
     def setypos(self, newypos):
-        self.posiy = newypos
+        self.posy = newypos
 
     def moveyup(self):
-        self.posiy -= self.mf
+        self.posy -= self.mf
 
     def moveydown(self):
-        self.posiy += self.mf
+        self.posy += self.mf
 
-    def setcmd(self, bool):
-        self.canmovedown = bool
+    def setcmd(self, boolean):
+        self.canmovedown = boolean
 
-    def setcmu(self, boll):
-        self.canmoveup = boll
+    def setcmu(self, boolean):
+        self.canmoveup = boolean
 
     def getcmd(self):
         return self.canmovedown

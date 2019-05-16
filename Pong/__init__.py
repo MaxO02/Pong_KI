@@ -14,20 +14,17 @@ class THEMAINMASTER:
         inputMap = [False, False, False, False]
         cancel = False
 
-        while not cancel:
-            if self.scoreright == 5 or self.scoreleft == 5:
-                break
-
+        while not cancel and self.scoreright <= 10 and self.scoreleft <= 10:
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    cancel = True
-                    pygame.quit()
-
                 if event.type == pygame.KEYDOWN:
-                        inputMap[0] = event.key == pygame.K_DOWN
-                        inputMap[1] = event.key == pygame.K_UP
-                        inputMap[2] = event.key == pygame.K_s
-                        inputMap[3] = event.key == pygame.K_w
+                    if event.key == pygame.K_ESCAPE:
+                        cancel = True
+                        pygame.quit()
+                        break
+                    inputMap[0] = event.key == pygame.K_DOWN
+                    inputMap[1] = event.key == pygame.K_UP
+                    inputMap[2] = event.key == pygame.K_s
+                    inputMap[3] = event.key == pygame.K_w
 
             spf.movepaddel(inputMap)
             spf.ballhandeling(self.clock.tick(60))

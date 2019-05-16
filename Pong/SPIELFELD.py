@@ -12,15 +12,15 @@ class SPIELFELD:
     def __init__(self, tmm):
         self.tmm = tmm
         pygame.init()
-        RESOLUTION = (1280, 720)
-        self.WIDTH, self.HEIGHT = RESOLUTION
+        resolution = (1920, 1080)
+        self.WIDTH, self.HEIGHT = resolution
 
-        self.screen = pygame.display.set_mode(RESOLUTION)
+        self.screen = pygame.display.set_mode(resolution)
         pygame.display.set_caption("Pong")
         self.score_font = pygame.font.SysFont("Clear Sans Regular", 30)
 
-        self.leftpaddel = PADDEL(50, 50)
-        self.rightpaddel = PADDEL(1220, 50)
+        self.leftpaddel = PADDEL(self.WIDTH*0.1, self.HEIGHT/2)
+        self.rightpaddel = PADDEL(self.WIDTH*0.9, self.HEIGHT/2)
         self.ball = BALL(int(self.WIDTH / 2), int(self.HEIGHT / 2))
 
     def movepaddel(self, inputmap):
@@ -42,11 +42,11 @@ class SPIELFELD:
 
         if self.rightpaddel.getcmd() and inputmap[0]:
             self.rightpaddel.moveydown()
-        if self.rightpaddel.getcmu() and inputmap[1]:
+        elif self.rightpaddel.getcmu() and inputmap[1]:
             self.rightpaddel.moveyup()
         if self.leftpaddel.getcmd() and inputmap[2]:
             self.leftpaddel.moveydown()
-        if self.leftpaddel.getcmu() and inputmap[3]:
+        elif self.leftpaddel.getcmu() and inputmap[3]:
             self.leftpaddel.moveyup()
 
     def ballhandeling(self, clocktick):
