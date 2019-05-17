@@ -1,9 +1,8 @@
 class BALL:
-    def __init__(self, startxpos, startypos):
+    def __init__(self, startxpos, startypos, mfspeed):
         self.startx = self.xpos = startxpos
         self.starty = self.ypos = startypos
-        self.mfx = 700
-        self.mfy = 700
+        self.mfx, self.mfy = mfspeed
 
     def reset(self):
         self.xpos = self.startx

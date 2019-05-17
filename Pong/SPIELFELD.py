@@ -8,6 +8,11 @@ class SPIELFELD:
     red = (255, 0, 0)
     green = (0, 255, 0)
     blue = (0, 0, 255)
+    paddle_color = (254, 115, 1)
+    ball_color = (85, 57, 138)
+    background_color = (1, 254, 240)
+#    font_color = (254, 1, 14)
+    font_color = paddle_color
 
     def __init__(self, tmm):
         self.tmm = tmm
@@ -17,11 +22,11 @@ class SPIELFELD:
 
         self.screen = pygame.display.set_mode(resolution)
         pygame.display.set_caption("Pong")
-        self.score_font = pygame.font.SysFont("Clear Sans Regular", 30)
+        self.score_font = pygame.font.SysFont("Clear Sans Regular", 80)
 
-        self.leftpaddel = PADDEL(self.WIDTH*0.1, self.HEIGHT/2)
-        self.rightpaddel = PADDEL(self.WIDTH*0.9, self.HEIGHT/2)
-        self.ball = BALL(int(self.WIDTH / 2), int(self.HEIGHT / 2))
+        self.leftpaddel = PADDEL(int(self.WIDTH*0.1), int(self.HEIGHT/2))
+        self.rightpaddel = PADDEL(int(self.WIDTH*0.9), int(self.HEIGHT/2))
+        self.ball = BALL(int(self.WIDTH / 2), int(self.HEIGHT / 2), (0.5 * self.WIDTH, 0.5 * self.HEIGHT))
 
     def movepaddel(self, inputmap):
         if self.rightpaddel.getypos() < 0 - self.rightpaddel.getheight() / 2:
@@ -56,9 +61,9 @@ class SPIELFELD:
         if self.ball.getypos() > self.HEIGHT or self.ball.getypos() < 0:
             self.ball.changeydirection()
         if self.ball.getxpos() > self.rightpaddel.getxpos() or self.ball.getxpos() < self.leftpaddel.getxpos():
-            if self.rightpaddel.getypos() <  self.ball.getypos() < self.rightpaddel.getypos() + self.rightpaddel.getheight():
+            if self.rightpaddel.getypos() < self.ball.getypos() < self.rightpaddel.getypos() + self.rightpaddel.getheight():
                 self.ball.changexdirection()
-            if  self.leftpaddel.getypos() < self.ball.getypos() < self.leftpaddel.getypos() + self.leftpaddel.getheight():
+            if self.leftpaddel.getypos() < self.ball.getypos() < self.leftpaddel.getypos() + self.leftpaddel.getheight():
                 self.ball.changexdirection()
 
         if self.ball.getxpos() > self.WIDTH:
@@ -70,14 +75,14 @@ class SPIELFELD:
             self.ball.reset()
 
     def updatescreen(self, scoreleft, scoreright):
-        self.screen.fill(self.green)
+        self.screen.fill(self.background_color)
 
-        pygame.draw.rect(self.screen, self.blue, [self.leftpaddel.getxpos(), self.leftpaddel.getypos(), 10, self.leftpaddel.getheight()])
-        pygame.draw.rect(self.screen, self.blue, [self.rightpaddel.getxpos(), self.rightpaddel.getypos(), 10, self.rightpaddel.getheight()])
-        pygame.draw.rect(self.screen, self.red, [self.ball.getxpos(), self.ball.getypos(), 20, 20])
+        pygame.draw.rect(self.screen, self.paddle_color, [self.leftpaddel.getxpos(), self.leftpaddel.getypos(), 10, self.leftpaddel.getheight()])
+        pygame.draw.rect(self.screen, self.paddle_color, [self.rightpaddel.getxpos(), self.rightpaddel.getypos(), 10, self.rightpaddel.getheight()])
+        pygame.draw.rect(self.screen, self.ball_color, [self.ball.getxpos(), self.ball.getypos(), 20, 20])
 
-        self.screen.blit(self.score_font.render(str(scoreleft), True, self.blue), (self.WIDTH / 4, 50))
-        self.screen.blit(self.score_font.render(str(scoreright), True, self.blue), (self.WIDTH / 1.25, 50))
+        self.screen.blit(self.score_font.render(str(scoreleft), True, self.font_color), (self.WIDTH / 4, 50))
+        self.screen.blit(self.score_font.render(str(scoreright), True, self.font_color), (self.WIDTH / 1.25, 50))
 
         pygame.display.flip()
 
