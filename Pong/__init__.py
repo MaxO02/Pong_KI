@@ -22,6 +22,7 @@ class THEMAINMASTER:
         for event in pygame.event.get():
             if event.type == QUIT:
                 exit()
+
             if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
                 pressed_keys = pygame.key.get_pressed()
                 if pressed_keys[K_ESCAPE]:
