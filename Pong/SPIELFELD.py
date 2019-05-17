@@ -22,13 +22,14 @@ class SPIELFELD:
         self.WIDTH, self.HEIGHT = resolution
 
         self.screen = pygame.display.set_mode(resolution)
-        pygame.display.set_caption("Pong")
+        pygame.display.set_caption("Pong by Max and Linus")
         self.score_font = pygame.font.SysFont("Clear Sans Regular", 80)
 
         self.leftpaddel = PADDEL(int(self.WIDTH*0.1), int(self.HEIGHT/2))
         self.rightpaddel = PADDEL(int(self.WIDTH*0.9), int(self.HEIGHT/2))
         self.ball = BALL(int(self.WIDTH / 2), int(self.HEIGHT / 2), (0.5 * self.WIDTH * random.choice([-1, 1]),
                                                                      0.5 * self.HEIGHT * random.choice([-1, 1])))
+        """self.ball.waitforinput()"""
 
     def movepaddel(self, inputmap):
         if self.rightpaddel.getypos() < 0 - self.rightpaddel.getheight() / 2:
@@ -72,11 +73,11 @@ class SPIELFELD:
 
         if self.ball.getxpos() > self.WIDTH:
             self.tmm.goalleft()
-            self.ball.reset()
+            self.ball.reset((0.5 * self.WIDTH * random.choice([-1, 1]), 0.4 * self.HEIGHT * random.choice([-1, 1])))
 
         if self.ball.getxpos() < 0:
             self.tmm.goalright()
-            self.ball.reset()
+            self.ball.reset((0.5 * self.WIDTH * random.choice([-1, 1]), 0.4 * self.HEIGHT * random.choice([-1, 1])))
 
     def updatescreen(self, scoreleft, scoreright):
         self.screen.fill(self.background_color)
