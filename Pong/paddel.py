@@ -17,9 +17,6 @@ class PADDEL:
     def setypos(self, newypos):
         self.posy = newypos
 
-    def setpos(self, position):
-        self.posx, self.posy = position
-
     def moveyup(self):
         self.posy -= self.mf
 

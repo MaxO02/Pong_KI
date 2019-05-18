@@ -1,8 +1,18 @@
 <component name="ProjectDictionaryState">
   <dictionary name="linus">
     <words>
+      <w>ballhandeling</w>
+      <w>clearlist</w>
+      <w>clocktick</w>
+      <w>goalleft</w>
+      <w>goalright</w>
+      <w>inputmap</w>
       <w>leftpaddle</w>
+      <w>mainmenu</w>
+      <w>matchstart</w>
       <w>menuscreen</w>
+      <w>menuscreensettings</w>
+      <w>movepaddel</w>
       <w>rightpaddle</w>
       <w>scoreleft</w>
       <w>spielsteuerung</w>
