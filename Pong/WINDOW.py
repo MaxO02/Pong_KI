@@ -85,3 +85,9 @@ class WINDOW:
 
     def menuscreensettings(self):
         pass
+
+    def menuscreenhelp(self):
+        pass
+
+    def menuscreeninfo(self):
+        pass

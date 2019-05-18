@@ -128,11 +128,11 @@ class SPIELSTEUERUNG:
 
     def help(self):
         while True:
-            self.spf.menuscreensettings()
+            self.spf.menuscreenhelp()
 
     def info(self):
         while True:
-            self.spf.menuscreensettings()
+            self.spf.menuscreeninfo()
 
     def goalright(self):
         self.scoreright += 1
