@@ -105,8 +105,11 @@ class SPIELFELD:
         self.ball = BALL(int(self.WIDTH / 2), int(self.HEIGHT / 2), (0.5 * self.WIDTH * random.choice([-1, 1]),
                                                                      0.5 * self.HEIGHT * random.choice([-1, 1])))
 
-    def menuscreen(self):
-        self.screen.fill(0, 0, 0)
+    def menuscreen(self, list):
+        focus = list
+        self.screen.fill((0, 0, 0))
+        pygame.event.clear()
+        pygame.mouse.set_visible(True)
         """buttons:
         - Start Game
         - Settings
@@ -115,15 +118,32 @@ class SPIELFELD:
         - Exit game
         - Player-Mode"""
 
+        text1 = self.menu_font.render("START A NEW GAME", True, (254, 254, 254))
+        text2 = self.menu_font.render("SETTINGS", True, (254, 254, 254))
+        text3 = self.menu_font.render("HELP", True, (254, 254, 254))
+        text4 = self.menu_font.render("INFO", True, (254, 254, 254))
+        text5 = self.menu_font.render("EXIT GAME", True, (254, 254, 254))
 
+        if focus[0]:
+            text1 = self.menu_font_focused.render("START A NEW GAME", True, (254, 254, 254))
+        elif focus[1]:
+            text2 = self.menu_font_focused.render("SETTINGS", True, (254, 254, 254))
+        elif focus[2]:
+            text3 = self.menu_font_focused.render("HELP", True, (254, 254, 254))
+        elif focus[3]:
+            text4 = self.menu_font_focused.render("INFO", True, (254, 254, 254))
+        elif focus[4]:
+            text5 = self.menu_font_focused.render("EXIT GAME", True, (254, 254, 254))
 
-        # nothing is focused
-        self.screen.blit(self.menu_font.render("START A NEW GAME", True, (254, 254, 254)), (self.WIDTH/2, (self.HEIGHT -
-                                                                                                           100)/5 + 50))
-        self.screen.blit(self.menu_font.render("SETTINGS", True, (254, 254, 254)), (self.WIDTH/2, (self.HEIGHT - 100)/5
-                                                                                    * 2 + 50))
-        self.screen.blit(self.menu_font.render("HELP", True, (254, 254, 254)), (self.WIDTH/2, (self.HEIGHT - 100)/5 * 3
-                                                                                + 50))
-        self.screen.blit(self.menu_font.render("INFO", True, (254, 254, 254)), (self.WIDTH/2, (self.HEIGHT - 100)/5 * 4
-                                                                                + 50))
-        self.screen.blit(self.menu_font.render("EXIT GAME", True, (254, 254, 254)), (self.WIDTH/2, (self.HEIGHT - 50)))
+        wid1 = text1.get_rect().width
+        wid2 = text2.get_rect().width
+        wid3 = text3.get_rect().width
+        wid4 = text4.get_rect().width
+        wid5 = text5.get_rect().width
+
+        self.screen.blit(text1, ((self.WIDTH - wid1) / 2, self.HEIGHT / 6))
+        self.screen.blit(text2, ((self.WIDTH - wid2) / 2, self.HEIGHT / 6 * 2))
+        self.screen.blit(text3, ((self.WIDTH - wid3) / 2, self.HEIGHT / 6 * 3))
+        self.screen.blit(text4, ((self.WIDTH - wid4) / 2, self.HEIGHT / 6 * 4))
+        self.screen.blit(text5, ((self.WIDTH - wid5) / 2, self.HEIGHT / 6 * 5))
+        pygame.display.flip()
