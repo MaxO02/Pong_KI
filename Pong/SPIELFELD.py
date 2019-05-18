@@ -12,10 +12,9 @@ class SPIELFELD:
     paddle_color = (254, 115, 1)
     ball_color = (85, 57, 138)
     background_color = (1, 254, 240)
-#    font_color = (254, 1, 14)
     font_color = paddle_color
 
-    def __init__(self, tmm):
+    def __init__(self, tmm, ball, leftpaddle, rightpaddle):
         self.tmm = tmm
         pygame.init()
         self.resolution = (1920, 1080)
@@ -24,11 +23,12 @@ class SPIELFELD:
         self.screen = pygame.display.set_mode(self.resolution)
         pygame.display.set_caption("Pong by Max and Linus")
         self.score_font = pygame.font.SysFont("Clear Sans Regular", 80)
+        self.menu_font = pygame.font.SysFont("Clear Sans Regular", 30)
+        self.menu_font_focused = pygame.font.SysFont("Clear Sans Regular", 40)
 
-        self.leftpaddel = PADDEL(int(self.WIDTH*0.1), int(self.HEIGHT/2))
-        self.rightpaddel = PADDEL(int(self.WIDTH*0.9), int(self.HEIGHT/2))
-        self.ball = BALL(int(self.WIDTH / 2), int(self.HEIGHT / 2), (0.5 * self.WIDTH * random.choice([-1, 1]),
-                                                                     0.5 * self.HEIGHT * random.choice([-1, 1])))
+        self.leftpaddel = leftpaddle
+        self.rightpaddel = rightpaddle
+        self.ball = ball
         """self.ball.waitforinput()"""
 
     def movepaddel(self, inputmap):
@@ -104,3 +104,26 @@ class SPIELFELD:
         self.rightpaddel = PADDEL(int(self.WIDTH * 0.9), int(self.HEIGHT / 2))
         self.ball = BALL(int(self.WIDTH / 2), int(self.HEIGHT / 2), (0.5 * self.WIDTH * random.choice([-1, 1]),
                                                                      0.5 * self.HEIGHT * random.choice([-1, 1])))
+
+    def menuscreen(self):
+        self.screen.fill(0, 0, 0)
+        """buttons:
+        - Start Game
+        - Settings
+        - help
+        - Info
+        - Exit game
+        - Player-Mode"""
+
+
+
+        # nothing is focused
+        self.screen.blit(self.menu_font.render("START A NEW GAME", True, (254, 254, 254)), (self.WIDTH/2, (self.HEIGHT -
+                                                                                                           100)/5 + 50))
+        self.screen.blit(self.menu_font.render("SETTINGS", True, (254, 254, 254)), (self.WIDTH/2, (self.HEIGHT - 100)/5
+                                                                                    * 2 + 50))
+        self.screen.blit(self.menu_font.render("HELP", True, (254, 254, 254)), (self.WIDTH/2, (self.HEIGHT - 100)/5 * 3
+                                                                                + 50))
+        self.screen.blit(self.menu_font.render("INFO", True, (254, 254, 254)), (self.WIDTH/2, (self.HEIGHT - 100)/5 * 4
+                                                                                + 50))
+        self.screen.blit(self.menu_font.render("EXIT GAME", True, (254, 254, 254)), (self.WIDTH/2, (self.HEIGHT - 50)))
