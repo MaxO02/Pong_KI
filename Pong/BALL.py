@@ -21,6 +21,9 @@ class BALL:
     def getypos(self):
         return self.ypos
 
+    def setpos(self, position):
+        self.xpos, self.ypos = position
+
     def move(self, timesec):
         self.xpos += self.mfx * timesec
         self.ypos += self.mfy * timesec

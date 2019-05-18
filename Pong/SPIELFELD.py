@@ -18,10 +18,10 @@ class SPIELFELD:
     def __init__(self, tmm):
         self.tmm = tmm
         pygame.init()
-        resolution = (1920, 1080)
-        self.WIDTH, self.HEIGHT = resolution
+        self.resolution = (1920, 1080)
+        self.WIDTH, self.HEIGHT = self.resolution
 
-        self.screen = pygame.display.set_mode(resolution)
+        self.screen = pygame.display.set_mode(self.resolution)
         pygame.display.set_caption("Pong by Max and Linus")
         self.score_font = pygame.font.SysFont("Clear Sans Regular", 80)
 
@@ -92,3 +92,15 @@ class SPIELFELD:
         self.screen.blit(self.score_font.render(str(scoreright), True, self.font_color), (self.WIDTH / 1.25, 50))
 
         pygame.display.flip()
+
+    def giveresolution(self):
+        return self.resolution
+
+    def changeresolution(self, newresolution):
+        self.resolution = newresolution
+        self.screen = pygame.display.set_mode(self.resolution)
+        self.WIDTH, self.HEIGHT = self.resolution
+        self.leftpaddel = PADDEL(int(self.WIDTH * 0.1), int(self.HEIGHT / 2))
+        self.rightpaddel = PADDEL(int(self.WIDTH * 0.9), int(self.HEIGHT / 2))
+        self.ball = BALL(int(self.WIDTH / 2), int(self.HEIGHT / 2), (0.5 * self.WIDTH * random.choice([-1, 1]),
+                                                                     0.5 * self.HEIGHT * random.choice([-1, 1])))
