@@ -1,10 +1,8 @@
 To-Do's
 
--> Weitere Screens einfügen: Nicht nur das Spielfeld, sondern auch ein Menü mit Optionen usw.
 -> Dem Ball ein abwechslungsreicheres Bewegungsverhalten geben
--> Start und Anstöße durch Klick bestätigen lassen
+-> Start und Anstöße durch Eingabe bestätigen lassen
 -> Hitboxen richtig setzen
--> Trennen von WINDOW und SPIELSTEUERUNG
-linus, 511.7e3
+linus, 512.7e3
 
 ------------------------------------------------------------------------------------------------------------------------

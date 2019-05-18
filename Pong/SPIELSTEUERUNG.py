@@ -1,24 +1,24 @@
 import pygame
 from pygame.locals import *
 from Pong.BALL import BALL
-from Pong.paddel import PADDEL
+from Pong.PADDLE import PADDEL
 from Pong.WINDOW import WINDOW
 import random
+from time import sleep
 
 
 class SPIELSTEUERUNG:
     scoreleft, scoreright = 0, 0
+    kickoffbool = True
 
     def __init__(self):
         """loads necessary modules, defines important objects, initiates the menu, gives necessary infos"""
-        # objects
         self.leftpaddle = PADDEL(192, 540)
         self.rightpaddle = PADDEL(1728, 540)
-        self.ball = BALL(960, 540, (960 * random.choice([-1, 1]), 540 * random.choice([-1, 1])))
+        self.ball = BALL(960, 540, (540 / 0.6 * random.choice([-1, 1]), 540 / 0.6 * random.choice([-1, 1])))
         self.spf = WINDOW(self.ball, self.leftpaddle, self.rightpaddle)
-        self.WIDTH, self.HEIGHT = self.spf.giveresolution()
+        self.width, self.hight = self.spf.giveresolution()
         pygame.init()
-        self.clock = pygame.time.Clock()
         self.inputMap = [False, False, False, False]
         self.focus = [False, False, False, False, False]
         while True:
@@ -28,20 +28,31 @@ class SPIELSTEUERUNG:
         """creates a new screen
            handles all objects floating on the screen
            waits for the first input to kickoff"""
-        self.scoreleft, self.scoreright = 0, 0
-        while self.scoreright <= 10 and self.scoreleft <= 10:
+        self.kickoffbool = True
+        while self.scoreright < 10 and self.scoreleft < 10:
             self.spf.updategamescreen(self.scoreleft, self.scoreright)
             self.events()
             self.movepaddel(self.inputMap)
-            self.ballhandeling(self.clock.tick(60))
-            self.clock.tick(60)
+            self.ballhandeling(self.clock.tick(200))
+            self.clock.tick(200)
+
+    def kickoff(self):
+        """for i in range(3, 0, -1):
+            self.spf.kickoffScreen(self.scoreleft, self.scoreright, i)
+            sleep(1)"""
+        self.spf.kickoffScreen(self.scoreleft, self.scoreright, "PRESS 'SPACE'")
+        while self.kickoffbool:
+            self.events()
+            sleep(0.1)
+        self.kickoffbool = True
+        self.clock = pygame.time.Clock()
+        self.matchstart()
 
     def mainmenu(self):
         """handles any settings, game pauses etc"""
         while True:
             self.events()
             self.spf.menuscreenmain(self.focus)
-            self.clock.tick(60)
 
     def events(self):
         for event in pygame.event.get():
@@ -49,6 +60,8 @@ class SPIELSTEUERUNG:
                 exit()
             if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
                 pressed_keys = pygame.key.get_pressed()
+                if pressed_keys[K_SPACE]:
+                    self.kickoffbool = False
                 if pressed_keys[K_p]:
                     self.mainmenu()
                 self.inputMap[0] = pressed_keys[K_DOWN]
@@ -57,14 +70,14 @@ class SPIELSTEUERUNG:
                 self.inputMap[3] = pressed_keys[K_w]
             if event.type == pygame.MOUSEMOTION:
                 x, y = pygame.mouse.get_pos()
-                self.focus[0] = y < self.HEIGHT * 0.25
-                self.focus[1] = y < self.HEIGHT * 5 / 12
-                self.focus[2] = y < self.HEIGHT / 12 * 7
-                self.focus[3] = y < self.HEIGHT * 0.75
-                self.focus[4] = y > self.HEIGHT * 0.75
+                self.focus[0] = y < self.hight * 0.25 and self.width * 0.3 < x < self.width * 0.7
+                self.focus[1] = self.hight * 0.25 < y < self.hight * 5 / 12 and self.width * 0.3 < x < self.width * 0.7
+                self.focus[2] = self.hight * 5/12 < y < self.hight / 12 * 7 and self.width * 0.3 < x < self.width * 0.7
+                self.focus[3] = self.hight / 12 * 7 < y < self.hight * 0.75 and self.width * 0.3 < x < self.width * 0.7
+                self.focus[4] = y > self.hight * 0.75
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.focus[0]:
-                    self.matchstart()
+                    self.kickoff()
                 elif self.focus[1]:
                     self.settings()
                 elif self.focus[2]:
@@ -75,20 +88,21 @@ class SPIELSTEUERUNG:
                     exit()
 
     def movepaddel(self, inputmap):
-        if self.rightpaddle.getypos() < 0 - self.rightpaddle.getheight() / 2:
+        if self.rightpaddle.getypos() < 1:
             self.rightpaddle.setcmu(False)
         else:
             self.rightpaddle.setcmu(True)
-        if self.rightpaddle.getypos() > self.HEIGHT - self.rightpaddle.getheight() / 2:
+        if self.rightpaddle.getypos() >= self.hight - self.rightpaddle.gethight():
             self.rightpaddle.setcmd(False)
         else:
             self.rightpaddle.setcmd(True)
-        if self.leftpaddle.getypos() < 0 - self.leftpaddle.getheight() / 2:
+        if self.leftpaddle.getypos() < 1:
             self.leftpaddle.setcmu(False)
         else:
             self.leftpaddle.setcmu(True)
-        if self.leftpaddle.getypos() > self.HEIGHT - self.leftpaddle.getheight() / 2:
+        if self.leftpaddle.getypos() >= self.hight - self.rightpaddle.gethight():
             self.leftpaddle.setcmd(False)
+        else:
             self.leftpaddle.setcmd(True)
         if self.rightpaddle.getcmd() and inputmap[0]:
             self.rightpaddle.moveydown()
@@ -101,21 +115,32 @@ class SPIELSTEUERUNG:
 
     def ballhandeling(self, clocktick):
         self.ball.move(clocktick / 1000.0)
-        if self.ball.getypos() > self.HEIGHT or self.ball.getypos() < 0:
+        if not 21 < self.ball.getypos() < self.hight - 21:
             self.ball.changeydirection()
-        if self.ball.getxpos() > self.rightpaddle.getxpos() or self.ball.getxpos() < self.leftpaddle.getxpos():
-            if self.rightpaddle.getypos() < self.ball.getypos() < self.rightpaddle.getypos() + \
-                    self.rightpaddle.getheight():
-                self.ball.changexdirection()
+        if self.leftpaddle.getxpos() + 5 < self.ball.getxpos() < self.leftpaddle.getxpos() + 16:
             if self.leftpaddle.getypos() < self.ball.getypos() < self.leftpaddle.getypos() \
-                    + self.leftpaddle.getheight():
+                    + self.leftpaddle.gethight():
                 self.ball.changexdirection()
-        if self.ball.getxpos() > self.WIDTH:
+                if self.inputMap[2]:
+                    self.ball.add_mfy(self.rightpaddle.getmfy() * 10)
+                elif self.inputMap[3]:
+                    self.ball.add_mfy(-self.rightpaddle.getmfy() * 10)
+        if self.rightpaddle.getxpos() - 16 < self.ball.getxpos() < self.rightpaddle.getxpos() + 5:
+            if self.rightpaddle.getypos() < self.ball.getypos() < self.rightpaddle.getypos() + \
+                    self.rightpaddle.gethight():
+                self.ball.changexdirection()
+                if self.inputMap[0]:
+                    self.ball.add_mfy(self.rightpaddle.getmfy() * 10)
+                elif self.inputMap[1]:
+                    self.ball.add_mfy(-self.rightpaddle.getmfy() * 10)
+        if self.ball.getxpos() >= self.width:
             self.goalleft()
-            self.ball.reset((0.5 * self.WIDTH * random.choice([-1, 1]), 0.4 * self.HEIGHT * random.choice([-1, 1])))
-        if self.ball.getxpos() < 0:
+            self.ball.reset((0.5 * self.width * random.choice([-1, 1]), 0.5 * self.hight * random.choice([-1, 1])))
+            self.kickoff()
+        if self.ball.getxpos() < 1:
             self.goalright()
-            self.ball.reset((0.5 * self.WIDTH * random.choice([-1, 1]), 0.4 * self.HEIGHT * random.choice([-1, 1])))
+            self.ball.reset((0.5 * self.width * random.choice([-1, 1]), 0.5 * self.hight * random.choice([-1, 1])))
+            self.kickoff()
 
     @staticmethod
     def clearlist(l):

@@ -1,4 +1,5 @@
 class BALL:
+
     def __init__(self, startxpos, startypos, mfspeed):
         self.startx = self.xpos = startxpos
         self.starty = self.ypos = startypos
@@ -30,3 +31,9 @@ class BALL:
 
     def setstartpos(self, coords):
         self.startx, self.starty = coords
+
+    def add_mfx(self, deltav):
+        self.mfx += deltav
+
+    def add_mfy(self, deltav):
+        self.mfy += deltav
