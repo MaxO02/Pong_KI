@@ -10,6 +10,7 @@ from time import sleep
 class SPIELSTEUERUNG:
     scoreleft, scoreright = 0, 0
     kickoffbool = True
+    gamemode = '1v0'
 
     def __init__(self):
         """loads necessary modules, defines important objects, initiates the menu, gives necessary infos"""
@@ -32,7 +33,10 @@ class SPIELSTEUERUNG:
         while self.scoreright < 10 and self.scoreleft < 10:
             self.spf.updategamescreen(self.scoreleft, self.scoreright)
             self.events()
-            self.movepaddel(self.inputMap)
+            if self.gamemode == '1v1':
+                self.movepaddel1v1(self.inputMap)
+            else:
+                self.movepaddelsingleplayer(self.inputMap)
             self.ballhandeling(self.clock.tick(200))
             self.clock.tick(200)
 
@@ -51,6 +55,7 @@ class SPIELSTEUERUNG:
     def mainmenu(self):
         """handles any settings, game pauses etc"""
         while True:
+            """show the main menu and wait for an event"""
             self.events()
             self.spf.menuscreenmain(self.focus)
 
@@ -87,7 +92,7 @@ class SPIELSTEUERUNG:
                 elif self.focus[4]:
                     exit()
 
-    def movepaddel(self, inputmap):
+    def movepaddel1v1(self, inputmap):
         if self.rightpaddle.getypos() < 1:
             self.rightpaddle.setcmu(False)
         else:
@@ -111,6 +116,33 @@ class SPIELSTEUERUNG:
         if self.leftpaddle.getcmd() and inputmap[2]:
             self.leftpaddle.moveydown()
         elif self.leftpaddle.getcmu() and inputmap[3]:
+            self.leftpaddle.moveyup()
+
+    def movepaddelsingleplayer(self, inputmap):
+        if self.rightpaddle.getypos() < 1:
+            self.rightpaddle.setcmu(False)
+        else:
+            self.rightpaddle.setcmu(True)
+        if self.rightpaddle.getypos() >= self.hight - self.rightpaddle.gethight():
+            self.rightpaddle.setcmd(False)
+        else:
+            self.rightpaddle.setcmd(True)
+        if self.leftpaddle.getypos() < 1:
+            self.leftpaddle.setcmu(False)
+        else:
+            self.leftpaddle.setcmu(True)
+        if self.leftpaddle.getypos() >= self.hight - self.rightpaddle.gethight():
+            self.leftpaddle.setcmd(False)
+        else:
+            self.leftpaddle.setcmd(True)
+        if self.rightpaddle.getcmd() and inputmap[0]:
+            self.rightpaddle.moveydown()
+        elif self.rightpaddle.getcmu() and inputmap[1]:
+            self.rightpaddle.moveyup()
+
+        if self.leftpaddle.getcmd() and self.ball.getypos() > self.leftpaddle.getypos()+self.leftpaddle.gethight()/2:
+            self.leftpaddle.moveydown()
+        elif self.leftpaddle.getcmu() and self.ball.getypos() < self.leftpaddle.getypos()+self.leftpaddle.gethight()/2:
             self.leftpaddle.moveyup()
 
     def ballhandeling(self, clocktick):

@@ -1,8 +1,15 @@
 To-Do's
 
--> Dem Ball ein abwechslungsreicheres Bewegungsverhalten geben
--> Start und Anstöße durch Eingabe bestätigen lassen
--> Hitboxen richtig setzen
+-> Dem Ball ein abwechslungsreicheres Bewegungsverhalten geben. Optionen:
+        - Drall einführen
+        - Drag durch y-Bewegung der Paddel hat einfluss auf Ball
+        - Trapez-Hitbox
+        - x-Bewegung der Paddel
+-> Menüpunkte formulieren
+-> Gegner einfügen:
+        - erst normal Ball folgen
+        - dann KI
+-> Design Rework
 linus, 512.7e3
 
 ------------------------------------------------------------------------------------------------------------------------
