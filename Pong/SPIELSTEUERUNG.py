@@ -3,6 +3,7 @@ from pygame.locals import *
 from Pong.BALL import BALL
 from Pong.PADDLE import PADDEL
 from Pong.WINDOW import WINDOW
+from Pong.SOUNDS import SOUNDS
 import random
 from time import sleep
 
@@ -50,6 +51,7 @@ class SPIELSTEUERUNG:
             sleep(0.1)
         self.kickoffbool = True
         self.clock = pygame.time.Clock()
+        SOUNDS.play('soundfiles/airhorn.wav')
         self.matchstart()
 
     def mainmenu(self):
@@ -149,10 +151,12 @@ class SPIELSTEUERUNG:
         self.ball.move(clocktick / 1000.0)
         if not 21 < self.ball.getypos() < self.hight - 21:
             self.ball.changeydirection()
+            SOUNDS.play('soundfiles/jump.wav')
         if self.leftpaddle.getxpos() + 5 < self.ball.getxpos() < self.leftpaddle.getxpos() + 16:
             if self.leftpaddle.getypos() < self.ball.getypos() < self.leftpaddle.getypos() \
                     + self.leftpaddle.gethight():
                 self.ball.changexdirection()
+                SOUNDS.play('soundfiles/jump.wav')
                 if self.inputMap[2]:
                     self.ball.add_mfy(self.rightpaddle.getmfy() * 10)
                 elif self.inputMap[3]:
@@ -161,15 +165,20 @@ class SPIELSTEUERUNG:
             if self.rightpaddle.getypos() < self.ball.getypos() < self.rightpaddle.getypos() + \
                     self.rightpaddle.gethight():
                 self.ball.changexdirection()
+                SOUNDS.play('soundfiles/jump.wav')
                 if self.inputMap[0]:
                     self.ball.add_mfy(self.rightpaddle.getmfy() * 10)
                 elif self.inputMap[1]:
                     self.ball.add_mfy(-self.rightpaddle.getmfy() * 10)
         if self.ball.getxpos() >= self.width:
+            SOUNDS.play('soundfiles/shatter.wav')
+            self.resetpaddles()
             self.goalleft()
             self.ball.reset((0.5 * self.width * random.choice([-1, 1]), 0.5 * self.hight * random.choice([-1, 1])))
             self.kickoff()
         if self.ball.getxpos() < 1:
+            SOUNDS.play('soundfiles/shatter.wav')
+            self.resetpaddles()
             self.goalright()
             self.ball.reset((0.5 * self.width * random.choice([-1, 1]), 0.5 * self.hight * random.choice([-1, 1])))
             self.kickoff()
@@ -196,3 +205,7 @@ class SPIELSTEUERUNG:
 
     def goalleft(self):
         self.scoreleft += 1
+
+    def resetpaddles(self):
+        self.rightpaddle.setypos(self.hight/2)
+        self.leftpaddle.setypos(self.hight/2)
