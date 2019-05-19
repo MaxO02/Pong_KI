@@ -11,7 +11,7 @@ from time import sleep
 class SPIELSTEUERUNG:
     scoreleft, scoreright = 0, 0
     kickoffbool = True
-    gamemode = '1v0'
+    gamemode = '1v1'
 
     def __init__(self):
         """loads necessary modules, defines important objects, initiates the menu, gives necessary infos"""
@@ -42,16 +42,14 @@ class SPIELSTEUERUNG:
             self.clock.tick(200)
 
     def kickoff(self):
-        """for i in range(3, 0, -1):
-            self.spf.kickoffScreen(self.scoreleft, self.scoreright, i)
-            sleep(1)"""
         self.spf.kickoffScreen(self.scoreleft, self.scoreright, "PRESS 'SPACE'")
         while self.kickoffbool:
             self.events()
             sleep(0.1)
         self.kickoffbool = True
-        self.clock = pygame.time.Clock()
         SOUNDS.play('soundfiles/airhorn.wav')
+        sleep(0.5)
+        self.clock = pygame.time.Clock()
         self.matchstart()
 
     def mainmenu(self):
