@@ -182,9 +182,9 @@ class SPIELSTEUERUNG:
             self.kickoff()
 
     @staticmethod
-    def clearlist(l):
+    def clearlist(l, data):
         for i in range(len(l)):
-            l[i - 1] = False
+            l[i - 1] = data
 
     def settings(self):
         while True:

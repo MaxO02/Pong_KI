@@ -55,6 +55,7 @@ class WINDOW:
         for t in range(0, 5):
             self.screen.blit(text_obj[t], ((self.width - widths[t]) / 2, self.hight / 6 * (t + 1)))
         pygame.display.flip()
+        """reset score"""
 
     def kickoffScreen(self, scoreleft, scoreright, i):
         pygame.mouse.set_visible(False)
@@ -72,10 +73,16 @@ class WINDOW:
         pygame.display.flip()
 
     def menuscreensettings(self):
+        """Here we need to give a selection of all the options provided. Like Enemy-Skill, Window size, Ballspeed,
+        ??Theme??"""
         pass
 
     def menuscreenhelp(self):
+        """What to do if you need help? Go to GitHub and open a new issue with exact descriptions. We might be able to
+        help you. Keep in mind, that this is just a hobby school project and non-profit."""
         pass
 
     def menuscreeninfo(self):
+        """All about the game you need to know. Who are the maintainers, How did this project happen? How did we
+        work? Why did we choose this? Are there other projects to check out? Which links to follow?"""
         pass

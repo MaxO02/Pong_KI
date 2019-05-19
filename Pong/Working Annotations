@@ -2,17 +2,17 @@ To-Do's
 
 -> Dem Ball ein abwechslungsreicheres Bewegungsverhalten geben. Optionen:
         - Drall einführen
-        - Drag durch y-Bewegung der Paddel hat einfluss auf Ball
+        - Drag durch y-Bewegung der Paddel hat einfluss auf Ball (Aktuell)
         - Trapez-Hitbox
         - x-Bewegung der Paddel
 -> Menüpunkte formulieren
--> Gamesounds
+-> Gamesounds verbessern
 -> Gegner einfügen:
         - nur noch KI einfügen
 -> Design Rework
 
-Sollen wir dann danach einfach andere Spiele machen und die dann auch von der KI lernen lassen? Viel unterschied wird in
-dem AI Dingnens
+Sollen wir dann danach einfach andere Spiele machen und die dann auch von der KI lernen lassen? Viel Unterschied wird in
+dem AI Dingens dann ja nicht mehr sein
 linus, 513.7e3
 
 ------------------------------------------------------------------------------------------------------------------------
