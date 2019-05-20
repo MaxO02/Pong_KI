@@ -67,7 +67,7 @@ class SPIELSTEUERUNG:
                 pressed_keys = pygame.key.get_pressed()
                 if pressed_keys[K_SPACE]:
                     self.kickoffbool = False
-                if pressed_keys[K_p]:
+                if pressed_keys[K_ESCAPE]:
                     self.mainmenu()
                 self.inputMap[0] = pressed_keys[K_DOWN]
                 self.inputMap[1] = pressed_keys[K_UP]

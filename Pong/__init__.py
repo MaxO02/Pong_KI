@@ -1,6 +1,8 @@
+#!/usr/bin/env python3
+
 from Pong.SPIELSTEUERUNG import SPIELSTEUERUNG
 
 
-class MAIN:
-    if __name__ == '__main__':
-        game_management = SPIELSTEUERUNG()
+if __name__ == '__main__':
+    game_management = SPIELSTEUERUNG()
+
