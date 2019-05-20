@@ -6,7 +6,7 @@ class PADDEL:
         self.mf = 7.5
         self.canmoveup = True
         self.canmovedown = True
-        self.hight = 150
+        self.height = 150
 
     def getxpos(self):
         return self.posx
@@ -39,4 +39,4 @@ class PADDEL:
         return self.canmoveup
 
     def gethight(self):
-        return self.hight
+        return self.height

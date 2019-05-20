@@ -13,13 +13,14 @@ class SPIELSTEUERUNG:
     kickoffbool = True
     gamemode = '1v1'
 
-    def __init__(self):
+    def __init__(self, resolution = (1920, 1080)):
         """loads necessary modules, defines important objects, initiates the menu, gives necessary infos"""
-        self.leftpaddle = PADDEL(192, 540)
-        self.rightpaddle = PADDEL(1728, 540)
-        self.ball = BALL(960, 540, (540 / 0.6 * random.choice([-1, 1]), 540 / 0.6 * random.choice([-1, 1])))
+        self.width, self.height = resolution
+        self.leftpaddle = PADDEL(0.1 * self.width, self.height / 2)
+        self.rightpaddle = PADDEL(0.9 * self.width, self.height / 2)
+        self.ball = BALL(self.width / 2, self.height / 2, (540 / 0.6 * random.choice([-1, 1]), 540 / 0.6 * random.choice([-1, 1])))
         self.spf = WINDOW(self.ball, self.leftpaddle, self.rightpaddle)
-        self.width, self.hight = self.spf.giveresolution()
+        self.width, self.height = self.spf.giveresolution()
         pygame.init()
         self.inputMap = [False, False, False, False]
         self.focus = [False, False, False, False, False]
@@ -75,11 +76,11 @@ class SPIELSTEUERUNG:
                 self.inputMap[3] = pressed_keys[K_w]
             if event.type == pygame.MOUSEMOTION:
                 x, y = pygame.mouse.get_pos()
-                self.focus[0] = y < self.hight * 0.25 and self.width * 0.3 < x < self.width * 0.7
-                self.focus[1] = self.hight * 0.25 < y < self.hight * 5 / 12 and self.width * 0.3 < x < self.width * 0.7
-                self.focus[2] = self.hight * 5/12 < y < self.hight / 12 * 7 and self.width * 0.3 < x < self.width * 0.7
-                self.focus[3] = self.hight / 12 * 7 < y < self.hight * 0.75 and self.width * 0.3 < x < self.width * 0.7
-                self.focus[4] = y > self.hight * 0.75
+                self.focus[0] = y < self.height * 0.25 and self.width * 0.3 < x < self.width * 0.7
+                self.focus[1] = self.height * 0.25 < y < self.height * 5 / 12 and self.width * 0.3 < x < self.width * 0.7
+                self.focus[2] = self.height * 5 / 12 < y < self.height / 12 * 7 and self.width * 0.3 < x < self.width * 0.7
+                self.focus[3] = self.height / 12 * 7 < y < self.height * 0.75 and self.width * 0.3 < x < self.width * 0.7
+                self.focus[4] = y > self.height * 0.75
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.focus[0]:
                     self.kickoff()
@@ -97,7 +98,7 @@ class SPIELSTEUERUNG:
             self.rightpaddle.setcmu(False)
         else:
             self.rightpaddle.setcmu(True)
-        if self.rightpaddle.getypos() >= self.hight - self.rightpaddle.gethight():
+        if self.rightpaddle.getypos() >= self.height - self.rightpaddle.gethight():
             self.rightpaddle.setcmd(False)
         else:
             self.rightpaddle.setcmd(True)
@@ -105,7 +106,7 @@ class SPIELSTEUERUNG:
             self.leftpaddle.setcmu(False)
         else:
             self.leftpaddle.setcmu(True)
-        if self.leftpaddle.getypos() >= self.hight - self.rightpaddle.gethight():
+        if self.leftpaddle.getypos() >= self.height - self.rightpaddle.gethight():
             self.leftpaddle.setcmd(False)
         else:
             self.leftpaddle.setcmd(True)
@@ -123,7 +124,7 @@ class SPIELSTEUERUNG:
             self.rightpaddle.setcmu(False)
         else:
             self.rightpaddle.setcmu(True)
-        if self.rightpaddle.getypos() >= self.hight - self.rightpaddle.gethight():
+        if self.rightpaddle.getypos() >= self.height - self.rightpaddle.gethight():
             self.rightpaddle.setcmd(False)
         else:
             self.rightpaddle.setcmd(True)
@@ -131,7 +132,7 @@ class SPIELSTEUERUNG:
             self.leftpaddle.setcmu(False)
         else:
             self.leftpaddle.setcmu(True)
-        if self.leftpaddle.getypos() >= self.hight - self.rightpaddle.gethight():
+        if self.leftpaddle.getypos() >= self.height - self.rightpaddle.gethight():
             self.leftpaddle.setcmd(False)
         else:
             self.leftpaddle.setcmd(True)
@@ -147,7 +148,7 @@ class SPIELSTEUERUNG:
 
     def ballhandeling(self, clocktick):
         self.ball.move(clocktick / 1000.0)
-        if not 21 < self.ball.getypos() < self.hight - 21:
+        if not 21 < self.ball.getypos() < self.height - 21:
             self.ball.changeydirection()
             SOUNDS.play('soundfiles/jump.wav')
         if self.leftpaddle.getxpos() + 5 < self.ball.getxpos() < self.leftpaddle.getxpos() + 16:
@@ -172,13 +173,13 @@ class SPIELSTEUERUNG:
             SOUNDS.play('soundfiles/shatter.wav')
             self.resetpaddles()
             self.goalleft()
-            self.ball.reset((0.5 * self.width * random.choice([-1, 1]), 0.5 * self.hight * random.choice([-1, 1])))
+            self.ball.reset((0.5 * self.width * random.choice([-1, 1]), 0.5 * self.height * random.choice([-1, 1])))
             self.kickoff()
         if self.ball.getxpos() < 1:
             SOUNDS.play('soundfiles/shatter.wav')
             self.resetpaddles()
             self.goalright()
-            self.ball.reset((0.5 * self.width * random.choice([-1, 1]), 0.5 * self.hight * random.choice([-1, 1])))
+            self.ball.reset((0.5 * self.width * random.choice([-1, 1]), 0.5 * self.height * random.choice([-1, 1])))
             self.kickoff()
 
     @staticmethod
@@ -205,5 +206,5 @@ class SPIELSTEUERUNG:
         self.scoreleft += 1
 
     def resetpaddles(self):
-        self.rightpaddle.setypos(self.hight/2)
-        self.leftpaddle.setypos(self.hight/2)
+        self.rightpaddle.setypos(self.height / 2)
+        self.leftpaddle.setypos(self.height / 2)

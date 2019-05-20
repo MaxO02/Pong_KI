@@ -10,7 +10,7 @@ class WINDOW:
     def __init__(self, ball, leftpaddle, rightpaddle):
         pygame.init()
         self.resolution = (1920, 1080)
-        self.width, self.hight = self.resolution
+        self.width, self.height = self.resolution
         self.screen = pygame.display.set_mode(self.resolution)
         pygame.display.set_caption("Pong by Max and Linus")
         self.score_font = pygame.font.SysFont("Clear Sans Regular", 80)
@@ -38,10 +38,10 @@ class WINDOW:
     def changeresolution(self, newresolution):
         self.resolution = newresolution
         self.screen = pygame.display.set_mode(self.resolution)
-        self.width, self.hight = self.resolution
-        self.leftpaddel.setypos(self.hight / 2)
-        self.rightpaddel(self.hight / 2)
-        self.ball.setstartpos(self.width / 2, self.hight / 2)
+        self.width, self.height = self.resolution
+        self.leftpaddel.setypos(self.height / 2)
+        self.rightpaddel(self.height / 2)
+        self.ball.setstartpos(self.width / 2, self.height / 2)
 
     def menuscreenmain(self, l):
         pygame.mouse.set_visible(True)
@@ -53,7 +53,7 @@ class WINDOW:
         for t in range(0, 5):
             widths.append(text_obj[t].get_rect().width)
         for t in range(0, 5):
-            self.screen.blit(text_obj[t], ((self.width - widths[t]) / 2, self.hight / 6 * (t + 1)))
+            self.screen.blit(text_obj[t], ((self.width - widths[t]) / 2, self.height / 6 * (t + 1)))
         pygame.display.flip()
         """reset score"""
 
