@@ -11,19 +11,19 @@ from time import sleep
 class SPIELSTEUERUNG:
     scoreleft, scoreright = 0, 0
     kickoffbool = True
-    gamemode = '1v1'
+    gamemode = '1v0'
 
-    def __init__(self, resolution = (1920, 1080)):
+    def __init__(self, resolution=(1920, 1080)):
         """loads necessary modules, defines important objects, initiates the menu, gives necessary infos"""
         self.width, self.height = resolution
         self.leftpaddle = PADDEL(0.1 * self.width, self.height / 2)
         self.rightpaddle = PADDEL(0.9 * self.width, self.height / 2)
         self.ball = BALL(self.width / 2, self.height / 2, (540 / 0.6 * random.choice([-1, 1]), 540 / 0.6 * random.choice([-1, 1])))
-        self.spf = WINDOW(self.ball, self.leftpaddle, self.rightpaddle)
+        self.spf = WINDOW(self.ball, self.leftpaddle, self.rightpaddle, resolution)
         self.width, self.height = self.spf.giveresolution()
         pygame.init()
         self.inputMap = [False, False, False, False]
-        self.focus = [False, False, False, False, False]
+        self.focus = [False, False, False, False, False, False]
         while True:
             self.mainmenu()
 
@@ -80,7 +80,8 @@ class SPIELSTEUERUNG:
                 self.focus[1] = self.height * 0.25 < y < self.height * 5 / 12 and self.width * 0.3 < x < self.width * 0.7
                 self.focus[2] = self.height * 5 / 12 < y < self.height / 12 * 7 and self.width * 0.3 < x < self.width * 0.7
                 self.focus[3] = self.height / 12 * 7 < y < self.height * 0.75 and self.width * 0.3 < x < self.width * 0.7
-                self.focus[4] = y > self.height * 0.75
+                self.focus[4] = y > self.height * 0.75 and self.width * 0.3 < x < self.width * 0.7
+                self.focus[5] = y < self.height * 0.25 and x > self.width * 0.7
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.focus[0]:
                     self.kickoff()
@@ -92,6 +93,8 @@ class SPIELSTEUERUNG:
                     self.info()
                 elif self.focus[4]:
                     exit()
+                elif self.focus[5]:
+                    self.resetscore()
 
     def movepaddel1v1(self, inputmap):
         if self.rightpaddle.getypos() < 1:
@@ -208,3 +211,11 @@ class SPIELSTEUERUNG:
     def resetpaddles(self):
         self.rightpaddle.setypos(self.height / 2)
         self.leftpaddle.setypos(self.height / 2)
+
+    def increaseballspeed(self):
+        self.ball.add_mfx(9 * self.ball.mfx / abs(self.ball.mfx))
+        self.ball.add_mfy(3 * self.ball.mfy / abs(self.ball.mfy))
+
+    def resetscore(self):
+        self.scoreleft = 0
+        self.scoreright = 0

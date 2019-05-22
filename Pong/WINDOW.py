@@ -7,9 +7,9 @@ class WINDOW:
     background_color = (1, 254, 240)
     font_color = paddle_color
 
-    def __init__(self, ball, leftpaddle, rightpaddle):
+    def __init__(self, ball, leftpaddle, rightpaddle, res):
         pygame.init()
-        self.resolution = (1920, 1080)
+        self.resolution = res
         self.width, self.height = self.resolution
         self.screen = pygame.display.set_mode(self.resolution)
         pygame.display.set_caption("Pong by Max and Linus")
@@ -54,6 +54,11 @@ class WINDOW:
             widths.append(text_obj[t].get_rect().width)
         for t in range(0, 5):
             self.screen.blit(text_obj[t], ((self.width - widths[t]) / 2, self.height / 6 * (t + 1)))
+        scorereset = self.menu_font.render("RESET SCORE", True, (254, 254, 254)) if not focus[5] else self.\
+            menu_font_focused.render("RESET SCORE", True, (254, 254, 254))
+        scorewidth = scorereset.get_rect().width
+        self.screen.blit(scorereset, (0.7*self.width + scorewidth / 2, self.height / 6))
+
         pygame.display.flip()
         """reset score"""
 
