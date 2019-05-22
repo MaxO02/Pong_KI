@@ -13,7 +13,7 @@ class SPIELSTEUERUNG:
     kickoffbool = True
     gamemode = '1v0'
 
-    def __init__(self, resolution=(1920, 1080)):
+    def __init__(self, resolution=(1680, 1050)):
         """loads necessary modules, defines important objects, initiates the menu, gives necessary infos"""
         self.width, self.height = resolution
         self.leftpaddle = PADDEL(0.1 * self.width, self.height / 2)
