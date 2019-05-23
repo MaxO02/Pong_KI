@@ -13,12 +13,12 @@ class SPIELSTEUERUNG:
     kickoffbool = True
     gamemode = '1v0'
 
-    def __init__(self, resolution=(1680, 1050)):
+    def __init__(self, resolution=(1920, 1080)):
         """loads necessary modules, defines important objects, initiates the menu, gives necessary infos"""
         self.width, self.height = resolution
         self.leftpaddle = PADDEL(0.1 * self.width, self.height / 2)
         self.rightpaddle = PADDEL(0.9 * self.width, self.height / 2)
-        self.ball = BALL(self.width / 2, self.height / 2, (540 / 0.6 * random.choice([-1, 1]), 540 / 0.6 * random.choice([-1, 1])))
+        self.ball = BALL(self.width / 2, self.height / 2, (270 / 0.6 * random.choice([-1, 1]), 270 / 0.6 * random.choice([-1, 1])))
         self.spf = WINDOW(self.ball, self.leftpaddle, self.rightpaddle, resolution)
         self.width, self.height = self.spf.giveresolution()
         pygame.init()
@@ -36,11 +36,10 @@ class SPIELSTEUERUNG:
             self.spf.updategamescreen(self.scoreleft, self.scoreright)
             self.events()
             if self.gamemode == '1v1':
-                self.movepaddel1v1(self.inputMap)
+                self.movepaddle1v1(self.inputMap)
             else:
-                self.movepaddelsingleplayer(self.inputMap)
-            self.ballhandeling(self.clock.tick(200))
-            self.clock.tick(200)
+                self.movepaddlesingleplayer(self.inputMap)
+            self.ballhandling(self.clock.tick(200))
 
     def kickoff(self):
         self.spf.kickoffScreen(self.scoreleft, self.scoreright, "PRESS 'SPACE'")
@@ -96,12 +95,12 @@ class SPIELSTEUERUNG:
                 elif self.focus[5]:
                     self.resetscore()
 
-    def movepaddel1v1(self, inputmap):
+    def movepaddle1v1(self, inputmap):
         if self.rightpaddle.getypos() < 1:
             self.rightpaddle.setcmu(False)
         else:
             self.rightpaddle.setcmu(True)
-        if self.rightpaddle.getypos() >= self.height - self.rightpaddle.gethight():
+        if self.rightpaddle.getypos() >= self.height - self.rightpaddle.getheight():
             self.rightpaddle.setcmd(False)
         else:
             self.rightpaddle.setcmd(True)
@@ -109,7 +108,7 @@ class SPIELSTEUERUNG:
             self.leftpaddle.setcmu(False)
         else:
             self.leftpaddle.setcmu(True)
-        if self.leftpaddle.getypos() >= self.height - self.rightpaddle.gethight():
+        if self.leftpaddle.getypos() >= self.height - self.rightpaddle.getheight():
             self.leftpaddle.setcmd(False)
         else:
             self.leftpaddle.setcmd(True)
@@ -122,12 +121,12 @@ class SPIELSTEUERUNG:
         elif self.leftpaddle.getcmu() and inputmap[3]:
             self.leftpaddle.moveyup()
 
-    def movepaddelsingleplayer(self, inputmap):
+    def movepaddlesingleplayer(self, inputmap):
         if self.rightpaddle.getypos() < 1:
             self.rightpaddle.setcmu(False)
         else:
             self.rightpaddle.setcmu(True)
-        if self.rightpaddle.getypos() >= self.height - self.rightpaddle.gethight():
+        if self.rightpaddle.getypos() >= self.height - self.rightpaddle.getheight():
             self.rightpaddle.setcmd(False)
         else:
             self.rightpaddle.setcmd(True)
@@ -135,7 +134,7 @@ class SPIELSTEUERUNG:
             self.leftpaddle.setcmu(False)
         else:
             self.leftpaddle.setcmu(True)
-        if self.leftpaddle.getypos() >= self.height - self.rightpaddle.gethight():
+        if self.leftpaddle.getypos() >= self.height - self.rightpaddle.getheight():
             self.leftpaddle.setcmd(False)
         else:
             self.leftpaddle.setcmd(True)
@@ -144,28 +143,28 @@ class SPIELSTEUERUNG:
         elif self.rightpaddle.getcmu() and inputmap[1]:
             self.rightpaddle.moveyup()
 
-        if self.leftpaddle.getcmd() and self.ball.getypos() > self.leftpaddle.getypos()+self.leftpaddle.gethight()/2:
+        if self.leftpaddle.getcmd() and self.ball.getypos() > self.leftpaddle.getypos()+self.leftpaddle.getheight()/2:
             self.leftpaddle.moveydown()
-        elif self.leftpaddle.getcmu() and self.ball.getypos() < self.leftpaddle.getypos()+self.leftpaddle.gethight()/2:
+        elif self.leftpaddle.getcmu() and self.ball.getypos() < self.leftpaddle.getypos()+self.leftpaddle.getheight()/2:
             self.leftpaddle.moveyup()
 
-    def ballhandeling(self, clocktick):
+    def ballhandling(self, clocktick):
         self.ball.move(clocktick / 1000.0)
         if not 21 < self.ball.getypos() < self.height - 21:
             self.ball.changeydirection()
             SOUNDS.play('soundfiles/jump.wav')
-        if self.leftpaddle.getxpos() + 5 < self.ball.getxpos() < self.leftpaddle.getxpos() + 16:
+        if self.leftpaddle.getxpos() + 10 < self.ball.getxpos() < self.leftpaddle.getxpos() + 16:
             if self.leftpaddle.getypos() < self.ball.getypos() < self.leftpaddle.getypos() \
-                    + self.leftpaddle.gethight():
+                    + self.leftpaddle.getheight():
                 self.ball.changexdirection()
                 SOUNDS.play('soundfiles/jump.wav')
                 if self.inputMap[2]:
                     self.ball.add_mfy(self.rightpaddle.getmfy() * 10)
                 elif self.inputMap[3]:
                     self.ball.add_mfy(-self.rightpaddle.getmfy() * 10)
-        if self.rightpaddle.getxpos() - 16 < self.ball.getxpos() < self.rightpaddle.getxpos() + 5:
+        if self.rightpaddle.getxpos() - 16 < self.ball.getxpos() < self.rightpaddle.getxpos() - 10:
             if self.rightpaddle.getypos() < self.ball.getypos() < self.rightpaddle.getypos() + \
-                    self.rightpaddle.gethight():
+                    self.rightpaddle.getheight():
                 self.ball.changexdirection()
                 SOUNDS.play('soundfiles/jump.wav')
                 if self.inputMap[0]:
@@ -176,13 +175,13 @@ class SPIELSTEUERUNG:
             SOUNDS.play('soundfiles/shatter.wav')
             self.resetpaddles()
             self.goalleft()
-            self.ball.reset((0.5 * self.width * random.choice([-1, 1]), 0.5 * self.height * random.choice([-1, 1])))
+            self.ball.reset((0.25 * self.width * random.choice([-1, 1]), 0.25 * self.height * random.choice([-1, 1])))
             self.kickoff()
         if self.ball.getxpos() < 1:
             SOUNDS.play('soundfiles/shatter.wav')
             self.resetpaddles()
             self.goalright()
-            self.ball.reset((0.5 * self.width * random.choice([-1, 1]), 0.5 * self.height * random.choice([-1, 1])))
+            self.ball.reset((0.25 * self.width * random.choice([-1, 1]), 0.25 * self.height * random.choice([-1, 1])))
             self.kickoff()
 
     @staticmethod

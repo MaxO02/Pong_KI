@@ -3,7 +3,7 @@ class PADDEL:
     def __init__(self, positionx, positiony):
         self.posx = positionx
         self.posy = positiony
-        self.mf = 7.5
+        self.mf = 3.5
         self.canmoveup = True
         self.canmovedown = True
         self.height = 150
@@ -38,5 +38,5 @@ class PADDEL:
     def getcmu(self):
         return self.canmoveup
 
-    def gethight(self):
+    def getheight(self):
         return self.height

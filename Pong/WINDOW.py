@@ -24,9 +24,9 @@ class WINDOW:
         pygame.mouse.set_visible(False)
         self.screen.fill(self.background_color)
         pygame.draw.rect(self.screen, self.paddle_color, [self.leftpaddel.getxpos(), self.leftpaddel.getypos(), 10,
-                                                          self.leftpaddel.gethight()])
+                                                          self.leftpaddel.getheight()])
         pygame.draw.rect(self.screen, self.paddle_color, [self.rightpaddel.getxpos(), self.rightpaddel.getypos(), 10,
-                                                          self.rightpaddel.gethight()])
+                                                          self.rightpaddel.getheight()])
         pygame.draw.rect(self.screen, self.ball_color, [self.ball.getxpos(), self.ball.getypos(), 20, 20])
         self.screen.blit(self.score_font.render(str(scoreleft), True, self.font_color), (self.width / 4, 50))
         self.screen.blit(self.score_font.render(str(scoreright), True, self.font_color), (self.width / 1.25, 50))
@@ -66,9 +66,9 @@ class WINDOW:
         pygame.mouse.set_visible(False)
         self.screen.fill(self.background_color)
         pygame.draw.rect(self.screen, self.paddle_color, [self.leftpaddel.getxpos(), self.leftpaddel.getypos(), 10,
-                                                          self.leftpaddel.gethight()])
+                                                          self.leftpaddel.getheight()])
         pygame.draw.rect(self.screen, self.paddle_color, [self.rightpaddel.getxpos(), self.rightpaddel.getypos(), 10,
-                                                          self.rightpaddel.gethight()])
+                                                          self.rightpaddel.getheight()])
         pygame.draw.rect(self.screen, self.ball_color, [self.ball.getxpos(), self.ball.getypos(), 20, 20])
         self.screen.blit(self.score_font.render(str(scoreleft), True, self.font_color), (self.width / 4, 50))
         self.screen.blit(self.score_font.render(str(scoreright), True, self.font_color), (self.width / 1.25, 50))
