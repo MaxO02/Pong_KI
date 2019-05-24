@@ -76,11 +76,11 @@ class SPIELSTEUERUNG:
                     self.clock = pygame.time.Clock()  # reset the clock to prevent ball movement in kickoff screen
                     self.matchstart()  # let the match start / continue
                 if pressed_keys[K_ESCAPE]:   # if escape has been pressed
-                    if self.screen == "mainmenu":
-                        self.kickoff()
-                    elif self.screen == "settings":
+                    if self.screen == "game":
                         self.mainmenu()
-                    elif self.screen == "game":
+                    elif self.screen == "mainmenu":
+                        self.kickoff()
+                    else:
                         self.mainmenu()  # start the menu screen
                 """now fill the input map for any paddle controlling keystroke"""
                 self.inputMap[0] = pressed_keys[K_DOWN]  # right player: move down
