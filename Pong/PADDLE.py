@@ -3,7 +3,7 @@ class PADDEL:
     def __init__(self, positionx, positiony):
         self.posx = positionx
         self.posy = positiony
-        self.mf = 10
+        self.mf = 3.5
         self.canmoveup = True
         self.canmovedown = True
         self.height = 150
@@ -17,14 +17,14 @@ class PADDEL:
     def setypos(self, newypos):
         self.posy = newypos
 
-    def setpos(self, position):
-        self.posx, self.posy = position
-
     def moveyup(self):
         self.posy -= self.mf
 
     def moveydown(self):
         self.posy += self.mf
+
+    def getmfy(self):
+        return self.mf
 
     def setcmd(self, boolean):
         self.canmovedown = boolean

@@ -1,10 +1,19 @@
 To-Do's
 
--> Weitere Screens einfügen: Nicht nur das Spielfeld, sondern auch ein Menü mit Optionen usw.
--> Dem Ball ein abwechslungsreicheres Bewegungsverhalten geben
--> Start und Anstöße durch Klick bestätigen lassen
--> Hitboxen richtig setzen
--> Trennen von SPIELFELD und SPIELSTEUERUNG
-linus, 511.7e3
+-> Dem Ball ein abwechslungsreicheres Bewegungsverhalten geben. Optionen:
+        - Drall einführen
+        - Drag durch y-Bewegung der Paddel hat einfluss auf Ball (Aktuell)
+        - Trapez-Hitbox
+        - x-Bewegung der Paddel
+-> Menüpunkte formulieren
+-> Gamesounds verbessern
+-> Gegner einfügen:
+        - nur noch KI einfügen
+-> Design Rework
+-> Interaktives Menü schreiben, gemachte Änderungen sollten auch in irgendeiner Weise ausgegeben und werden
+
+Sollen wir dann danach einfach andere Spiele machen und die dann auch von der KI lernen lassen? Viel Unterschied wird in
+dem AI Dingens dann ja nicht mehr sein
+linus, 517.7e3
 
 ------------------------------------------------------------------------------------------------------------------------
