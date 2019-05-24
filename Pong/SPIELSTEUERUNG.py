@@ -55,11 +55,13 @@ class SPIELSTEUERUNG:
         """wait for a the players to get ready"""
         pygame.mouse.set_visible(False)  # mouse won't show
         self.spf.kickoffScreen(self.scoreleft, self.scoreright, "PRESS SPACE")  # show the kickoff screen
+        self.screen = "game"
         while True:
             self.events()  # read the events
 
     def mainmenu(self):
         """handles any settings, game pauses etc"""
+        self.screen = "mainmenu"
         pygame.mouse.set_visible(True)  # mouse will show
         while True:
             """show the main menu and wait for an event"""
@@ -74,7 +76,12 @@ class SPIELSTEUERUNG:
                     self.clock = pygame.time.Clock()  # reset the clock to prevent ball movement in kickoff screen
                     self.matchstart()  # let the match start / continue
                 if pressed_keys[K_ESCAPE]:   # if escape has been pressed
-                    self.mainmenu()  # start the menu screen
+                    if self.screen == "mainmenu":
+                        self.kickoff()
+                    elif self.screen == "settings":
+                        self.mainmenu()
+                    elif self.screen == "game":
+                        self.mainmenu()  # start the menu screen
                 """now fill the input map for any paddle controlling keystroke"""
                 self.inputMap[0] = pressed_keys[K_DOWN]  # right player: move down
                 self.inputMap[1] = pressed_keys[K_UP]  # right player: move up
@@ -95,18 +102,23 @@ class SPIELSTEUERUNG:
                 self.focus[5] = y < self.height * 0.25 and x > self.width * 0.7
             if event.type == pygame.MOUSEBUTTONDOWN and self.mousevisibility:  # if mouse has been pressed, take action
                 # depending on the current mouse position
-                if self.focus[0]:
-                    self.kickoff()  # will start the kickoff
-                elif self.focus[1]:
-                    self.settings()  # will enter the 'settings' menu
-                elif self.focus[2]:
-                    self.help()  # will enter the 'help' menu
-                elif self.focus[3]:
-                    self.info()  # will enter the 'info' menu
-                elif self.focus[4]:
-                    exit()  # will close the gamed
-                elif self.focus[5]:
-                    self.resetscore()  # will reset the score
+                if self.screen == "mainmenu":
+                    if self.focus[0]:
+                        self.kickoff()  # will start the kickoff
+                    elif self.focus[1]:
+                        self.settings()  # will enter the 'settings' menu
+                    elif self.focus[2]:
+                        self.help()  # will enter the 'help' menu
+                    elif self.focus[3]:
+                        self.info()  # will enter the 'info' menu
+                    elif self.focus[4]:
+                        exit()  # will close the gamed
+                    elif self.focus[5]:
+                        self.resetscore()  # will reset the score
+                elif self.screen == "settings":
+                    if self.focus[5]:
+
+                        self.mainmenu()
 
     def movepaddle1v1(self, inputmap):
         if self.rightpaddle.getypos() <= 1:  # paddle at minimum height
@@ -208,8 +220,11 @@ class SPIELSTEUERUNG:
         """the screen specifically made for the game's settings
 
         needs revision in WINDOW-class"""
+        pygame.mouse.set_visible(True)  # mouse will show
+        self.screen = "settings"
         while True:
-            self.spf.menuscreensettings()
+            self.events()  # read the events
+            self.spf.menuscreensettings(self.focus)
 
     def help(self):
         """the screen specifically made for providing help, should point towards the github project

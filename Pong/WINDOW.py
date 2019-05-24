@@ -77,10 +77,18 @@ class WINDOW:
         self.screen.blit(inputtext, ((self.width - width) / 2, 50))
         pygame.display.flip()
 
-    def menuscreensettings(self):
+    def menuscreensettings(self, l):
         """Here we need to give a selection of all the options provided. Like Enemy-Skill, Window size, Ballspeed,
         ??Theme??"""
-        pass
+        pygame.mouse.set_visible(True)
+        self.screen.fill((0, 0, 0))
+        focus = l
+        changres = self.menu_font.render("BACK", True, (254, 254, 254)) if not focus[5] else self. \
+            menu_font_focused.render("BACK", True, (254, 254, 254))
+        scorewidth = changres.get_rect().width
+        self.screen.blit(changres, (0.7 * self.width + scorewidth / 2, self.height / 6))
+        pygame.display.flip()
+
 
     def menuscreenhelp(self):
         """What to do if you need help? Go to GitHub and open a new issue with exact descriptions. We might be able to
