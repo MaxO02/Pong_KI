@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-from Pong.SPIELSTEUERUNG import SPIELSTEUERUNG
+from Pong.GAMECONTROL import GAMECONTROL
 
 
-if __name__ == '__main__':
-    game_management = SPIELSTEUERUNG()
+if __name__ == '__main__':  # If this file is directly execxuted (not just imported)
+    game_management = GAMECONTROL()  # execute the GAMECONTROL class. This will handle anything else.

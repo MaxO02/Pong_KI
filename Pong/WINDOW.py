@@ -56,9 +56,7 @@ class WINDOW:
             menu_font_focused.render("RESET SCORE", True, (254, 254, 254))
         scorewidth = scorereset.get_rect().width
         self.screen.blit(scorereset, (0.7*self.width + scorewidth / 2, self.height / 6))
-
         pygame.display.flip()
-        """reset score"""
 
     def kickoffscreen(self, scoreleft, scoreright, i):
         pygame.mouse.set_visible(False)

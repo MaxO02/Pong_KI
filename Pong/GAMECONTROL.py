@@ -19,7 +19,8 @@ class GAMECONTROL:
         self.focus = [False, False, False, False, False, False]  # tells which area the mouse is hovering over
         self.gamemode = gm  # sets the gamemode: either player vs player or computer vs player
         self.scoreleft, self.scoreright = score  # self explainatory, right? the score
-        self.mousevisibility = True  # is the mouse even showing
+        self.screens = {"game": False, "mainmenu": True, "settings": False, "help": False, "info": False}
+        self.gamemodes = {"1v1": True, "1v0": False}
 
         # objects
         self.clock = pygame.time.Clock()  # handles the timespans passing between operations,
@@ -46,7 +47,7 @@ class GAMECONTROL:
         while self.scoreright < 10 and self.scoreleft < 10:  # make sure the game's not over yet
             self.spf.updategamescreen(self.scoreleft, self.scoreright)  # draw a frame of the game
             self.eventsingame()  # read the events
-            if self.gamemode == '1v1':  # movement depending on the gamemode
+            if self.gamemode == "1v1":  # movement depending on the gamemode
                 self.movepaddle1v1(self.inputMap)  # both paddles are controlled by people
             else:
                 self.movepaddlesingleplayer(self.inputMap)  # only one paddle is under human control
@@ -56,7 +57,7 @@ class GAMECONTROL:
         """wait for a the players to get ready"""
         pygame.mouse.set_visible(False)  # mouse won't show
         self.spf.kickoffscreen(self.scoreleft, self.scoreright, "PRESS SPACE")  # show the kickoff screen
-        self.screen = "game"
+        self.screen = "kickoff"
         while True:
             self.eventsingame()  # read the events
 
@@ -83,13 +84,15 @@ class GAMECONTROL:
                 self.inputMap[1] = pressed_keys[K_UP]  # right player: move up
                 self.inputMap[2] = pressed_keys[K_s]  # left player: move down
                 self.inputMap[3] = pressed_keys[K_w]  # left player: move up
+            if event.type == pygame.QUIT:
+                exit()
 
     def eventsmenu(self):
         for event in pygame.event.get():
-            if event.type == pygame.MOUSEMOTION and self.mousevisibility:  # if mouse has been moved you need to update
+            if event.type == pygame.MOUSEMOTION:  # if mouse has been moved you need to update
                 # the focused area
                 x, y = pygame.mouse.get_pos()  # get where the mouse is hovering
-                if self.screen == "mainmenu":
+                if self.screen == "mainmenu":  # depends on which screen you are
                     self.focus[0] = y < self.height * 0.25 and self.width * 0.3 < x < self.width * 0.7
                     self.focus[1] = self.height * 0.25 < y < self.height * 5 / 12 and self.width * 0.3 < x < \
                         self.width * 0.7
@@ -99,12 +102,12 @@ class GAMECONTROL:
                         self.width * 0.7
                     self.focus[4] = y > self.height * 0.75 and self.width * 0.3 < x < self.width * 0.7
                     self.focus[5] = y < self.height * 0.25 and x > self.width * 0.7
-                elif self.screen == "settings":
+                elif self.screen == "settings":  # depends on which screen you are
                     self.focus[0] = y < self.height * 0.25 and x > self.width * 0.8
                     self.focus[1] = y < self.height * 0.25 and self.width * 0.3 < x < self.width * 0.7
-            if event.type == pygame.MOUSEBUTTONDOWN and self.mousevisibility:  # if mouse has been pressed, take action
+            if event.type == pygame.MOUSEBUTTONDOWN:  # if mouse has been pressed, take action
                 # depending on the current mouse position
-                if self.screen == "mainmenu":
+                if self.screen == "mainmenu":  # depends on which screen you are
                     if self.focus[0]:
                         self.kickoff()  # will start the kickoff
                     elif self.focus[1]:
@@ -117,29 +120,19 @@ class GAMECONTROL:
                         exit()  # will close the gamed
                     elif self.focus[5]:
                         self.resetscore()  # will reset the score
-                elif self.screen == "settings":
+                elif self.screen == "settings":  # depends on which screen you are
                     if self.focus[0]:
-                        self.mainmenu()
+                        self.mainmenu()  # back to main menu
                     if self.focus[1]:
-                        self.gamemode = "1v1" if self.gamemode != "1v1" else "1v0"
+                        self.gamemode = "1v1" if self.gamemode != "1v1" else "1v0"  # switch the gamemode
+            if event.type == pygame.QUIT:  # close the window
+                exit()
 
     def movepaddle1v1(self, inputmap):
-        if self.rightpaddle.getypos() <= 1:  # paddle at minimum height
-            self.rightpaddle.setcmu(False)  # no further upwards movement
-        else:
-            self.rightpaddle.setcmu(True)
-        if self.rightpaddle.getypos() >= self.height - self.rightpaddle.getheight():  # paddle at maximum height
-            self.rightpaddle.setcmd(False)  # no further
-        else:
-            self.rightpaddle.setcmd(True)
-        if self.leftpaddle.getypos() < 1:
-            self.leftpaddle.setcmu(False)
-        else:
-            self.leftpaddle.setcmu(True)
-        if self.leftpaddle.getypos() >= self.height - self.rightpaddle.getheight():
-            self.leftpaddle.setcmd(False)
-        else:
-            self.leftpaddle.setcmd(True)
+        self.rightpaddle.setcmu(self.rightpaddle.getypos() > 1)
+        self.rightpaddle.setcmd(self.rightpaddle.getypos() < self.height - self.rightpaddle.getheight())
+        self.leftpaddle.setcmu(self.leftpaddle.getypos() > 1)
+        self.leftpaddle.setcmd(self.leftpaddle.getypos() < self.height - self.rightpaddle.getheight())
         if self.rightpaddle.getcmd() and inputmap[0]:
             self.rightpaddle.moveydown()
         elif self.rightpaddle.getcmu() and inputmap[1]:
@@ -150,27 +143,14 @@ class GAMECONTROL:
             self.leftpaddle.moveyup()
 
     def movepaddlesingleplayer(self, inputmap):
-        if self.rightpaddle.getypos() < 1:
-            self.rightpaddle.setcmu(False)
-        else:
-            self.rightpaddle.setcmu(True)
-        if self.rightpaddle.getypos() >= self.height - self.rightpaddle.getheight():
-            self.rightpaddle.setcmd(False)
-        else:
-            self.rightpaddle.setcmd(True)
-        if self.leftpaddle.getypos() < 1:
-            self.leftpaddle.setcmu(False)
-        else:
-            self.leftpaddle.setcmu(True)
-        if self.leftpaddle.getypos() >= self.height - self.rightpaddle.getheight():
-            self.leftpaddle.setcmd(False)
-        else:
-            self.leftpaddle.setcmd(True)
+        self.rightpaddle.setcmu(self.rightpaddle.getypos() > 1)
+        self.rightpaddle.setcmd(self.rightpaddle.getypos() < self.height - self.rightpaddle.getheight())
+        self.leftpaddle.setcmu(self.leftpaddle.getypos() > 1)
+        self.leftpaddle.setcmd(self.leftpaddle.getypos() < self.height - self.rightpaddle.getheight())
         if self.rightpaddle.getcmd() and inputmap[0]:
             self.rightpaddle.moveydown()
         elif self.rightpaddle.getcmu() and inputmap[1]:
             self.rightpaddle.moveyup()
-
         if self.leftpaddle.getcmd() and self.ball.getypos() > self.leftpaddle.getypos()+self.leftpaddle.getheight()/2:
             self.leftpaddle.moveydown()
         elif self.leftpaddle.getcmu() and self.ball.getypos() < self.leftpaddle.getypos()+self.leftpaddle.getheight()/2:
@@ -186,19 +166,16 @@ class GAMECONTROL:
                     + self.leftpaddle.getheight():
                 self.ball.changexdirection()
                 SOUNDS.play('soundfiles/jump.wav')
-                if self.inputMap[2]:
-                    self.ball.add_mfy(self.rightpaddle.getmfy() * 10)
-                elif self.inputMap[3]:
-                    self.ball.add_mfy(-self.rightpaddle.getmfy() * 10)
+                if self.inputMap[2] or self.inputMap[3]:
+                    self.increaseballspeed()
+
         if self.rightpaddle.getxpos() - 16 < self.ball.getxpos() < self.rightpaddle.getxpos() - 10:
             if self.rightpaddle.getypos() < self.ball.getypos() < self.rightpaddle.getypos() + \
                     self.rightpaddle.getheight():
                 self.ball.changexdirection()
                 SOUNDS.play('soundfiles/jump.wav')
-                if self.inputMap[0]:
-                    self.ball.add_mfy(self.rightpaddle.getmfy() * 10)
-                elif self.inputMap[1]:
-                    self.ball.add_mfy(-self.rightpaddle.getmfy() * 10)
+                if self.inputMap[0] or self.inputMap[1]:
+                    self.increaseballspeed()
         if self.ball.getxpos() >= self.width:
             SOUNDS.play('soundfiles/shatter.wav')
             self.resetpaddles()
