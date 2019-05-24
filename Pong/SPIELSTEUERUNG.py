@@ -83,6 +83,8 @@ class SPIELSTEUERUNG:
                 self.inputMap[1] = pressed_keys[K_UP]  # right player: move up
                 self.inputMap[2] = pressed_keys[K_s]  # left player: move down
                 self.inputMap[3] = pressed_keys[K_w]  # left player: move up
+            if event.type == pygame.QUIT:
+                exit()
 
     def eventsmenu(self):
         for event in pygame.event.get():
@@ -114,7 +116,7 @@ class SPIELSTEUERUNG:
                     elif self.focus[3]:
                         self.info()  # will enter the 'info' menu
                     elif self.focus[4]:
-                        exit()  # will close the gamed
+                        exit()  # will close the game
                     elif self.focus[5]:
                         self.resetscore()  # will reset the score
                 elif self.screen == "settings":
@@ -129,6 +131,8 @@ class SPIELSTEUERUNG:
                         self.kickoff()
                     elif self.screen == "settings":
                         self.mainmenu()
+            if event.type == pygame.QUIT:
+                exit()
 
 
     def movepaddle1v1(self, inputmap):
