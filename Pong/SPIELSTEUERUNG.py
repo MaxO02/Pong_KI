@@ -102,7 +102,7 @@ class SPIELSTEUERUNG:
                     self.focus[4] = y > self.height * 0.75 and self.width * 0.3 < x < self.width * 0.7
                     self.focus[5] = y < self.height * 0.25 and x > self.width * 0.7
                 elif self.screen == "settings":
-                    self.focus[0] = y < self.height * 0.25 and x > self.width * 0.7
+                    self.focus[0] = y < self.height * 0.25 and x > self.width * 0.8
                     self.focus[1] = y < self.height * 0.25 and self.width * 0.3 < x < self.width * 0.7
             if event.type == pygame.MOUSEBUTTONDOWN and self.mousevisibility:  # if mouse has been pressed, take action
                 # depending on the current mouse position
