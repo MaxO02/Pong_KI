@@ -50,9 +50,7 @@ class WINDOW:
         for t in range(0, 5):
             text_obj.append(self.menu_font.render(titles[t], True, (254, 254, 254)) if not focus[t] else
                             self.menu_font_focused.render(titles[t], True, (254, 254, 254)))
-        for t in range(0, 5):
             widths.append(text_obj[t].get_rect().width)
-        for t in range(0, 5):
             self.screen.blit(text_obj[t], ((self.width - widths[t]) / 2, self.height / 6 * (t + 1)))
         scorereset = self.menu_font.render("RESET SCORE", True, (254, 254, 254)) if not focus[5] else self.\
             menu_font_focused.render("RESET SCORE", True, (254, 254, 254))
@@ -62,7 +60,7 @@ class WINDOW:
         pygame.display.flip()
         """reset score"""
 
-    def kickoffScreen(self, scoreleft, scoreright, i):
+    def kickoffscreen(self, scoreleft, scoreright, i):
         pygame.mouse.set_visible(False)
         self.screen.fill(self.background_color)
         pygame.draw.rect(self.screen, self.paddle_color, [self.leftpaddel.getxpos(), self.leftpaddel.getypos(), 10,

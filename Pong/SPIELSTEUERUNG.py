@@ -42,9 +42,10 @@ class SPIELSTEUERUNG:
         """creates a new screenFalse
            handles all objects floating on the screen
            waits for the first input to kickoff"""
+
         while self.scoreright < 10 and self.scoreleft < 10:  # make sure the game's not over yet
             self.spf.updategamescreen(self.scoreleft, self.scoreright)  # draw a frame of the game
-            self.events()  # read the events
+            self.eventsingame()  # read the events
             if self.gamemode == '1v1':  # movement depending on the gamemode
                 self.movepaddle1v1(self.inputMap)  # both paddles are controlled by people
             else:
@@ -54,10 +55,10 @@ class SPIELSTEUERUNG:
     def kickoff(self):
         """wait for a the players to get ready"""
         pygame.mouse.set_visible(False)  # mouse won't show
-        self.spf.kickoffScreen(self.scoreleft, self.scoreright, "PRESS SPACE")  # show the kickoff screen
+        self.spf.kickoffscreen(self.scoreleft, self.scoreright, "PRESS SPACE")  # show the kickoff screen
         self.screen = "game"
         while True:
-            self.events()  # read the events
+            self.eventsingame()  # read the events
 
     def mainmenu(self):
         """handles any settings, game pauses etc"""
@@ -65,10 +66,10 @@ class SPIELSTEUERUNG:
         pygame.mouse.set_visible(True)  # mouse will show
         while True:
             """show the main menu and wait for an event"""
-            self.events()  # read the events
+            self.eventsmenu()  # read the events
             self.spf.menuscreenmain(self.focus)  # show the menu-screen depending on where the mouse is
 
-    def events(self):
+    def eventsingame(self):
         for event in pygame.event.get():  # get every event
             if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:  # all the key events
                 pressed_keys = pygame.key.get_pressed()
@@ -76,18 +77,15 @@ class SPIELSTEUERUNG:
                     self.clock = pygame.time.Clock()  # reset the clock to prevent ball movement in kickoff screen
                     self.matchstart()  # let the match start / continue
                 if pressed_keys[K_ESCAPE]:   # if escape has been pressed
-                    if self.screen == "game":
-                        self.mainmenu()
-                    elif self.screen == "mainmenu":
-                        self.kickoff()
-                    else:
-                        self.mainmenu()  # start the menu screen
+                        self.mainmenu() # start the menu screen
                 """now fill the input map for any paddle controlling keystroke"""
                 self.inputMap[0] = pressed_keys[K_DOWN]  # right player: move down
                 self.inputMap[1] = pressed_keys[K_UP]  # right player: move up
                 self.inputMap[2] = pressed_keys[K_s]  # left player: move down
                 self.inputMap[3] = pressed_keys[K_w]  # left player: move up
 
+    def eventsmenu(self):
+        for event in pygame.event.get():
             if event.type == pygame.MOUSEMOTION and self.mousevisibility:  # if mouse has been moved you need to update
                 # the focused area
                 x, y = pygame.mouse.get_pos()  # get where the mouse is hovering
@@ -123,11 +121,7 @@ class SPIELSTEUERUNG:
                     if self.focus[0]:
                         self.mainmenu()
                     if self.focus[1]:
-                        if self.gamemode == "1v1":
-                            self.gamemode = "1v0"
-                        else:
-                            self.gamemode = "1v1"
-
+                        self.gamemode = "1v1" if self.gamemode != "1v1" else "1v2"
 
     def movepaddle1v1(self, inputmap):
         if self.rightpaddle.getypos() <= 1:  # paddle at minimum height
@@ -232,7 +226,7 @@ class SPIELSTEUERUNG:
         pygame.mouse.set_visible(True)  # mouse will show
         self.screen = "settings"
         while True:
-            self.events()  # read the events
+            self.eventsmenu()  # read the events
             self.spf.menuscreensettings(self.focus)
 
     def help(self):
