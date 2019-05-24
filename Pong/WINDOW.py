@@ -83,10 +83,15 @@ class WINDOW:
         pygame.mouse.set_visible(True)
         self.screen.fill((0, 0, 0))
         focus = l
-        changres = self.menu_font.render("BACK", True, (254, 254, 254)) if not focus[5] else self. \
+        back = self.menu_font.render("BACK", True, (254, 254, 254)) if not focus[0] else self. \
             menu_font_focused.render("BACK", True, (254, 254, 254))
-        scorewidth = changres.get_rect().width
-        self.screen.blit(changres, (0.7 * self.width + scorewidth / 2, self.height / 6))
+        backwidth = back.get_rect().width
+        self.screen.blit(back, (0.8 * self.width + backwidth / 2, self.height / 6))
+
+        changegm = self.menu_font.render("CHANGE GAMEMODE", True, (254, 254, 254)) if not focus[1] else self. \
+            menu_font_focused.render("CHANGE GAMEMDOE", True, (254, 254, 254))
+        gmwidth = changegm.get_rect().width
+        self.screen.blit(changegm, ((self.width - gmwidth) / 2, self.height / 6 * 1))
         pygame.display.flip()
 
 

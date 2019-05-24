@@ -91,15 +91,19 @@ class SPIELSTEUERUNG:
             if event.type == pygame.MOUSEMOTION and self.mousevisibility:  # if mouse has been moved you need to update
                 # the focused area
                 x, y = pygame.mouse.get_pos()  # get where the mouse is hovering
-                self.focus[0] = y < self.height * 0.25 and self.width * 0.3 < x < self.width * 0.7
-                self.focus[1] = self.height * 0.25 < y < self.height * 5 / 12 and self.width * 0.3 < x < self.width * \
-                    0.7
-                self.focus[2] = self.height * 5 / 12 < y < self.height / 12 * 7 and self.width * 0.3 < x < self.width *\
-                    0.7
-                self.focus[3] = self.height / 12 * 7 < y < self.height * 0.75 and self.width * 0.3 < x < self.width * \
-                    0.7
-                self.focus[4] = y > self.height * 0.75 and self.width * 0.3 < x < self.width * 0.7
-                self.focus[5] = y < self.height * 0.25 and x > self.width * 0.7
+                if self.screen == "mainmenu":
+                    self.focus[0] = y < self.height * 0.25 and self.width * 0.3 < x < self.width * 0.7
+                    self.focus[1] = self.height * 0.25 < y < self.height * 5 / 12 and self.width * 0.3 < x < \
+                        self.width * 0.7
+                    self.focus[2] = self.height * 5 / 12 < y < self.height / 12 * 7 and self.width * 0.3 < x < \
+                        self.width * 0.7
+                    self.focus[3] = self.height / 12 * 7 < y < self.height * 0.75 and self.width * 0.3 < x < \
+                        self.width * 0.7
+                    self.focus[4] = y > self.height * 0.75 and self.width * 0.3 < x < self.width * 0.7
+                    self.focus[5] = y < self.height * 0.25 and x > self.width * 0.7
+                elif self.screen == "settings":
+                    self.focus[0] = y < self.height * 0.25 and x > self.width * 0.7
+                    self.focus[1] = y < self.height * 0.25 and self.width * 0.3 < x < self.width * 0.7
             if event.type == pygame.MOUSEBUTTONDOWN and self.mousevisibility:  # if mouse has been pressed, take action
                 # depending on the current mouse position
                 if self.screen == "mainmenu":
@@ -116,9 +120,14 @@ class SPIELSTEUERUNG:
                     elif self.focus[5]:
                         self.resetscore()  # will reset the score
                 elif self.screen == "settings":
-                    if self.focus[5]:
-
+                    if self.focus[0]:
                         self.mainmenu()
+                    if self.focus[1]:
+                        if self.gamemode == "1v1":
+                            self.gamemode = "1v0"
+                        else:
+                            self.gamemode = "1v1"
+
 
     def movepaddle1v1(self, inputmap):
         if self.rightpaddle.getypos() <= 1:  # paddle at minimum height
