@@ -1,23 +1,7 @@
-from Pong.SPIELFELD import SPIELFELD
-import pygame
-from pygame.locals import *
+#!/usr/bin/env python3
 
-class THEMAINMASTER:
-    def __init__(self):
-        spf = SPIELFELD(self)
-        pygame.init()
-        self.clock = pygame.time.Clock()
-        self.scoreleft = 0
-        self.scoreright = 0
-        self.inputMap = [False, False, False, False]
-        cancel = False
-        while not cancel and self.scoreright <= 10 and self.scoreleft <= 10:
-            self.events()
-            spf.movepaddel(self.inputMap)
-            spf.ballhandeling(self.clock.tick(60))
-            spf.updatescreen(self.scoreleft, self.scoreright)
-            self.clock.tick(60)
+from Pong.GAMECONTROL import GAMECONTROL
 
-    
-if __name__ == '__main__':    
-    tmm = THEMAINMASTER()
+
+if __name__ == '__main__':  # if this script is executed as the main skript (importing it won't trigger this)
+    game_management = GAMECONTROL()  # GAMECONTROL handles any other class needed for the game
