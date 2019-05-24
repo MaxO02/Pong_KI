@@ -121,7 +121,15 @@ class SPIELSTEUERUNG:
                     if self.focus[0]:
                         self.mainmenu()
                     if self.focus[1]:
-                        self.gamemode = "1v1" if self.gamemode != "1v1" else "1v2"
+                        self.gamemode = "1v1" if self.gamemode != "1v1" else "1v0"
+            if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
+                pressed_keys = pygame.key.get_pressed()
+                if pressed_keys[K_ESCAPE]:
+                    if self.screen == "mainmenu":
+                        self.kickoff()
+                    elif self.screen == "settings":
+                        self.mainmenu()
+
 
     def movepaddle1v1(self, inputmap):
         if self.rightpaddle.getypos() <= 1:  # paddle at minimum height
