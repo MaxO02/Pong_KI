@@ -5,103 +5,116 @@ from Pong.PADDLE import PADDEL
 from Pong.WINDOW import WINDOW
 from Pong.SOUNDS import SOUNDS
 import random
-from time import sleep
 
 
 class SPIELSTEUERUNG:
-    scoreleft, scoreright = 0, 0
-    kickoffbool = True
-    gamemode = '1v0'
+    def __init__(self, resolution=(1920, 1080), gm='1v1', score=(0, 0)):
+        """defines important variables: height and width of the screen, arrays for the event-handling, gamemode, score
+        defines objects of other classes: game's clock, paddles, ball, window
+        initiates pygame and the menu"""
 
-    def __init__(self, resolution=(1920, 1080)):
-        """loads necessary modules, defines important objects, initiates the menu, gives necessary infos"""
-        self.width, self.height = resolution
-        self.leftpaddle = PADDEL(0.1 * self.width, self.height / 2)
-        self.rightpaddle = PADDEL(0.9 * self.width, self.height / 2)
-        self.ball = BALL(self.width / 2, self.height / 2, (270 / 0.6 * random.choice([-1, 1]), 270 / 0.6 * random.choice([-1, 1])))
-        self.spf = WINDOW(self.ball, self.leftpaddle, self.rightpaddle, resolution)
-        self.width, self.height = self.spf.giveresolution()
-        pygame.init()
-        self.inputMap = [False, False, False, False]
-        self.focus = [False, False, False, False, False, False]
+        # variables:
+        self.width, self.height = resolution  # sets the variables depending on the current resolution
+        self.inputMap = [False, False, False, False]  # tells wich control keys are pressed
+        self.focus = [False, False, False, False, False, False]  # tells which area the mouse is hovering over
+        self.gamemode = gm  # sets the gamemode: either player vs player or computer vs player
+        self.scoreleft, self.scoreright = score  # self explainatory, right? the score
+        self.mousevisibility = True  # is the mouse even showing
+
+        # objects
+        self.clock = pygame.time.Clock()  # handles the timespans passing between operations,
+        self.leftpaddle = PADDEL(0.1 * self.width, self.height / 2)  # paddle is created depending on the screens
+        # resolution
+        self.rightpaddle = PADDEL(0.9 * self.width, self.height / 2)  # paddle is created depending on the screens
+        # resolution
+        self.ball = BALL(self.width / 2, self.height / 2, (270 / 0.6 * random.choice([-1, 1]), 270 / 0.6 * random.
+                                                           choice([-1, 1])))  # Ball is created depending on the screens
+        # resolution, speed has a random direction
+        self.spf = WINDOW(self.ball, self.leftpaddle, self.rightpaddle, resolution)  # WINDOW gets the objects to show
+        # aswell as the resolution
+
+        # start the game
+        pygame.init()  # initiates pygame
         while True:
-            self.mainmenu()
+            self.mainmenu()  # shows the menu screen
 
     def matchstart(self):
-        """creates a new screen
+        """creates a new screenFalse
            handles all objects floating on the screen
            waits for the first input to kickoff"""
-        self.kickoffbool = True
-        while self.scoreright < 10 and self.scoreleft < 10:
-            self.spf.updategamescreen(self.scoreleft, self.scoreright)
-            self.events()
-            if self.gamemode == '1v1':
-                self.movepaddle1v1(self.inputMap)
+        while self.scoreright < 10 and self.scoreleft < 10:  # make sure the game's not over yet
+            self.spf.updategamescreen(self.scoreleft, self.scoreright)  # draw a frame of the game
+            self.events()  # read the events
+            if self.gamemode == '1v1':  # movement depending on the gamemode
+                self.movepaddle1v1(self.inputMap)  # both paddles are controlled by people
             else:
-                self.movepaddlesingleplayer(self.inputMap)
-            self.ballhandling(self.clock.tick(200))
+                self.movepaddlesingleplayer(self.inputMap)  # only one paddle is under human control
+            self.ballhandling(self.clock.tick(200))  # move the ball adequately and wait for a short time
 
     def kickoff(self):
-        self.spf.kickoffScreen(self.scoreleft, self.scoreright, "PRESS 'SPACE'")
-        while self.kickoffbool:
-            self.events()
-            sleep(0.1)
-        self.kickoffbool = True
-        SOUNDS.play('soundfiles/airhorn.wav')
-        sleep(0.5)
-        self.clock = pygame.time.Clock()
-        self.matchstart()
+        """wait for a the players to get ready"""
+        pygame.mouse.set_visible(False)  # mouse won't show
+        self.spf.kickoffScreen(self.scoreleft, self.scoreright, "PRESS SPACE")  # show the kickoff screen
+        while True:
+            self.events()  # read the events
 
     def mainmenu(self):
         """handles any settings, game pauses etc"""
+        pygame.mouse.set_visible(True)  # mouse will show
         while True:
             """show the main menu and wait for an event"""
-            self.events()
-            self.spf.menuscreenmain(self.focus)
+            self.events()  # read the events
+            self.spf.menuscreenmain(self.focus)  # show the menu-screen depending on where the mouse is
 
     def events(self):
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                exit()
-            if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
+        for event in pygame.event.get():  # get every event
+            if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:  # all the key events
                 pressed_keys = pygame.key.get_pressed()
-                if pressed_keys[K_SPACE]:
-                    self.kickoffbool = False
-                if pressed_keys[K_ESCAPE]:
-                    self.mainmenu()
-                self.inputMap[0] = pressed_keys[K_DOWN]
-                self.inputMap[1] = pressed_keys[K_UP]
-                self.inputMap[2] = pressed_keys[K_s]
-                self.inputMap[3] = pressed_keys[K_w]
-            if event.type == pygame.MOUSEMOTION:
-                x, y = pygame.mouse.get_pos()
+                if pressed_keys[K_SPACE]:  # if space has been pressed
+                    self.clock = pygame.time.Clock()  # reset the clock to prevent ball movement in kickoff screen
+                    self.matchstart()  # let the match start / continue
+                if pressed_keys[K_ESCAPE]:   # if escape has been pressed
+                    self.mainmenu()  # start the menu screen
+                """now fill the input map for any paddle controlling keystroke"""
+                self.inputMap[0] = pressed_keys[K_DOWN]  # right player: move down
+                self.inputMap[1] = pressed_keys[K_UP]  # right player: move up
+                self.inputMap[2] = pressed_keys[K_s]  # left player: move down
+                self.inputMap[3] = pressed_keys[K_w]  # left player: move up
+
+            if event.type == pygame.MOUSEMOTION and self.mousevisibility:  # if mouse has been moved you need to update
+                # the focused area
+                x, y = pygame.mouse.get_pos()  # get where the mouse is hovering
                 self.focus[0] = y < self.height * 0.25 and self.width * 0.3 < x < self.width * 0.7
-                self.focus[1] = self.height * 0.25 < y < self.height * 5 / 12 and self.width * 0.3 < x < self.width * 0.7
-                self.focus[2] = self.height * 5 / 12 < y < self.height / 12 * 7 and self.width * 0.3 < x < self.width * 0.7
-                self.focus[3] = self.height / 12 * 7 < y < self.height * 0.75 and self.width * 0.3 < x < self.width * 0.7
+                self.focus[1] = self.height * 0.25 < y < self.height * 5 / 12 and self.width * 0.3 < x < self.width * \
+                    0.7
+                self.focus[2] = self.height * 5 / 12 < y < self.height / 12 * 7 and self.width * 0.3 < x < self.width *\
+                    0.7
+                self.focus[3] = self.height / 12 * 7 < y < self.height * 0.75 and self.width * 0.3 < x < self.width * \
+                    0.7
                 self.focus[4] = y > self.height * 0.75 and self.width * 0.3 < x < self.width * 0.7
                 self.focus[5] = y < self.height * 0.25 and x > self.width * 0.7
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN and self.mousevisibility:  # if mouse has been pressed, take action
+                # depending on the current mouse position
                 if self.focus[0]:
-                    self.kickoff()
+                    self.kickoff()  # will start the kickoff
                 elif self.focus[1]:
-                    self.settings()
+                    self.settings()  # will enter the 'settings' menu
                 elif self.focus[2]:
-                    self.help()
+                    self.help()  # will enter the 'help' menu
                 elif self.focus[3]:
-                    self.info()
+                    self.info()  # will enter the 'info' menu
                 elif self.focus[4]:
-                    exit()
+                    exit()  # will close the gamed
                 elif self.focus[5]:
-                    self.resetscore()
+                    self.resetscore()  # will reset the score
 
     def movepaddle1v1(self, inputmap):
-        if self.rightpaddle.getypos() < 1:
-            self.rightpaddle.setcmu(False)
+        if self.rightpaddle.getypos() <= 1:  # paddle at minimum height
+            self.rightpaddle.setcmu(False)  # no further upwards movement
         else:
             self.rightpaddle.setcmu(True)
-        if self.rightpaddle.getypos() >= self.height - self.rightpaddle.getheight():
-            self.rightpaddle.setcmd(False)
+        if self.rightpaddle.getypos() >= self.height - self.rightpaddle.getheight():  # paddle at maximum height
+            self.rightpaddle.setcmd(False)  # no further
         else:
             self.rightpaddle.setcmd(True)
         if self.leftpaddle.getypos() < 1:
@@ -186,35 +199,56 @@ class SPIELSTEUERUNG:
 
     @staticmethod
     def clearlist(l, data):
+        """clears any list full of booleans, came in handy with an earlier approach to the events of ours
+        not used anymore"""
         for i in range(len(l)):
             l[i - 1] = data
 
     def settings(self):
+        """the screen specifically made for the game's settings
+
+        needs revision in WINDOW-class"""
         while True:
             self.spf.menuscreensettings()
 
     def help(self):
+        """the screen specifically made for providing help, should point towards the github project
+
+        needs revision in WINDOW-class"""
         while True:
             self.spf.menuscreenhelp()
 
     def info(self):
+        """the screen for basic information about the game, credits
+
+        needs revision in WINDOW-class"""
         while True:
             self.spf.menuscreeninfo()
 
     def goalright(self):
+        """increases the right player's score by one"""
         self.scoreright += 1
 
     def goalleft(self):
+        """increases the left player's score by one"""
         self.scoreleft += 1
 
     def resetpaddles(self):
+        """sets both paddles back to the middle of the screen, used after a goal has been scored"""
         self.rightpaddle.setypos(self.height / 2)
         self.leftpaddle.setypos(self.height / 2)
 
     def increaseballspeed(self):
+        """speeds up the ball in both x and y direction (but by different values)
+
+        currently unused"""
         self.ball.add_mfx(9 * self.ball.mfx / abs(self.ball.mfx))
         self.ball.add_mfy(3 * self.ball.mfy / abs(self.ball.mfy))
 
     def resetscore(self):
+        """sets both scores back to 0
+        used to rematch or to restart a running game
+
+        needs output like 'successfully reset score' -> WINDOW-class """
         self.scoreleft = 0
         self.scoreright = 0
