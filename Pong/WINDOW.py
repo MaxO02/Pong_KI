@@ -1,4 +1,5 @@
 import pygame
+import random
 
 
 class WINDOW:
@@ -45,6 +46,7 @@ class WINDOW:
         self.leftpaddel.setxpos(0.1*self.width)
         self.rightpaddel.setxpos(0.9 * self.width)
         self.ball.setstartpos((self.width/2, self.height/2))
+        self.ball.reset((270 / 0.6 * random.choice([-1, 1]), 270 / 0.6 * random.choice([-1, 1])))
 
     def menuscreenmain(self, l):
         pygame.mouse.set_visible(True)
