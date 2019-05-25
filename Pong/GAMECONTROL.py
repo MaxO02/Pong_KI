@@ -19,8 +19,8 @@ class GAMECONTROL:
         self.focus = [False, False, False, False, False, False]  # tells which area the mouse is hovering over
         self.gamemode = gm  # sets the gamemode: either player vs player or computer vs player
         self.scoreleft, self.scoreright = score  # self explainatory, right? the score
-        self.screens = {"game": False, "mainmenu": True, "settings": False, "help": False, "info": False}  # not in use
-        self.gamemodes = {"1v1": True, "1v0": False}  # not in use
+        self.screens = {"game": False, "mainmenu": True, "settings": False, "help": False, "info": False, "resmenu": False}
+        self.gamemodes = {"1v1": True, "1v0": False}
 
         # objects
         self.clock = pygame.time.Clock()  # handles the timespans passing between operations,
@@ -36,7 +36,7 @@ class GAMECONTROL:
 
         # start the game
         pygame.init()  # initiates pygame
-        while True:  # endless loop
+        while True:
             self.mainmenu()  # shows the menu screen
 
     def matchstart(self):
@@ -71,7 +71,6 @@ class GAMECONTROL:
             self.spf.menuscreenmain(self.focus)  # show the menu-screen depending on where the mouse is
 
     def eventsingame(self):
-        """listens for any events necessary while playing"""
         for event in pygame.event.get():  # get every event
             if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:  # all the key events
                 pressed_keys = pygame.key.get_pressed()
@@ -82,15 +81,14 @@ class GAMECONTROL:
                 if pressed_keys[K_ESCAPE]:   # if escape has been pressed
                         self.mainmenu() # start the menu screen
                 """now fill the input map for any paddle controlling keystroke"""
-                self.inputMap[0] = pressed_keys[K_DOWN]  # right player input: move down
-                self.inputMap[1] = pressed_keys[K_UP]  # right player input: move up
-                self.inputMap[2] = pressed_keys[K_s]  # left player input: move down
-                self.inputMap[3] = pressed_keys[K_w]  # left player input: move up
+                self.inputMap[0] = pressed_keys[K_DOWN]  # right player: move down
+                self.inputMap[1] = pressed_keys[K_UP]  # right player: move up
+                self.inputMap[2] = pressed_keys[K_s]  # left player: move down
+                self.inputMap[3] = pressed_keys[K_w]  # left player: move up
             if event.type == pygame.QUIT:
                 exit()
 
     def eventsmenu(self):
-        """listens for any events necessary while in menu"""
         for event in pygame.event.get():
             if event.type == pygame.MOUSEMOTION:  # if mouse has been moved you need to update
                 # the focused area
@@ -105,9 +103,13 @@ class GAMECONTROL:
                         self.width * 0.7
                     self.focus[4] = y > self.height * 0.75 and self.width * 0.3 < x < self.width * 0.7
                     self.focus[5] = y < self.height * 0.25 and x > self.width * 0.7
-                elif self.screen == "settings":  # depends on which screen you are
+                elif self.screen == "settings" :  # depends on which screen you are
                     self.focus[0] = y < self.height * 0.25 and x > self.width * 0.8
                     self.focus[1] = y < self.height * 0.25 and self.width * 0.3 < x < self.width * 0.7
+                    self.focus[2] = self.height * 0.25 < y < self.height * 5 / 12 and self.width * 0.3 < x < \
+                                    self.width * 0.7
+                elif self.screen == "resmenu":  # depends on which screen you are
+                    self.focus[0] = y < self.height * 0.25 and x > self.width * 0.8
             if event.type == pygame.MOUSEBUTTONDOWN:  # if mouse has been pressed, take action
                 # depending on the current mouse position
                 if self.screen == "mainmenu":  # depends on which screen you are
@@ -128,11 +130,15 @@ class GAMECONTROL:
                         self.mainmenu()  # back to main menu
                     if self.focus[1]:
                         self.gamemode = "1v1" if self.gamemode != "1v1" else "1v0"  # switch the gamemode
+                    if self.focus[2]:
+                        self.resmenu()
+                elif self.screen == "resmenu":
+                    if self.focus[0]:
+                        self.settings()
             if event.type == pygame.QUIT:  # close the window
                 exit()
 
     def movepaddle1v1(self, inputmap):
-        """moves both paddles if two players are at hand"""
         self.rightpaddle.setcmu(self.rightpaddle.getypos() > 1)  # blocks right movement on top of the screen
         self.rightpaddle.setcmd(self.rightpaddle.getypos() < self.height - self.rightpaddle.getheight())  # blocks right
         # movement on the bottom of the screen
@@ -149,7 +155,6 @@ class GAMECONTROL:
             self.leftpaddle.moveyup()  # move leftpaddle up
 
     def movepaddlesingleplayer(self, inputmap):
-        """moves both paddles if only one player is at hand"""
         self.rightpaddle.setcmu(self.rightpaddle.getypos() > 1)  # blocks right movement on top of the screen
         self.rightpaddle.setcmd(self.rightpaddle.getypos() < self.height - self.rightpaddle.getheight())  # blocks right
         # movement on the bottom of the screen
@@ -168,7 +173,6 @@ class GAMECONTROL:
             self.leftpaddle.moveyup()  # move leftpaddle up
 
     def ballhandling(self, clocktick):
-        """controls the balls behaviour, lets it move, lets it bounce, acknowledges goals"""
         self.ball.move(clocktick / 1000.0)  # ball should relocate itself according to it's speed and the time
         if not 21 < self.ball.getypos() < self.height - 21:  # in case the ball touches the bottom or the top
             self.ball.changeydirection()  # change balls direction of movement in y
@@ -180,6 +184,7 @@ class GAMECONTROL:
                 SOUNDS.play('soundfiles/bing2.wav')
                 if self.inputMap[2] or self.inputMap[3]:
                     self.increaseballspeed()
+
         if self.rightpaddle.getxpos() - 16 < self.ball.getxpos() < self.rightpaddle.getxpos() - 10:
             if self.rightpaddle.getypos() - 10 < self.ball.getypos() < self.rightpaddle.getypos() + \
                     self.rightpaddle.getheight() + 10:
@@ -231,6 +236,14 @@ class GAMECONTROL:
         needs revision in WINDOW-class"""
         while True:
             self.spf.menuscreeninfo()
+    def resmenu(self):
+        """the screen for changing the resolution
+
+                needs revision in WINDOW-class"""
+        self.screen = "resmenu"
+        while True:
+            self.eventsmenu()
+            self.spf.menuscreenresolution(self.focus)
 
     def goalright(self):
         """increases the right player's score by one"""
