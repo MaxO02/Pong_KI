@@ -75,6 +75,7 @@ class GAMECONTROL:
             if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:  # all the key events
                 pressed_keys = pygame.key.get_pressed()
                 if pressed_keys[K_SPACE]:  # if space has been pressed
+                    SOUNDS.play("soundfiles/start.wav")
                     self.clock = pygame.time.Clock()  # reset the clock to prevent ball movement in kickoff screen
                     self.matchstart()  # let the match start / continue
                 if pressed_keys[K_ESCAPE]:   # if escape has been pressed
@@ -166,12 +167,12 @@ class GAMECONTROL:
         self.ball.move(clocktick / 1000.0)  # ball should relocate itself according to it's speed and the time
         if not 21 < self.ball.getypos() < self.height - 21:  # in case the ball touches the bottom or the top
             self.ball.changeydirection()  # change balls direction of movement in y
-            SOUNDS.play('soundfiles/jump.wav')  # play a bump sound
+            SOUNDS.play('soundfiles/bing1.wav')  # play a bump sound
         if self.leftpaddle.getxpos() + 10 < self.ball.getxpos() < self.leftpaddle.getxpos() + 16:
             if self.leftpaddle.getypos() - 10 < self.ball.getypos() < self.leftpaddle.getypos() \
                     + self.leftpaddle.getheight() + 10:
                 self.ball.changexdirection()
-                SOUNDS.play('soundfiles/jump.wav')
+                SOUNDS.play('soundfiles/bing2.wav')
                 if self.inputMap[2] or self.inputMap[3]:
                     self.increaseballspeed()
 
@@ -179,17 +180,17 @@ class GAMECONTROL:
             if self.rightpaddle.getypos() - 10 < self.ball.getypos() < self.rightpaddle.getypos() + \
                     self.rightpaddle.getheight() + 10:
                 self.ball.changexdirection()
-                SOUNDS.play('soundfiles/jump.wav')
+                SOUNDS.play('soundfiles/bing2.wav')
                 if self.inputMap[0] or self.inputMap[1]:
                     self.increaseballspeed()
         if self.ball.getxpos() >= self.width:
-            SOUNDS.play('soundfiles/shatter.wav')
+            SOUNDS.play('soundfiles/win.ogg')
             self.resetpaddles()
             self.goalleft()
             self.ball.reset((0.25 * self.width * random.choice([-1, 1]), 0.25 * self.height * random.choice([-1, 1])))
             self.kickoff()
         if self.ball.getxpos() < 1:
-            SOUNDS.play('soundfiles/shatter.wav')
+            SOUNDS.play('soundfiles/win.ogg')
             self.resetpaddles()
             self.goalright()
             self.ball.reset((0.25 * self.width * random.choice([-1, 1]), 0.25 * self.height * random.choice([-1, 1])))
