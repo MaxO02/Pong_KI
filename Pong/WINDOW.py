@@ -6,6 +6,7 @@ class WINDOW:
     ball_color = (85, 57, 138)
     background_color = (1, 254, 240)
     font_color = paddle_color
+    inputresolution = ''
 
     def __init__(self, ball, leftpaddle, rightpaddle, res):
         pygame.init()
@@ -40,8 +41,10 @@ class WINDOW:
         self.screen = pygame.display.set_mode(self.resolution)
         self.width, self.height = self.resolution
         self.leftpaddel.setypos(self.height / 2)
-        self.rightpaddel(self.height / 2)
-        self.ball.setstartpos(self.width / 2, self.height / 2)
+        self.rightpaddel.setypos(self.height / 2)
+        startpos = self.width/2, self.height/2
+        self.ball.setstartpos(startpos
+                              )
 
     def menuscreenmain(self, l):
         pygame.mouse.set_visible(True)
@@ -88,6 +91,12 @@ class WINDOW:
             menu_font_focused.render("CHANGE GAMEMDOE", True, (254, 254, 254))
         gmwidth = changegm.get_rect().width
         self.screen.blit(changegm, ((self.width - gmwidth) / 2, self.height / 6 * 1))
+
+        changeres = self.menu_font.render("CHANGE RESOLUTION", True, (254, 254, 254)) if not focus[2] else self. \
+            menu_font_focused.render("CHANGE RESOLUTION", True, (254, 254, 254))
+        gmwidth = changeres.get_rect().width
+        self.screen.blit(changeres, ((self.width - gmwidth) / 2, self.height / 6 * 2))
+
         pygame.display.flip()
 
 
@@ -100,3 +109,36 @@ class WINDOW:
         """All about the game you need to know. Who are the maintainers, How did this project happen? How did we
         work? Why did we choose this? Are there other projects to check out? Which links to follow?"""
         pass
+
+    def menuscreenresolution(self, l):
+        pygame.mouse.set_visible(True)
+        self.screen.fill((0, 0, 0))
+        focus = l
+        back = self.menu_font.render("BACK", True, (254, 254, 254)) if not focus[0] else self. \
+            menu_font_focused.render("BACK", True, (254, 254, 254))
+        backwidth = back.get_rect().width
+        self.screen.blit(back, (0.8 * self.width + backwidth / 2, self.height / 6))
+
+        font = pygame.font.Font(None, 32)
+        color = (254, 254, 254)
+        input_box = pygame.Rect(100, 100, 140, 32)
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    res = self.inputresolution.split("x")
+                    newres = int(res[0]), int(res[1])
+                    self.changeresolution(newres)
+                    self.inputresolution = ''
+                elif event.key == pygame.K_BACKSPACE:
+                     self.inputresolution = self.inputresolution[:-1]
+                else:
+                    self.inputresolution += event.unicode
+
+        # Render the current resolution
+        txt_surface = font.render(self.inputresolution, True, color)
+        # Resize the box if the resolution is too long.
+        width = max(200, txt_surface.get_width() + 10)
+        input_box.w = width
+        self.screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
+        pygame.draw.rect(self.screen, color, input_box, 2)
+        pygame.display.flip()
