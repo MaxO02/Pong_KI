@@ -28,23 +28,17 @@ class BALL:
         self.xpos += self.mfx * timesec
         self.ypos += self.mfy * timesec
 
-    # @multitasking.task
     def changeydirection(self):
         if not self.turnedy:
             self.turnedy = True
             self.mfy = -self.mfy
             self.resetturnedy()
-            # sleep(0.5)
-            # self.turnedy = False
 
-    # @multitasking.task
     def changexdirection(self):
         if not self.turnedx:
             self.turnedx = True
             self.mfx = -self.mfx
             self.resetturnedx()
-            # sleep(0.5)
-            # self.turnedx = False
 
     def setstartpos(self, coords):
         self.startx, self.starty = coords
