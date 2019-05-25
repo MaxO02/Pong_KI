@@ -42,6 +42,8 @@ class WINDOW:
         self.width, self.height = self.resolution
         self.leftpaddel.setypos(self.height / 2)
         self.rightpaddel.setypos(self.height / 2)
+        self.leftpaddel.setxpos(0.1*self.width)
+        self.rightpaddel.setxpos(0.9 * self.width)
         self.ball.setstartpos((self.width/2, self.height/2))
 
     def menuscreenmain(self, l):

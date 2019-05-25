@@ -11,6 +11,9 @@ class PADDEL:
     def getxpos(self):
         return self.posx
 
+    def setxpos(self, newxpos):
+        self.posx = newxpos
+
     def getypos(self):
         return self.posy
 
