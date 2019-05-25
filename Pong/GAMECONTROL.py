@@ -57,7 +57,7 @@ class GAMECONTROL:
         """wait for a the players to get ready"""
         pygame.mouse.set_visible(False)  # mouse won't show
         self.spf.kickoffscreen(self.scoreleft, self.scoreright, "PRESS SPACE")  # show the kickoff screen
-        self.screen = "kickoff"
+        self.screen = "game"
         while True:
             self.eventsingame()  # read the events
 
@@ -117,7 +117,7 @@ class GAMECONTROL:
                     elif self.focus[3]:
                         self.info()  # will enter the 'info' menu
                     elif self.focus[4]:
-                        exit()  # will close the gamed
+                        exit()  # will close the game
                     elif self.focus[5]:
                         self.resetscore()  # will reset the score
                 elif self.screen == "settings":  # depends on which screen you are
@@ -129,49 +129,55 @@ class GAMECONTROL:
                 exit()
 
     def movepaddle1v1(self, inputmap):
-        self.rightpaddle.setcmu(self.rightpaddle.getypos() > 1)
-        self.rightpaddle.setcmd(self.rightpaddle.getypos() < self.height - self.rightpaddle.getheight())
-        self.leftpaddle.setcmu(self.leftpaddle.getypos() > 1)
-        self.leftpaddle.setcmd(self.leftpaddle.getypos() < self.height - self.rightpaddle.getheight())
-        if self.rightpaddle.getcmd() and inputmap[0]:
-            self.rightpaddle.moveydown()
-        elif self.rightpaddle.getcmu() and inputmap[1]:
-            self.rightpaddle.moveyup()
-        if self.leftpaddle.getcmd() and inputmap[2]:
-            self.leftpaddle.moveydown()
-        elif self.leftpaddle.getcmu() and inputmap[3]:
-            self.leftpaddle.moveyup()
+        self.rightpaddle.setcmu(self.rightpaddle.getypos() > 1)  # blocks right movement on top of the screen
+        self.rightpaddle.setcmd(self.rightpaddle.getypos() < self.height - self.rightpaddle.getheight())  # blocks right
+        # movement on the bottom of the screen
+        self.leftpaddle.setcmu(self.leftpaddle.getypos() > 1)  # blocks left movement on top of the screen
+        self.leftpaddle.setcmd(self.leftpaddle.getypos() < self.height - self.rightpaddle.getheight())  # blocks left
+        # movement on the bottom of the screen
+        if self.rightpaddle.getcmd() and inputmap[0]:  # in case K_DOWN is pressed
+            self.rightpaddle.moveydown()  # move rightpaddle down
+        elif self.rightpaddle.getcmu() and inputmap[1]:  # in case K_UP is pressed
+            self.rightpaddle.moveyup()  # move rightpaddle up
+        if self.leftpaddle.getcmd() and inputmap[2]:  # in case K_S is pressed
+            self.leftpaddle.moveydown()  # move leftpaddle down
+        elif self.leftpaddle.getcmu() and inputmap[3]:  # in case K_W is pressed
+            self.leftpaddle.moveyup()  # move leftpaddle up
 
     def movepaddlesingleplayer(self, inputmap):
-        self.rightpaddle.setcmu(self.rightpaddle.getypos() > 1)
-        self.rightpaddle.setcmd(self.rightpaddle.getypos() < self.height - self.rightpaddle.getheight())
-        self.leftpaddle.setcmu(self.leftpaddle.getypos() > 1)
-        self.leftpaddle.setcmd(self.leftpaddle.getypos() < self.height - self.rightpaddle.getheight())
-        if self.rightpaddle.getcmd() and inputmap[0]:
-            self.rightpaddle.moveydown()
-        elif self.rightpaddle.getcmu() and inputmap[1]:
-            self.rightpaddle.moveyup()
+        self.rightpaddle.setcmu(self.rightpaddle.getypos() > 1)  # blocks right movement on top of the screen
+        self.rightpaddle.setcmd(self.rightpaddle.getypos() < self.height - self.rightpaddle.getheight())  # blocks right
+        # movement on the bottom of the screen
+        self.leftpaddle.setcmu(self.leftpaddle.getypos() > 1)  # blocks left movement on top of the screen
+        self.leftpaddle.setcmd(self.leftpaddle.getypos() < self.height - self.rightpaddle.getheight())  # blocks left
+        # movement on the bottom of the screen
+        if self.rightpaddle.getcmd() and inputmap[0]:  # in case K_DOWN is pressed
+            self.rightpaddle.moveydown()  # move rightpaddle down
+        elif self.rightpaddle.getcmu() and inputmap[1]:  # in case K_UP is pressed
+            self.rightpaddle.moveyup()  # move rightpaddle up
         if self.leftpaddle.getcmd() and self.ball.getypos() > self.leftpaddle.getypos()+self.leftpaddle.getheight()/2:
-            self.leftpaddle.moveydown()
+            # in case the ball is lower than the left paddle
+            self.leftpaddle.moveydown()  # move leftpaddle down
         elif self.leftpaddle.getcmu() and self.ball.getypos() < self.leftpaddle.getypos()+self.leftpaddle.getheight()/2:
-            self.leftpaddle.moveyup()
+            # in case the ball is higher than the left paddle
+            self.leftpaddle.moveyup()  # move leftpaddle up
 
     def ballhandling(self, clocktick):
-        self.ball.move(clocktick / 1000.0)
-        if not 21 < self.ball.getypos() < self.height - 21:
-            self.ball.changeydirection()
-            SOUNDS.play('soundfiles/jump.wav')
+        self.ball.move(clocktick / 1000.0)  # ball should relocate itself according to it's speed and the time
+        if not 21 < self.ball.getypos() < self.height - 21:  # in case the ball touches the bottom or the top
+            self.ball.changeydirection()  # change balls direction of movement in y
+            SOUNDS.play('soundfiles/jump.wav')  # play a bump sound
         if self.leftpaddle.getxpos() + 10 < self.ball.getxpos() < self.leftpaddle.getxpos() + 16:
-            if self.leftpaddle.getypos() < self.ball.getypos() < self.leftpaddle.getypos() \
-                    + self.leftpaddle.getheight():
+            if self.leftpaddle.getypos() - 10 < self.ball.getypos() < self.leftpaddle.getypos() \
+                    + self.leftpaddle.getheight() + 10:
                 self.ball.changexdirection()
                 SOUNDS.play('soundfiles/jump.wav')
                 if self.inputMap[2] or self.inputMap[3]:
                     self.increaseballspeed()
 
         if self.rightpaddle.getxpos() - 16 < self.ball.getxpos() < self.rightpaddle.getxpos() - 10:
-            if self.rightpaddle.getypos() < self.ball.getypos() < self.rightpaddle.getypos() + \
-                    self.rightpaddle.getheight():
+            if self.rightpaddle.getypos() - 10 < self.ball.getypos() < self.rightpaddle.getypos() + \
+                    self.rightpaddle.getheight() + 10:
                 self.ball.changexdirection()
                 SOUNDS.play('soundfiles/jump.wav')
                 if self.inputMap[0] or self.inputMap[1]:
