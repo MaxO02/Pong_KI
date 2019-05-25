@@ -8,7 +8,7 @@ import random
 
 
 class GAMECONTROL:
-    def __init__(self, resolution=(1920, 1080), gm='1v1', score=(0, 0)):
+    def __init__(self, resolution=(1920, 1080), gm='1v1', score=(0, 0)) -> None:
         """defines important variables: height and width of the screen, arrays for the event-handling, gamemode, score
         defines objects of other classes: game's clock, paddles, ball, window
         initiates pygame and the menu"""
@@ -21,8 +21,9 @@ class GAMECONTROL:
         self.scoreleft, self.scoreright = score  # self explainatory, right? the score
         self.screens = {"game": False, "mainmenu": True, "settings": False, "help": False, "info": False, "resmenu":
                         False}
-        self.gamemodes = {"1v1": True, "1v0": False}
+        self.gamemodes = {"1v1": '1v1' == gm, "1v0": '1v0' == gm}
         self.inputresolution = ''
+        self.screen = ''
 
         # objects
         self.clock = pygame.time.Clock()  # handles the timespans passing between operations,
@@ -38,10 +39,9 @@ class GAMECONTROL:
 
         # start the game
         pygame.init()  # initiates pygame
-        while True:
-            self.mainmenu()  # shows the menu screen
+        self.mainmenu()  # shows the menu screen
 
-    def matchstart(self):
+    def matchstart(self) -> None:
         """creates a new screenFalse
            handles all objects floating on the screen
            waits for the first input to kickoff"""
@@ -54,8 +54,10 @@ class GAMECONTROL:
             else:
                 self.movepaddlesingleplayer(self.inputMap)  # only one paddle is under human control
             self.ballhandling(self.clock.tick(200))  # move the ball adequately and wait for a short time
+        else:
+            self.mainmenu()  # should rather be a victory screen
 
-    def kickoff(self):
+    def kickoff(self) -> None:
         """wait for a the players to get ready"""
         pygame.mouse.set_visible(False)  # mouse won't show
         self.spf.kickoffscreen(self.scoreleft, self.scoreright, "PRESS SPACE")  # show the kickoff screen
@@ -63,7 +65,7 @@ class GAMECONTROL:
         while True:
             self.eventsingame()  # read the events
 
-    def mainmenu(self):
+    def mainmenu(self) -> None:
         """handles any settings, game pauses etc"""
         self.screen = "mainmenu"
         pygame.mouse.set_visible(True)  # mouse will show
@@ -72,7 +74,7 @@ class GAMECONTROL:
             self.eventsmenu()  # read the events
             self.spf.menuscreenmain(self.focus)  # show the menu-screen depending on where the mouse is
 
-    def eventsingame(self):
+    def eventsingame(self) -> None:
         for event in pygame.event.get():  # get every event
             if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:  # all the key events
                 pressed_keys = pygame.key.get_pressed()
@@ -90,7 +92,7 @@ class GAMECONTROL:
             if event.type == pygame.QUIT:
                 exit()
 
-    def eventsmenu(self):
+    def eventsmenu(self) -> None:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEMOTION:  # if mouse has been moved you need to update
                 # the focused area
@@ -151,7 +153,7 @@ class GAMECONTROL:
                     else:
                         self.inputresolution += event.unicode
 
-    def movepaddle1v1(self, inputmap):
+    def movepaddle1v1(self, inputmap) -> None:
         self.rightpaddle.setcmu(self.rightpaddle.getypos() > 1)  # blocks right movement on top of the screen
         self.rightpaddle.setcmd(self.rightpaddle.getypos() < self.height - self.rightpaddle.getheight())  # blocks right
         # movement on the bottom of the screen
@@ -167,7 +169,7 @@ class GAMECONTROL:
         elif self.leftpaddle.getcmu() and inputmap[3]:  # in case K_W is pressed
             self.leftpaddle.moveyup()  # move leftpaddle up
 
-    def movepaddlesingleplayer(self, inputmap):
+    def movepaddlesingleplayer(self, inputmap) -> None:
         self.rightpaddle.setcmu(self.rightpaddle.getypos() > 1)  # blocks right movement on top of the screen
         self.rightpaddle.setcmd(self.rightpaddle.getypos() < self.height - self.rightpaddle.getheight())  # blocks right
         # movement on the bottom of the screen
@@ -185,7 +187,7 @@ class GAMECONTROL:
             # in case the ball is higher than the left paddle
             self.leftpaddle.moveyup()  # move leftpaddle up
 
-    def ballhandling(self, clocktick):
+    def ballhandling(self, clocktick) -> None:
         self.ball.move(clocktick / 1000.0)  # ball should relocate itself according to it's speed and the time
         if not 21 < self.ball.getypos() < self.height - 21:  # in case the ball touches the bottom or the top
             self.ball.changeydirection()  # change balls direction of movement in y
@@ -219,14 +221,14 @@ class GAMECONTROL:
             self.kickoff()
 
     @staticmethod
-    def clearlist(l, data):
+    def clearlist(l, data) -> None:
         """clears any list full of booleans, came in handy with an earlier approach to the events of ours
         not used anymore"""
         for i in range(len(l)):
             l[i - 1] = data
         return l
 
-    def settings(self):
+    def settings(self) -> None:
         """the screen specifically made for the game's settings
 
         needs revision in WINDOW-class"""
@@ -236,21 +238,21 @@ class GAMECONTROL:
             self.eventsmenu()  # read the events
             self.spf.menuscreensettings(self.focus)
 
-    def help(self):
+    def help(self) -> None:
         """the screen specifically made for providing help, should point towards the github project
 
         needs revision in WINDOW-class"""
         while True:
             self.spf.menuscreenhelp()
 
-    def info(self):
+    def info(self) -> None:
         """the screen for basic information about the game, credits
 
         needs revision in WINDOW-class"""
         while True:
             self.spf.menuscreeninfo()
 
-    def resmenu(self):
+    def resmenu(self) -> None:
         """the screen for changing the resolution
 
         needs revision in WINDOW-class"""
@@ -260,27 +262,27 @@ class GAMECONTROL:
             self.eventsmenu()
             self.spf.menuscreenresolution(self.focus, self.inputresolution)
 
-    def goalright(self):
+    def goalright(self) -> None:
         """increases the right player's score by one"""
         self.scoreright += 1
 
-    def goalleft(self):
+    def goalleft(self) -> None:
         """increases the left player's score by one"""
         self.scoreleft += 1
 
-    def resetpaddles(self):
+    def resetpaddles(self) -> None:
         """sets both paddles back to the middle of the screen, used after a goal has been scored"""
         self.rightpaddle.setypos(self.height / 2)
         self.leftpaddle.setypos(self.height / 2)
 
-    def increaseballspeed(self):
+    def increaseballspeed(self) -> None:
         """speeds up the ball in both x and y direction (but by different values)
 
         currently unused"""
         self.ball.add_mfx(9 * self.ball.mfx / abs(self.ball.mfx))
         self.ball.add_mfy(3 * self.ball.mfy / abs(self.ball.mfy))
 
-    def resetscore(self):
+    def resetscore(self) -> None:
         """sets both scores back to 0
         used to rematch or to restart a running game
 
