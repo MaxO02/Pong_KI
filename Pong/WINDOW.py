@@ -47,7 +47,7 @@ class WINDOW:
         pygame.mouse.set_visible(True)
         text_obj, widths, titles, focus = [], [], ["ENTER THE ARENA", "SETTINGS", "HELP", "INFO", "EXIT GAME"], l
         self.screen.fill((0, 0, 0))
-        for t in range(0, 5):
+        for t in range(0, len(titles)):
             text_obj.append(self.menu_font.render(titles[t], True, (254, 254, 254)) if not focus[t] else
                             self.menu_font_focused.render(titles[t], True, (254, 254, 254)))
             widths.append(text_obj[t].get_rect().width)
