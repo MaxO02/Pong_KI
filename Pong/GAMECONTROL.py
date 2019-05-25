@@ -201,6 +201,7 @@ class GAMECONTROL:
         not used anymore"""
         for i in range(len(l)):
             l[i - 1] = data
+        return l
 
     def settings(self):
         """the screen specifically made for the game's settings
