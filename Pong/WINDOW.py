@@ -42,9 +42,7 @@ class WINDOW:
         self.width, self.height = self.resolution
         self.leftpaddel.setypos(self.height / 2)
         self.rightpaddel.setypos(self.height / 2)
-        startpos = self.width/2, self.height/2
-        self.ball.setstartpos(startpos
-                              )
+        self.ball.setstartpos((self.width/2, self.height/2))
 
     def menuscreenmain(self, l):
         pygame.mouse.set_visible(True)
@@ -99,7 +97,6 @@ class WINDOW:
 
         pygame.display.flip()
 
-
     def menuscreenhelp(self):
         """What to do if you need help? Go to GitHub and open a new issue with exact descriptions. We might be able to
         help you. Keep in mind, that this is just a hobby school project and non-profit."""
@@ -110,35 +107,18 @@ class WINDOW:
         work? Why did we choose this? Are there other projects to check out? Which links to follow?"""
         pass
 
-    def menuscreenresolution(self, l):
+    def menuscreenresolution(self, l, inputresolution):
         pygame.mouse.set_visible(True)
         self.screen.fill((0, 0, 0))
-        focus = l
-        back = self.menu_font.render("BACK", True, (254, 254, 254)) if not focus[0] else self. \
+        back = self.menu_font.render("BACK", True, (254, 254, 254)) if not l[5] else self. \
             menu_font_focused.render("BACK", True, (254, 254, 254))
         backwidth = back.get_rect().width
         self.screen.blit(back, (0.8 * self.width + backwidth / 2, self.height / 6))
-
         font = pygame.font.Font(None, 32)
         color = (254, 254, 254)
         input_box = pygame.Rect(100, 100, 140, 32)
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
-                    res = self.inputresolution.split("x")
-                    newres = int(res[0]), int(res[1])
-                    self.changeresolution(newres)
-                    self.inputresolution = ''
-                elif event.key == pygame.K_BACKSPACE:
-                     self.inputresolution = self.inputresolution[:-1]
-                else:
-                    self.inputresolution += event.unicode
-
-        # Render the current resolution
-        txt_surface = font.render(self.inputresolution, True, color)
-        # Resize the box if the resolution is too long.
-        width = max(200, txt_surface.get_width() + 10)
-        input_box.w = width
+        txt_surface = font.render(inputresolution, True, color)  # Render the current text inside the box
+        input_box.w = max(200, txt_surface.get_width() + 10)  # Resize the box if the resolution is too long.
         self.screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
         pygame.draw.rect(self.screen, color, input_box, 2)
         pygame.display.flip()
