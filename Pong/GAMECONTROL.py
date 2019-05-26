@@ -26,7 +26,7 @@ class GAMECONTROL:
         self.screen = ''
 
         #themes
-        self.experimentaltheme = ((255, 255, 0), (255, 0, 0), (0, 0, 255))
+        self.experimenteltheme = ((255, 255, 0), (255, 0, 0), (0, 0, 255))
         self.defaulttheme = ((254, 115, 1), (85, 57, 138), (1, 254, 240))
 
         # objects
@@ -160,7 +160,7 @@ class GAMECONTROL:
                         self.spf.changetheme(self.defaulttheme)
                         self.settings()  # back to settings menu
                     elif self.focus[2]:
-                        self.spf.changetheme(self.experimentaltheme)
+                        self.spf.changetheme(self.experimenteltheme)
                         self.settings()  # back to settings menu
             if event.type == pygame.QUIT:  # close the window
                 exit()
