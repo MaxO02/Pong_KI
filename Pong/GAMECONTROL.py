@@ -20,10 +20,14 @@ class GAMECONTROL:
         self.gamemode = gm  # sets the gamemode: either player vs player or computer vs player
         self.scoreleft, self.scoreright = score  # self explainatory, right? the score
         self.screens = {"game": False, "mainmenu": True, "settings": False, "help": False, "info": False, "resmenu":
-                        False}
+                        False, "thememenu": False}
         self.gamemodes = {"1v1": '1v1' == gm, "1v0": '1v0' == gm}
         self.inputresolution = ''
         self.screen = ''
+
+        #themes
+        self.experimentaltheme = ((255, 255, 0), (255, 0, 0), (0, 0, 255))
+        self.defaulttheme = ((254, 115, 1), (85, 57, 138), (1, 254, 240))
 
         # objects
         self.clock = pygame.time.Clock()  # handles the timespans passing between operations,
@@ -112,8 +116,16 @@ class GAMECONTROL:
                     self.focus[1] = y < self.height * 0.25 and self.width * 0.3 < x < self.width * 0.7
                     self.focus[2] = self.height * 0.25 < y < self.height * 5 / 12 and self.width * 0.3 < x < \
                                     self.width * 0.7
+                    self.focus[3] = self.height * 5 / 12 < y < self.height / 12 * 7 and self.width * 0.3 < x < \
+                                    self.width * 0.7
                 elif self.screen == "resmenu":  # depends on which screen you are
-                    self.focus[5] = y < self.height * 0.25 and x > self.width * 0.7
+                    self.focus[0] = y < self.height * 0.25 and x > self.width * 0.7
+                elif self.screen == "thememenu":
+                    self.focus[0] = y < self.height * 0.25 and x > self.width * 0.7
+                    self.focus[1] = y < self.height * 0.25 and self.width * 0.3 < x < self.width * 0.7
+                    self.focus[2] = self.height * 0.25 < y < self.height * 5 / 12 and self.width * 0.3 < x < \
+                                    self.width * 0.7
+
             if event.type == pygame.MOUSEBUTTONDOWN:  # if mouse has been pressed, take action
                 # depending on the current mouse position
                 if self.screen == "mainmenu":  # depends on which screen you are
@@ -132,13 +144,24 @@ class GAMECONTROL:
                 elif self.screen == "settings":  # depends on which screen you are
                     if self.focus[0]:
                         self.mainmenu()  # back to main menu
-                    if self.focus[1]:
+                    elif self.focus[1]:
                         self.gamemode = "1v1" if self.gamemode != "1v1" else "1v0"  # switch the gamemode
-                    if self.focus[2]:
+                    elif self.focus[2]:
                         self.resmenu()
+                    elif self.focus[3]:
+                        self.thememenu()
                 elif self.screen == "resmenu":
-                    if self.focus[5]:
-                        self.settings()
+                    if self.focus[0]:
+                        self.settings()  # back to settings menu
+                elif self.screen == "thememenu":
+                    if self.focus[0]:
+                        self.settings()  # back to settings menu
+                    elif self.focus[1]:
+                        self.spf.changetheme(self.defaulttheme)
+                        self.settings()  # back to settings menu
+                    elif self.focus[2]:
+                        self.spf.changetheme(self.experimentaltheme)
+                        self.settings()  # back to settings menu
             if event.type == pygame.QUIT:  # close the window
                 exit()
             if event.type == KEYDOWN:
@@ -266,6 +289,12 @@ class GAMECONTROL:
             self.width, self.height = self.spf.giveresolution()
             self.eventsmenu()
             self.spf.menuscreenresolution(self.focus, self.inputresolution)
+
+    def thememenu(self) -> None:
+        self.screen = "thememenu"
+        while True:
+            self.eventsmenu()
+            self.spf.menutheme(self.focus)
 
     def goalright(self) -> None:
         """increases the right player's score by one"""

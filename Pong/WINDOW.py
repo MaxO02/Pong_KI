@@ -3,10 +3,7 @@ import random
 
 
 class WINDOW:
-    paddle_color = (254, 115, 1)
-    ball_color = (85, 57, 138)
-    background_color = (1, 254, 240)
-    font_color = paddle_color
+    defaulttheme = ((254, 115, 1), (85, 57, 138), (1, 254, 240)) #the 3 colors  1st paddle 2nd ball 3rd background
 
     def __init__(self, ball, leftpaddle, rightpaddle, res):
         pygame.init()
@@ -22,6 +19,7 @@ class WINDOW:
         self.ball = ball
         self.offset = 100
         self.resmenuerr = False
+        self.changetheme(self.defaulttheme)
 
     def updategamescreen(self, scoreleft, scoreright):
         pygame.mouse.set_visible(False)
@@ -97,8 +95,13 @@ class WINDOW:
 
         changeres = self.menu_font.render("CHANGE RESOLUTION", True, (254, 254, 254)) if not focus[2] else self. \
             menu_font_focused.render("CHANGE RESOLUTION", True, (254, 254, 254))
-        gmwidth = changeres.get_rect().width
-        self.screen.blit(changeres, ((self.width - gmwidth) / 2, self.height / 6 * 2))
+        reswidth = changeres.get_rect().width
+        self.screen.blit(changeres, ((self.width - reswidth) / 2, self.height / 6 * 2))
+
+        changetheme = self.menu_font.render("CHANGE THEME", True, (254, 254, 254)) if not focus[3] else self. \
+            menu_font_focused.render("CHANGE THEME", True, (254, 254, 254))
+        themewidth = changetheme.get_rect().width
+        self.screen.blit(changetheme, ((self.width - themewidth) / 2, self.height / 6 * 3))
 
         pygame.display.flip()
 
@@ -115,7 +118,7 @@ class WINDOW:
     def menuscreenresolution(self, l, inputresolution):
         pygame.mouse.set_visible(True)
         self.screen.fill((0, 0, 0))
-        back = self.menu_font.render("BACK", True, (254, 254, 254)) if not l[5] else self. \
+        back = self.menu_font.render("BACK", True, (254, 254, 254)) if not l[0] else self. \
             menu_font_focused.render("BACK", True, (254, 254, 254))
         backwidth = back.get_rect().width
         self.screen.blit(back, (0.8 * self.width + backwidth / 2, self.height / 6))
@@ -139,9 +142,32 @@ class WINDOW:
         pygame.draw.rect(self.screen, color, input_box, 2)
         pygame.display.flip()
 
+    def menutheme(self, l):
+        pygame.mouse.set_visible(True)
+        self.screen.fill((0, 0, 0))
+        back = self.menu_font.render("BACK", True, (254, 254, 254)) if not l[0] else self. \
+            menu_font_focused.render("BACK", True, (254, 254, 254))
+        backwidth = back.get_rect().width
+        self.screen.blit(back, (0.8 * self.width + backwidth / 2, self.height / 6))
+
+        default = self.menu_font.render("DEFAULT", True, (254, 254, 254)) if not l[1] else self. \
+            menu_font_focused.render("DEFAULT", True, (254, 254, 254))
+        dfwidth = default.get_rect().width
+        self.screen.blit(default, ((self.width - dfwidth) / 2, self.height / 6 * 1))
+
+        experimantel = self.menu_font.render("EXPERIMANTEL", True, (254, 254, 254)) if not l[2] else self. \
+            menu_font_focused.render("EXPERIMANTEL", True, (254, 254, 254))
+        exwidth = experimantel.get_rect().width
+        self.screen.blit(experimantel, ((self.width - exwidth) / 2, self.height / 6 * 2))
+
+        pygame.display.flip()
 
     def resmenuerror(self):
         self.resmenuerr = True
 
     def resmenutop(self):
         self.resmenuerr = False
+
+    def changetheme(self, theme):
+        self.paddle_color, self.ball_color, self.background_color = theme
+        self.font_color = self.paddle_color
