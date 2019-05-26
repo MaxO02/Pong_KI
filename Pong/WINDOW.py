@@ -155,8 +155,8 @@ class WINDOW:
         dfwidth = default.get_rect().width
         self.screen.blit(default, ((self.width - dfwidth) / 2, self.height / 6 * 1))
 
-        experimantel = self.menu_font.render("EXPERIMANTEL", True, (254, 254, 254)) if not l[2] else self. \
-            menu_font_focused.render("EXPERIMANTEL", True, (254, 254, 254))
+        experimantel = self.menu_font.render("EXPERIMENTAL", True, (254, 254, 254)) if not l[2] else self. \
+            menu_font_focused.render("EXPERIMENTAL", True, (254, 254, 254))
         exwidth = experimantel.get_rect().width
         self.screen.blit(experimantel, ((self.width - exwidth) / 2, self.height / 6 * 2))
 
