@@ -145,8 +145,11 @@ class GAMECONTROL:
                 if self.screen == "resmenu":
                     if event.key == pygame.K_RETURN:
                         res = self.inputresolution.split("x")
-                        newres = int(res[0]), int(res[1])
-                        self.spf.changeresolution(newres)
+                        try:
+                            newres = int(res[0]), int(res[1])
+                            self.spf.changeresolution(newres)
+                        except:
+                            print("something went wrong please try again")
                         self.inputresolution = ''
                     elif event.key == pygame.K_BACKSPACE:
                         self.inputresolution = self.inputresolution[:-1]

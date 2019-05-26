@@ -7,7 +7,6 @@ class WINDOW:
     ball_color = (85, 57, 138)
     background_color = (1, 254, 240)
     font_color = paddle_color
-    inputresolution = ''
 
     def __init__(self, ball, leftpaddle, rightpaddle, res):
         pygame.init()
@@ -21,6 +20,7 @@ class WINDOW:
         self.leftpaddel = leftpaddle
         self.rightpaddel = rightpaddle
         self.ball = ball
+        self.offset = 100
 
     def updategamescreen(self, scoreleft, scoreright):
         pygame.mouse.set_visible(False)
@@ -120,9 +120,10 @@ class WINDOW:
         self.screen.blit(back, (0.8 * self.width + backwidth / 2, self.height / 6))
         font = pygame.font.Font(None, 32)
         color = (254, 254, 254)
-        input_box = pygame.Rect(100, 100, 140, 32)
+        input_box = pygame.Rect(self.width*0.5-self.offset, self.height / 6, 140, 32)
         txt_surface = font.render(inputresolution, True, color)  # Render the current text inside the box
         input_box.w = max(200, txt_surface.get_width() + 10)  # Resize the box if the resolution is too long.
+        self.offset = input_box.w / 2
         self.screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
         pygame.draw.rect(self.screen, color, input_box, 2)
         pygame.display.flip()
