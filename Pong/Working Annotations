@@ -9,6 +9,7 @@ To-Do's
 -> Gegner einfügen:
         - nur noch KI einfügen
 -> Design Rework
+        - theme ability has been added need to add and create some more themes
 -> Interaktives Menü schreiben, gemachte Änderungen sollten auch in irgendeiner Weise ausgegeben und werden
 -> Durchkommentieren
 
@@ -16,4 +17,7 @@ Sollen wir dann danach einfach andere Spiele machen und die dann auch von der KI
 dem AI Dingens dann ja nicht mehr sein
 linus, 519.7e3
 
+sollten wir vieleicht wenn man den ball beschleunigt nch nur die eine komponente sondern auch wenigstens ein bischen die
+andere Kompoänte erhöhen ??
+Max 26.05.2019
 ------------------------------------------------------------------------------------------------------------------------
