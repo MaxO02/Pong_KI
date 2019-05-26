@@ -62,7 +62,7 @@ class WINDOW:
         self.screen.blit(scorereset, (0.7*self.width + scorewidth / 2, self.height / 6))
         pygame.display.flip()
 
-    def kickoffscreen(self, scoreleft, scoreright, i):
+    def kickoffscreen(self, scoreleft, scoreright, i):  # can be shortened
         pygame.mouse.set_visible(False)
         self.screen.fill(self.background_color)
         pygame.draw.rect(self.screen, self.paddle_color, [self.leftpaddel.getxpos(), self.leftpaddel.getypos(), 10,
@@ -77,7 +77,7 @@ class WINDOW:
         self.screen.blit(inputtext, ((self.width - width) / 2, 50))
         pygame.display.flip()
 
-    def menuscreensettings(self, l):
+    def menuscreensettings(self, l):  # mess --> cleanup
         """Here we need to give a selection of all the options provided. Like Enemy-Skill, Window size, Ballspeed,
         ??Theme??"""
         pygame.mouse.set_visible(True)
@@ -115,9 +115,11 @@ class WINDOW:
         work? Why did we choose this? Are there other projects to check out? Which links to follow?"""
         pass
 
-    def menuscreenresolution(self, l, inputresolution):
+    def menuscreenresolution(self, l, inputresolution):  # this method is a mess, needs cleanup
         pygame.mouse.set_visible(True)
         self.screen.fill((0, 0, 0))
+        titles = ["BACK", "Type in new Resolution", "Format: WIDTHxHEIGHT"]
+
         back = self.menu_font.render("BACK", True, (254, 254, 254)) if not l[0] else self. \
             menu_font_focused.render("BACK", True, (254, 254, 254))
         backwidth = back.get_rect().width
@@ -128,9 +130,9 @@ class WINDOW:
         resinfowidth2 = resinfo2.get_rect().width
         self.screen.blit(resinfo, (self.width*0.5-resinfowidth/2, self.height/10))
         self.screen.blit(resinfo2, (self.width * 0.5 - resinfowidth2 / 2, self.height / 8))
-        reserr = self.menu_font.render("Please Type in a valid Resolution", True, (255, 0, 0))
-        reserrwidth = reserr.get_rect().width
         if self.resmenuerr:
+            reserr = self.menu_font.render("Please Type in a valid Resolution", True, (255, 0, 0))
+            reserrwidth = reserr.get_rect().width
             self.screen.blit(reserr, (0.5 * self.width - reserrwidth / 2, self.height / 2))
         font = pygame.font.Font(None, 32)
         color = (254, 254, 254)
