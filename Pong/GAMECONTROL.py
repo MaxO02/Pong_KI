@@ -154,12 +154,12 @@ class GAMECONTROL:
                     if self.focus[0]:
                         self.settings()  # back to settings menu
                 elif self.screen == "thememenu":
-                    if self.focus[0]:
+                    if self.focus[2]:
                         self.settings()  # back to settings menu
-                    elif self.focus[1]:
+                    elif self.focus[0]:
                         self.spf.changetheme(self.defaulttheme)
                         self.settings()  # back to settings menu
-                    elif self.focus[2]:
+                    elif self.focus[1]:
                         self.spf.changetheme(self.experimentaltheme)
                         self.settings()  # back to settings menu
             if event.type == pygame.QUIT:  # close the window
