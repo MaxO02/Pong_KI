@@ -121,10 +121,10 @@ class GAMECONTROL:
                 elif self.screen == "resmenu":  # depends on which screen you are
                     self.focus[0] = y < self.height * 0.25 and x > self.width * 0.7
                 elif self.screen == "thememenu":
-                    self.focus[0] = y < self.height * 0.25 and x > self.width * 0.7
-                    self.focus[1] = y < self.height * 0.25 and self.width * 0.3 < x < self.width * 0.7
-                    self.focus[2] = self.height * 0.25 < y < self.height * 5 / 12 and self.width * 0.3 < x < \
-                                    self.width * 0.7
+                    self.focus[0] = y < self.height * 0.25 and self.width * 0.3 < x < self.width * 0.7
+                    self.focus[1] = self.height * 0.25 < y < self.height * 5 / 12 and self.width * 0.3 < x < \
+                        self.width * 0.7
+                    self.focus[2] = y < self.height * 0.25 and x > self.width * 0.7
 
             if event.type == pygame.MOUSEBUTTONDOWN:  # if mouse has been pressed, take action
                 # depending on the current mouse position

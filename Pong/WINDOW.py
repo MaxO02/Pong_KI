@@ -145,21 +145,13 @@ class WINDOW:
     def menutheme(self, l):
         pygame.mouse.set_visible(True)
         self.screen.fill((0, 0, 0))
-        back = self.menu_font.render("BACK", True, (254, 254, 254)) if not l[0] else self. \
-            menu_font_focused.render("BACK", True, (254, 254, 254))
-        backwidth = back.get_rect().width
-        self.screen.blit(back, (0.8 * self.width + backwidth / 2, self.height / 6))
-
-        default = self.menu_font.render("DEFAULT", True, (254, 254, 254)) if not l[1] else self. \
-            menu_font_focused.render("DEFAULT", True, (254, 254, 254))
-        dfwidth = default.get_rect().width
-        self.screen.blit(default, ((self.width - dfwidth) / 2, self.height / 6 * 1))
-
-        experimantel = self.menu_font.render("EXPERIMENTAL", True, (254, 254, 254)) if not l[2] else self. \
-            menu_font_focused.render("EXPERIMENTAL", True, (254, 254, 254))
-        exwidth = experimantel.get_rect().width
-        self.screen.blit(experimantel, ((self.width - exwidth) / 2, self.height / 6 * 2))
-
+        texts, widths, objects = ["DEFAULT", "EXPERIMENTAL", "BACK"], [], []
+        for i in range(0, len(texts)):
+            objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if not l[i] else self.
+                           menu_font_focused.render(texts[i], True, (254, 254, 254)))
+            widths.append(objects[i].get_rect().width)
+            self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / 6 * (i+1)) if texts[i] != "BACK"
+                             else (0.8 * self.width + widths[i] / 2, self.height / 6))
         pygame.display.flip()
 
     def resmenuerror(self):
