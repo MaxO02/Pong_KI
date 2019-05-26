@@ -21,6 +21,7 @@ class WINDOW:
         self.rightpaddel = rightpaddle
         self.ball = ball
         self.offset = 100
+        self.resmenuerr = False
 
     def updategamescreen(self, scoreleft, scoreright):
         pygame.mouse.set_visible(False)
@@ -118,6 +119,16 @@ class WINDOW:
             menu_font_focused.render("BACK", True, (254, 254, 254))
         backwidth = back.get_rect().width
         self.screen.blit(back, (0.8 * self.width + backwidth / 2, self.height / 6))
+        resinfo = self.menu_font.render("Type in new Resolution", True, (254, 254, 254))
+        resinfo2 = self.menu_font.render("Format: WIDTHxHEIGHT", True, (254, 254, 254))
+        resinfowidth = resinfo.get_rect().width
+        resinfowidth2 = resinfo2.get_rect().width
+        self.screen.blit(resinfo, (self.width*0.5-resinfowidth/2, self.height/10))
+        self.screen.blit(resinfo2, (self.width * 0.5 - resinfowidth2 / 2, self.height / 8))
+        reserr = self.menu_font.render("Please Type in a valid Resolution", True, (255, 0, 0))
+        reserrwidth = reserr.get_rect().width
+        if self.resmenuerr:
+            self.screen.blit(reserr, (0.5 * self.width - reserrwidth / 2, self.height / 2))
         font = pygame.font.Font(None, 32)
         color = (254, 254, 254)
         input_box = pygame.Rect(self.width*0.5-self.offset, self.height / 6, 140, 32)
@@ -127,3 +138,10 @@ class WINDOW:
         self.screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
         pygame.draw.rect(self.screen, color, input_box, 2)
         pygame.display.flip()
+
+
+    def resmenuerror(self):
+        self.resmenuerr = True
+
+    def resmenutop(self):
+        self.resmenuerr = False

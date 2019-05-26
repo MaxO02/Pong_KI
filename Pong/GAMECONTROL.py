@@ -148,8 +148,10 @@ class GAMECONTROL:
                         try:
                             newres = int(res[0]), int(res[1])
                             self.spf.changeresolution(newres)
-                        except:
-                            print("something went wrong please try again")
+                            self.spf.resmenutop()
+                        except Exception as e:
+                            print(e)
+                            self.spf.resmenuerror()
                         self.inputresolution = ''
                     elif event.key == pygame.K_BACKSPACE:
                         self.inputresolution = self.inputresolution[:-1]
