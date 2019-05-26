@@ -219,12 +219,12 @@ class GAMECONTROL:
         self.ball.move(clocktick / 1000.0)  # ball should relocate itself according to it's speed and the time
         if not 21 < self.ball.getypos() < self.height - 21:  # in case the ball touches the bottom or the top
             self.ball.changeydirection()  # change balls direction of movement in y
-            SOUNDS.play('soundfiles/bing1.wav')  # play a bump sound
+            SOUNDS.play(random.choice(['soundfiles/bing1.wav', 'soundfiles/bing2.wav']))  # play a bump sound
         if self.leftpaddle.getxpos() + 10 < self.ball.getxpos() < self.leftpaddle.getxpos() + 16:
             if self.leftpaddle.getypos() - 10 < self.ball.getypos() < self.leftpaddle.getypos() \
                     + self.leftpaddle.getheight() + 10:
                 self.ball.changexdirection()
-                SOUNDS.play('soundfiles/bing2.wav')
+                SOUNDS.play(random.choice(['soundfiles/bing2.wav', 'soundfiles/bing1.wav']))
                 if self.inputMap[2] or self.inputMap[3]:
                     self.increaseballspeed()
 
@@ -232,7 +232,7 @@ class GAMECONTROL:
             if self.rightpaddle.getypos() - 10 < self.ball.getypos() < self.rightpaddle.getypos() + \
                     self.rightpaddle.getheight() + 10:
                 self.ball.changexdirection()
-                SOUNDS.play('soundfiles/bing2.wav')
+                SOUNDS.play(random.choice(['soundfiles/bing2.wav', 'soundfiles/bing1.wav']))
                 if self.inputMap[0] or self.inputMap[1]:
                     self.increaseballspeed()
         if self.ball.getxpos() >= self.width:
