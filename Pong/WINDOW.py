@@ -1,5 +1,7 @@
 import pygame
 import random
+from time import sleep
+import multitasking
 
 
 class WINDOW:
@@ -24,13 +26,11 @@ class WINDOW:
     def updategamescreen(self, scoreleft, scoreright):
         pygame.mouse.set_visible(False)
         self.screen.fill(self.background_color)
-        pygame.draw.rect(self.screen, self.paddle_color, [self.leftpaddel.getxpos(), self.leftpaddel.getypos(), 10,
-                                                          self.leftpaddel.getheight()])
-        pygame.draw.rect(self.screen, self.paddle_color, [self.rightpaddel.getxpos(), self.rightpaddel.getypos(), 10,
-                                                          self.rightpaddel.getheight()])
+        pygame.draw.rect(self.screen, self.paddle_color, [self.leftpaddel.getxpos(), self.leftpaddel.getypos(), 10, self.leftpaddel.getheight()])
+        pygame.draw.rect(self.screen, self.paddle_color, [self.rightpaddel.getxpos(), self.rightpaddel.getypos(), 10, self.rightpaddel.getheight()])
         pygame.draw.rect(self.screen, self.ball_color, [self.ball.getxpos(), self.ball.getypos(), 20, 20])
-        self.screen.blit(self.score_font.render(str(scoreleft), True, self.font_color), (self.width / 4, 50))
-        self.screen.blit(self.score_font.render(str(scoreright), True, self.font_color), (self.width / 1.25, 50))
+        self.screen.blit(self.score_font.render(str(scoreleft), True, self.paddle_color), (self.width / 4, 50))
+        self.screen.blit(self.score_font.render(str(scoreright), True, self.paddle_color), (self.width / 1.25, 50))
         pygame.display.flip()
 
     def giveresolution(self):
@@ -49,15 +49,13 @@ class WINDOW:
 
     def menuscreenmain(self, l):
         pygame.mouse.set_visible(True)
-        text_obj, widths, titles, focus = [], [], ["ENTER THE ARENA", "SETTINGS", "HELP", "INFO", "EXIT GAME"], l
+        text_obj, widths, titles = [], [], ["ENTER THE ARENA", "SETTINGS", "HELP", "INFO", "EXIT GAME"]
         self.screen.fill((0, 0, 0))
         for t in range(0, len(titles)):
-            text_obj.append(self.menu_font.render(titles[t], True, (254, 254, 254)) if not focus[t] else
-                            self.menu_font_focused.render(titles[t], True, (254, 254, 254)))
+            text_obj.append(self.menu_font.render(titles[t], True, (254, 254, 254)) if not l[t] else self.menu_font_focused.render(titles[t], True, (254, 254, 254)))
             widths.append(text_obj[t].get_rect().width)
             self.screen.blit(text_obj[t], ((self.width - widths[t]) / 2, self.height / 6 * (t + 1)))
-        scorereset = self.menu_font.render("RESET SCORE", True, (254, 254, 254)) if not focus[5] else self.\
-            menu_font_focused.render("RESET SCORE", True, (254, 254, 254))
+        scorereset = self.menu_font.render("RESET SCORE", True, (254, 254, 254)) if not l[5] else self.menu_font_focused.render("RESET SCORE", True, (254, 254, 254))
         scorewidth = scorereset.get_rect().width
         self.screen.blit(scorereset, (0.7*self.width + scorewidth / 2, self.height / 6))
         pygame.display.flip()
@@ -65,14 +63,12 @@ class WINDOW:
     def kickoffscreen(self, scoreleft, scoreright, i):  # can be shortened
         pygame.mouse.set_visible(False)
         self.screen.fill(self.background_color)
-        pygame.draw.rect(self.screen, self.paddle_color, [self.leftpaddel.getxpos(), self.leftpaddel.getypos(), 10,
-                                                          self.leftpaddel.getheight()])
-        pygame.draw.rect(self.screen, self.paddle_color, [self.rightpaddel.getxpos(), self.rightpaddel.getypos(), 10,
-                                                          self.rightpaddel.getheight()])
+        pygame.draw.rect(self.screen, self.paddle_color, [self.leftpaddel.getxpos(), self.leftpaddel.getypos(), 10, self.leftpaddel.getheight()])
+        pygame.draw.rect(self.screen, self.paddle_color, [self.rightpaddel.getxpos(), self.rightpaddel.getypos(), 10, self.rightpaddel.getheight()])
         pygame.draw.rect(self.screen, self.ball_color, [self.ball.getxpos(), self.ball.getypos(), 20, 20])
-        self.screen.blit(self.score_font.render(str(scoreleft), True, self.font_color), (self.width / 4, 50))
-        self.screen.blit(self.score_font.render(str(scoreright), True, self.font_color), (self.width / 1.25, 50))
-        inputtext = self.menu_font_focused.render(str(i), True, self.font_color)
+        self.screen.blit(self.score_font.render(str(scoreleft), True, self.paddle_color), (self.width / 4, 50))
+        self.screen.blit(self.score_font.render(str(scoreright), True, self.paddle_color), (self.width / 1.25, 50))
+        inputtext = self.menu_font_focused.render(str(i), True, self.paddle_color)
         width = inputtext.get_rect().width
         self.screen.blit(inputtext, ((self.width - width) / 2, 50))
         pygame.display.flip()
@@ -82,27 +78,11 @@ class WINDOW:
         ??Theme??"""
         pygame.mouse.set_visible(True)
         self.screen.fill((0, 0, 0))
-        focus = l
-        back = self.menu_font.render("BACK", True, (254, 254, 254)) if not focus[0] else self. \
-            menu_font_focused.render("BACK", True, (254, 254, 254))
-        backwidth = back.get_rect().width
-        self.screen.blit(back, (0.8 * self.width + backwidth / 2, self.height / 6))
-
-        changegm = self.menu_font.render("CHANGE GAMEMODE", True, (254, 254, 254)) if not focus[1] else self. \
-            menu_font_focused.render("CHANGE GAMEMDOE", True, (254, 254, 254))
-        gmwidth = changegm.get_rect().width
-        self.screen.blit(changegm, ((self.width - gmwidth) / 2, self.height / 6 * 1))
-
-        changeres = self.menu_font.render("CHANGE RESOLUTION", True, (254, 254, 254)) if not focus[2] else self. \
-            menu_font_focused.render("CHANGE RESOLUTION", True, (254, 254, 254))
-        reswidth = changeres.get_rect().width
-        self.screen.blit(changeres, ((self.width - reswidth) / 2, self.height / 6 * 2))
-
-        changetheme = self.menu_font.render("CHANGE THEME", True, (254, 254, 254)) if not focus[3] else self. \
-            menu_font_focused.render("CHANGE THEME", True, (254, 254, 254))
-        themewidth = changetheme.get_rect().width
-        self.screen.blit(changetheme, ((self.width - themewidth) / 2, self.height / 6 * 3))
-
+        texts, objects, widths= ["BACK", "CHANGE GAMEMODE", "CHANGE RESOLUTION", "CHANGE THEME"], [], []
+        for i in range(0, len(texts)):
+            objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if not l[i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))
+            widths.append(objects[i].get_rect().width)
+            self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / 6 * i) if texts[i] != "BACK" else (0.8 * self.width + widths[i] / 2, self.height / 6))
         pygame.display.flip()
 
     def menuscreenhelp(self):
@@ -118,30 +98,16 @@ class WINDOW:
     def menuscreenresolution(self, l, inputresolution):  # this method is a mess, needs cleanup
         pygame.mouse.set_visible(True)
         self.screen.fill((0, 0, 0))
-        titles = ["BACK", "Type in new Resolution", "Format: WIDTHxHEIGHT"]
-
-        back = self.menu_font.render("BACK", True, (254, 254, 254)) if not l[0] else self. \
-            menu_font_focused.render("BACK", True, (254, 254, 254))
-        backwidth = back.get_rect().width
-        self.screen.blit(back, (0.8 * self.width + backwidth / 2, self.height / 6))
-        resinfo = self.menu_font.render("Type in new Resolution", True, (254, 254, 254))
-        resinfo2 = self.menu_font.render("Format: WIDTHxHEIGHT", True, (254, 254, 254))
-        resinfowidth = resinfo.get_rect().width
-        resinfowidth2 = resinfo2.get_rect().width
-        self.screen.blit(resinfo, (self.width*0.5-resinfowidth/2, self.height/10))
-        self.screen.blit(resinfo2, (self.width * 0.5 - resinfowidth2 / 2, self.height / 8))
-        if self.resmenuerr:
-            reserr = self.menu_font.render("Please Type in a valid Resolution", True, (255, 0, 0))
-            reserrwidth = reserr.get_rect().width
-            self.screen.blit(reserr, (0.5 * self.width - reserrwidth / 2, self.height / 2))
-        font = pygame.font.Font(None, 32)
-        color = (254, 254, 254)
-        input_box = pygame.Rect(self.width*0.5-self.offset, self.height / 6, 140, 32)
-        txt_surface = font.render(inputresolution, True, color)  # Render the current text inside the box
-        input_box.w = max(200, txt_surface.get_width() + 10)  # Resize the box if the resolution is too long.
-        self.offset = input_box.w / 2
+        texts, objects, widths = ["BACK", "Type in new Resolution", "Format: WIDTHxHEIGHT", "Please Type in a valid Resolution" if self.resmenuerr else ''], [], []
+        for i in range(0, len(texts)):
+            objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if texts[i] != "BACK" or not l[i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))
+            widths.append(objects[i].get_rect().width)
+            self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / (12 - i * i)) if texts[i] != "BACK" else (0.8 * self.width + widths[i] / 2, self.height / 6))
+        input_box = pygame.Rect((self.width-self.offset) * 0.5, self.height / 6, 140, 32)
+        txt_surface = pygame.font.Font(None, 32).render(inputresolution, True, (254, 254, 254))  # Render the current text inside the box
+        input_box.w = self.offset = max(200, txt_surface.get_width() + 10)  # Resize the box if the resolution is too long.
         self.screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
-        pygame.draw.rect(self.screen, color, input_box, 2)
+        pygame.draw.rect(self.screen, (254, 254, 254), input_box, 2)
         pygame.display.flip()
 
     def menutheme(self, l):
@@ -149,19 +115,16 @@ class WINDOW:
         self.screen.fill((0, 0, 0))
         texts, widths, objects = ["DEFAULT", "EXPERIMENTAL", "BACK"], [], []
         for i in range(0, len(texts)):
-            objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if not l[i] else self.
-                           menu_font_focused.render(texts[i], True, (254, 254, 254)))
+            objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if not l[i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))
             widths.append(objects[i].get_rect().width)
-            self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / 6 * (i+1)) if texts[i] != "BACK"
-                             else (0.8 * self.width + widths[i] / 2, self.height / 6))
+            self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / 6 * (i+1)) if texts[i] != "BACK" else (0.8 * self.width + widths[i] / 2, self.height / 6))
         pygame.display.flip()
 
+    @multitasking.task
     def resmenuerror(self):
         self.resmenuerr = True
-
-    def resmenutop(self):
+        sleep(3)
         self.resmenuerr = False
 
     def changetheme(self, theme):
         self.paddle_color, self.ball_color, self.background_color = theme
-        self.font_color = self.paddle_color

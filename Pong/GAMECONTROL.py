@@ -19,8 +19,7 @@ class GAMECONTROL:
         self.focus = [False, False, False, False, False, False]  # tells which area the mouse is hovering over
         self.gamemode = gm  # sets the gamemode: either player vs player or computer vs player
         self.scoreleft, self.scoreright = score  # self explainatory, right? the score
-        self.screens = {"game": False, "mainmenu": True, "settings": False, "help": False, "info": False, "resmenu":
-                        False, "thememenu": False}
+        self.screens = {"game": False, "mainmenu": True, "settings": False, "help": False, "info": False, "resmenu": False, "thememenu": False}
         self.gamemodes = {"1v1": '1v1' == gm, "1v0": '1v0' == gm}
         self.inputresolution = ''
         self.screen = ''
@@ -31,15 +30,10 @@ class GAMECONTROL:
 
         # objects
         self.clock = pygame.time.Clock()  # handles the timespans passing between operations,
-        self.leftpaddle = PADDEL(0.1 * self.width, self.height / 2)  # paddle is created depending on the screens
-        # resolution
-        self.rightpaddle = PADDEL(0.9 * self.width, self.height / 2)  # paddle is created depending on the screens
-        # resolution
-        self.ball = BALL(self.width / 2, self.height / 2, (270 / 0.6 * random.choice([-1, 1]), 270 / 0.6 * random.
-                                                           choice([-1, 1])))  # Ball is created depending on the screens
-        # resolution, speed has a random direction
-        self.spf = WINDOW(self.ball, self.leftpaddle, self.rightpaddle, resolution)  # WINDOW gets the objects to show
-        # aswell as the resolution
+        self.leftpaddle = PADDEL(0.1 * self.width, self.height / 2)  # paddle is created depending on the screens resolution
+        self.rightpaddle = PADDEL(0.9 * self.width, self.height / 2)  # paddle is created depending on the screens resolution
+        self.ball = BALL(self.width / 2, self.height / 2, (270 / 0.6 * random.choice([-1, 1]), 270 / 0.6 * random.choice([-1, 1])))  # Ball is created depending on the screens resolution, speed has a random direction
+        self.spf = WINDOW(self.ball, self.leftpaddle, self.rightpaddle, resolution)  # WINDOW gets the objects to show aswell as the resolution
 
         # start the game
         pygame.init()  # initiates pygame
@@ -103,27 +97,21 @@ class GAMECONTROL:
                 x, y = pygame.mouse.get_pos()  # get where the mouse is hovering
                 if self.screen == "mainmenu":  # depends on which screen you are
                     self.focus[0] = y < self.height * 0.25 and self.width * 0.3 < x < self.width * 0.7
-                    self.focus[1] = self.height * 0.25 < y < self.height * 5 / 12 and self.width * 0.3 < x < \
-                        self.width * 0.7
-                    self.focus[2] = self.height * 5 / 12 < y < self.height / 12 * 7 and self.width * 0.3 < x < \
-                        self.width * 0.7
-                    self.focus[3] = self.height / 12 * 7 < y < self.height * 0.75 and self.width * 0.3 < x < \
-                        self.width * 0.7
+                    self.focus[1] = self.height * 0.25 < y < self.height * 5 / 12 and self.width * 0.3 < x < self.width * 0.7
+                    self.focus[2] = self.height * 5 / 12 < y < self.height / 12 * 7 and self.width * 0.3 < x < self.width * 0.7
+                    self.focus[3] = self.height / 12 * 7 < y < self.height * 0.75 and self.width * 0.3 < x < self.width * 0.7
                     self.focus[4] = y > self.height * 0.75 and self.width * 0.3 < x < self.width * 0.7
                     self.focus[5] = y < self.height * 0.25 and x > self.width * 0.7
                 elif self.screen == "settings":  # depends on which screen you are
                     self.focus[0] = y < self.height * 0.25 and x > self.width * 0.8
                     self.focus[1] = y < self.height * 0.25 and self.width * 0.3 < x < self.width * 0.7
-                    self.focus[2] = self.height * 0.25 < y < self.height * 5 / 12 and self.width * 0.3 < x < \
-                                    self.width * 0.7
-                    self.focus[3] = self.height * 5 / 12 < y < self.height / 12 * 7 and self.width * 0.3 < x < \
-                                    self.width * 0.7
+                    self.focus[2] = self.height * 0.25 < y < self.height * 5 / 12 and self.width * 0.3 < x < self.width * 0.7
+                    self.focus[3] = self.height * 5 / 12 < y < self.height / 12 * 7 and self.width * 0.3 < x < self.width * 0.7
                 elif self.screen == "resmenu":  # depends on which screen you are
                     self.focus[0] = y < self.height * 0.25 and x > self.width * 0.7
                 elif self.screen == "thememenu":
                     self.focus[0] = y < self.height * 0.25 and self.width * 0.3 < x < self.width * 0.7
-                    self.focus[1] = self.height * 0.25 < y < self.height * 5 / 12 and self.width * 0.3 < x < \
-                        self.width * 0.7
+                    self.focus[1] = self.height * 0.25 < y < self.height * 5 / 12 and self.width * 0.3 < x < self.width * 0.7
                     self.focus[2] = y < self.height * 0.25 and x > self.width * 0.7
 
             if event.type == pygame.MOUSEBUTTONDOWN:  # if mouse has been pressed, take action
@@ -171,7 +159,6 @@ class GAMECONTROL:
                         try:
                             newres = int(res[0]), int(res[1])
                             self.spf.changeresolution(newres)
-                            self.spf.resmenutop()
                         except Exception as e:
                             print(e)
                             self.spf.resmenuerror()
@@ -183,11 +170,9 @@ class GAMECONTROL:
 
     def movepaddle1v1(self, inputmap) -> None:
         self.rightpaddle.setcmu(self.rightpaddle.getypos() > 1)  # blocks right movement on top of the screen
-        self.rightpaddle.setcmd(self.rightpaddle.getypos() < self.height - self.rightpaddle.getheight())  # blocks right
-        # movement on the bottom of the screen
+        self.rightpaddle.setcmd(self.rightpaddle.getypos() < self.height - self.rightpaddle.getheight())  # blocks right's movement on the bottom of the screen
         self.leftpaddle.setcmu(self.leftpaddle.getypos() > 1)  # blocks left movement on top of the screen
-        self.leftpaddle.setcmd(self.leftpaddle.getypos() < self.height - self.rightpaddle.getheight())  # blocks left
-        # movement on the bottom of the screen
+        self.leftpaddle.setcmd(self.leftpaddle.getypos() < self.height - self.rightpaddle.getheight())  # blocks left's movement on the bottom of the screen
         if self.rightpaddle.getcmd() and inputmap[0]:  # in case K_DOWN is pressed
             self.rightpaddle.moveydown()  # move rightpaddle down
         elif self.rightpaddle.getcmu() and inputmap[1]:  # in case K_UP is pressed
@@ -199,42 +184,38 @@ class GAMECONTROL:
 
     def movepaddlesingleplayer(self, inputmap) -> None:
         self.rightpaddle.setcmu(self.rightpaddle.getypos() > 1)  # blocks right movement on top of the screen
-        self.rightpaddle.setcmd(self.rightpaddle.getypos() < self.height - self.rightpaddle.getheight())  # blocks right
-        # movement on the bottom of the screen
+        self.rightpaddle.setcmd(self.rightpaddle.getypos() < self.height - self.rightpaddle.getheight())  # blocks right's movement on the bottom of the screen
         self.leftpaddle.setcmu(self.leftpaddle.getypos() > 1)  # blocks left movement on top of the screen
-        self.leftpaddle.setcmd(self.leftpaddle.getypos() < self.height - self.rightpaddle.getheight())  # blocks left
-        # movement on the bottom of the screen
+        self.leftpaddle.setcmd(self.leftpaddle.getypos() < self.height - self.rightpaddle.getheight())  # blocks left's movement on the bottom of the screen
         if self.rightpaddle.getcmd() and inputmap[0]:  # in case K_DOWN is pressed
             self.rightpaddle.moveydown()  # move rightpaddle down
         elif self.rightpaddle.getcmu() and inputmap[1]:  # in case K_UP is pressed
             self.rightpaddle.moveyup()  # move rightpaddle up
-        if self.leftpaddle.getcmd() and self.ball.getypos() > self.leftpaddle.getypos()+self.leftpaddle.getheight()/2:
-            # in case the ball is lower than the left paddle
+        if self.leftpaddle.getcmd() and self.ball.getypos() > self.leftpaddle.getypos()+self.leftpaddle.getheight()/2:  # in case the ball is lower than the left paddle
             self.leftpaddle.moveydown()  # move leftpaddle down
-        elif self.leftpaddle.getcmu() and self.ball.getypos() < self.leftpaddle.getypos()+self.leftpaddle.getheight()/2:
-            # in case the ball is higher than the left paddle
+        elif self.leftpaddle.getcmu() and self.ball.getypos() < self.leftpaddle.getypos()+self.leftpaddle.getheight()/2:  # in case the ball is higher than the left paddle
             self.leftpaddle.moveyup()  # move leftpaddle up
 
     def ballhandling(self, clocktick) -> None:
         self.ball.move(clocktick / 1000.0)  # ball should relocate itself according to it's speed and the time
+
         if not 21 < self.ball.getypos() < self.height - 21:  # in case the ball touches the bottom or the top
             self.ball.changeydirection()  # change balls direction of movement in y
             SOUNDS.play(random.choice(['soundfiles/bing1.wav', 'soundfiles/bing2.wav']))  # play a bump sound
+
         if self.leftpaddle.getxpos() + 10 < self.ball.getxpos() < self.leftpaddle.getxpos() + 16:
-            if self.leftpaddle.getypos() - 10 < self.ball.getypos() < self.leftpaddle.getypos() \
-                    + self.leftpaddle.getheight() + 10:
+            if self.leftpaddle.getypos() - 10 < self.ball.getypos() < self.leftpaddle.getypos() + self.leftpaddle.getheight() + 10:
                 self.ball.changexdirection()
                 SOUNDS.play(random.choice(['soundfiles/bing2.wav', 'soundfiles/bing1.wav']))
                 if self.inputMap[2] or self.inputMap[3]:
                     self.increaseballspeed()
-
         if self.rightpaddle.getxpos() - 16 < self.ball.getxpos() < self.rightpaddle.getxpos() - 10:
-            if self.rightpaddle.getypos() - 10 < self.ball.getypos() < self.rightpaddle.getypos() + \
-                    self.rightpaddle.getheight() + 10:
+            if self.rightpaddle.getypos() - 10 < self.ball.getypos() < self.rightpaddle.getypos() + self.rightpaddle.getheight() + 10:
                 self.ball.changexdirection()
                 SOUNDS.play(random.choice(['soundfiles/bing2.wav', 'soundfiles/bing1.wav']))
                 if self.inputMap[0] or self.inputMap[1]:
                     self.increaseballspeed()
+
         if self.ball.getxpos() >= self.width:
             SOUNDS.play('soundfiles/win.ogg')
             self.resetpaddles()
