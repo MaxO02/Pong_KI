@@ -37,6 +37,7 @@ class GAMECONTROL:
 
         # start the game
         pygame.init()  # initiates pygame
+        SOUNDS.musicqueue()
         self.mainmenu()  # shows the menu screen
 
     def matchstart(self) -> None:
@@ -92,33 +93,12 @@ class GAMECONTROL:
 
     def eventsmenu(self) -> None:
         for event in pygame.event.get():
-            if event.type == pygame.MOUSEMOTION:  # if mouse has been moved you need to update
-                # the focused area
+            if event.type == pygame.MOUSEMOTION:  # if mouse has been moved you need to update the focused area
                 x, y = pygame.mouse.get_pos()  # get where the mouse is hovering
-                """for i in range(0, len(self.focus)):
-                    self.focus[i] = self.height / 12 * (i - 1) < y < self.height / 12 * (i+1) if not i == 0 else y < self.height * 0.25 and x > self.width * 0.7"""
-                if self.screen == "mainmenu":  # depends on which screen you are
-                    self.focus[0] = y < self.height * 0.25 and self.width * 0.3 < x < self.width * 0.7
-                    self.focus[1] = self.height * 0.25 < y < self.height * 5 / 12 and self.width * 0.3 < x < self.width * 0.7
-                    self.focus[2] = self.height * 5 / 12 < y < self.height / 12 * 7 and self.width * 0.3 < x < self.width * 0.7
-                    self.focus[3] = self.height / 12 * 7 < y < self.height * 0.75 and self.width * 0.3 < x < self.width * 0.7
-                    self.focus[4] = y > self.height * 0.75 and self.width * 0.3 < x < self.width * 0.7
-                    self.focus[5] = y < self.height * 0.25 and x > self.width * 0.7
-                elif self.screen == "settings":  # depends on which screen you are
-                    self.focus[0] = y < self.height * 0.25 and x > self.width * 0.8
-                    self.focus[1] = y < self.height * 0.25 and self.width * 0.3 < x < self.width * 0.7
-                    self.focus[2] = self.height * 0.25 < y < self.height * 5 / 12 and self.width * 0.3 < x < self.width * 0.7
-                    self.focus[3] = self.height * 5 / 12 < y < self.height / 12 * 7 and self.width * 0.3 < x < self.width * 0.7
-                elif self.screen == "resmenu":  # depends on which screen you are
-                    self.focus[0] = y < self.height * 0.25 and x > self.width * 0.7
-                elif self.screen == "thememenu":
-                    self.focus[1] = y < self.height * 0.25 and self.width * 0.3 < x < self.width * 0.7
-                    self.focus[2] = self.height * 0.25 < y < self.height * 5 / 12 and self.width * 0.3 < x < self.width * 0.7
-                    self.focus[3] = self.height * 5 / 12 < y < self.height / 12 * 7 and self.width * 0.3 < x < self.width * 0.7
-                    self.focus[0] = y < self.height * 0.25 and x > self.width * 0.7
+                for i in range(0, len(self.focus)):
+                    self.focus[i] = self.height / 6 * i - self.height / 12 < y < self.height / 6 * i + self.height / 12 and self.width * 0.3 < x < self.width * 0.7 if not i == 0 else y < self.height * 0.25 and x > self.width * 0.7
 
-            if event.type == pygame.MOUSEBUTTONDOWN:  # if mouse has been pressed, take action
-                # depending on the current mouse position
+            if event.type == pygame.MOUSEBUTTONDOWN:  # if mouse has been pressed, take action depending on the current mouse position
                 if self.screen == "mainmenu":  # depends on which screen you are
                     if self.focus[1]:
                         self.kickoff()  # will start the kickoff

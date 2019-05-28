@@ -7,7 +7,7 @@ class SOUNDS:
     def play(path) -> None:
         """initiates the output of the soundfile with the directory-path path
         Does not wait for the sound to be finished"""
-        pygame.mixer.init(22100, -16, 2, 64)
+        pygame.mixer.init(22100, 16, 2, 64)
         pygame.mixer.Sound(path).play(loops=0, maxtime=0, fade_ms=0)
 
     @staticmethod
@@ -20,3 +20,10 @@ class SOUNDS:
         pygame.time.delay(int(sound.get_length() * 1000))
         pygame.mixer.quit()
         del sound
+
+    @staticmethod
+    def musicqueue() -> None:
+        pygame.init()
+        pygame.mixer.init(22100, 16, 2, 64)
+        pygame.mixer.music.load('soundfiles/background.mp3')
+        pygame.mixer.music.play(-1)

@@ -15,3 +15,5 @@ add all the fancy extras we wished for. If you can find any kind of bug
 in our code, please open a new issue and describe it. Also if there is
 an extra you've always wanted in a pong clone, you can open an issue and
 suggest your feature.
+
+Music: https://www.bensound.com
