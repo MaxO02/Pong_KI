@@ -22,6 +22,7 @@ class WINDOW:
         self.offset = 100
         self.resmenuerr = False
         self.changetheme(self.defaulttheme)
+        self.scoreresetv = False
 
     def updategamescreen(self, scoreleft, scoreright) -> None:
         pygame.mouse.set_visible(False)
@@ -49,15 +50,15 @@ class WINDOW:
 
     def menuscreenmain(self, l) -> None:
         pygame.mouse.set_visible(True)
-        text_obj, widths, titles = [], [], ["ENTER THE ARENA", "SETTINGS", "HELP", "INFO", "EXIT GAME"]
+        text_obj, widths, titles = [], [], ["RESET SCORE" if self.scoreresetv else '', "ENTER THE ARENA", "SETTINGS", "HELP", "INFO", "EXIT GAME"]
         self.screen.fill((0, 0, 0))
         for t in range(0, len(titles)):
-            text_obj.append(self.menu_font.render(titles[t], True, (254, 254, 254)) if not l[t + 1] else self.menu_font_focused.render(titles[t], True, (254, 254, 254)))
+            text_obj.append(self.menu_font.render(titles[t], True, (254, 254, 254)) if not l[t] else self.menu_font_focused.render(titles[t], True, (254, 254, 254)))
             widths.append(text_obj[t].get_rect().width)
-            self.screen.blit(text_obj[t], ((self.width - widths[t]) / 2, self.height / 6 * (t + 1)))
-        scorereset = self.menu_font.render("RESET SCORE", True, (254, 254, 254)) if not l[0] else self.menu_font_focused.render("RESET SCORE", True, (254, 254, 254))
+            self.screen.blit(text_obj[t], ((self.width - widths[t]) / 2, self.height / 6 * t) if titles[t] != "RESET SCORE" else (0.7 * self.width + widths[t] / 2, self.height / 6))
+        """scorereset = self.menu_font.render("RESET SCORE", True, (254, 254, 254)) if not l[0] else self.menu_font_focused.render("RESET SCORE", True, (254, 254, 254))
         scorewidth = scorereset.get_rect().width
-        self.screen.blit(scorereset, (0.7*self.width + scorewidth / 2, self.height / 6))
+        self.screen.blit(scorereset, (0.7*self.width + scorewidth / 2, self.height / 6))"""
         pygame.display.flip()
 
     def kickoffscreen(self, scoreleft, scoreright, i) -> None:  # can be shortened
@@ -85,10 +86,16 @@ class WINDOW:
             self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / 6 * i) if texts[i] != "BACK" else (0.8 * self.width + widths[i] / 2, self.height / 6))
         pygame.display.flip()
 
-    def menuscreenhelp(self) -> None:
+    def menuscreenhelp(self, l) -> None:
         """What to do if you need help? Go to GitHub and open a new issue with exact descriptions. We might be able to
         help you. Keep in mind, that this is just a hobby school project and non-profit."""
-        pass
+        self.screen.fill((0, 0, 0))
+        texts, widths, objects = ["BACK", "ONLINE SUPPORT PAGE"], [], []
+        for i in range(0, len(texts)):
+            objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if not l[i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))
+            widths.append(objects[i].get_rect().width)
+            self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / 6 * i) if i != 0 else (0.8 * self.width + widths[i] / 2, self.height / 6))
+        pygame.display.flip()
 
     def menuscreeninfo(self) -> None:
         """All about the game you need to know. Who are the maintainers, How did this project happen? How did we
@@ -128,3 +135,6 @@ class WINDOW:
 
     def changetheme(self, theme) -> None:
         self.paddle_color, self.ball_color, self.background_color = theme
+
+    def scorereset(self, boolean) -> None:
+        self.scoreresetv = boolean

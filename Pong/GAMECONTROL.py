@@ -4,6 +4,7 @@ from Pong.BALL import BALL
 from Pong.PADDLE import PADDEL
 from Pong.WINDOW import WINDOW
 from Pong.SOUNDS import SOUNDS
+import webbrowser
 import random
 
 
@@ -37,7 +38,7 @@ class GAMECONTROL:
 
         # start the game
         pygame.init()  # initiates pygame
-        SOUNDS.musicqueue()
+        SOUNDS.backgroundmusicqueue()
         self.mainmenu()  # shows the menu screen
 
     def matchstart(self) -> None:
@@ -136,6 +137,11 @@ class GAMECONTROL:
                     elif self.focus[3]:
                         self.spf.changetheme(((254, 254, 254), (254, 254, 254), (0, 0, 0)))
                         self.settings()  # back to settings menu
+                elif self.screen == 'help':
+                    if self.focus[0]:
+                        self.mainmenu()
+                    elif self.focus[1]:
+                        webbrowser.open('https://github.com/MaxO02/Pong_KI/issues')
             if event.type == pygame.QUIT:  # close the window
                 exit()
             if event.type == KEYDOWN:
@@ -237,13 +243,16 @@ class GAMECONTROL:
         """the screen specifically made for providing help, should point towards the github project
 
         needs revision in WINDOW-class"""
+        self.screen = 'help'
         while True:
-            self.spf.menuscreenhelp()
+            self.eventsmenu()
+            self.spf.menuscreenhelp(self.focus)
 
     def info(self) -> None:
         """the screen for basic information about the game, credits
 
         needs revision in WINDOW-class"""
+        self.screen = 'info'
         while True:
             self.spf.menuscreeninfo()
 
@@ -264,10 +273,12 @@ class GAMECONTROL:
     def goalright(self) -> None:
         """increases the right player's score by one"""
         self.scoreright += 1
+        self.spf.scorereset(True)
 
     def goalleft(self) -> None:
         """increases the left player's score by one"""
         self.scoreleft += 1
+        self.spf.scorereset(True)
 
     def resetpaddles(self) -> None:
         """sets both paddles back to the middle of the screen, used after a goal has been scored"""
@@ -286,3 +297,4 @@ class GAMECONTROL:
         needs output like 'successfully reset score' -> WINDOW-class """
         self.scoreleft = 0
         self.scoreright = 0
+        self.spf.scorereset(False)
