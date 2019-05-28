@@ -56,9 +56,6 @@ class WINDOW:
             text_obj.append(self.menu_font.render(titles[t], True, (254, 254, 254)) if not l[t] else self.menu_font_focused.render(titles[t], True, (254, 254, 254)))
             widths.append(text_obj[t].get_rect().width)
             self.screen.blit(text_obj[t], ((self.width - widths[t]) / 2, self.height / 6 * t) if titles[t] != "RESET SCORE" else (0.7 * self.width + widths[t] / 2, self.height / 6))
-        """scorereset = self.menu_font.render("RESET SCORE", True, (254, 254, 254)) if not l[0] else self.menu_font_focused.render("RESET SCORE", True, (254, 254, 254))
-        scorewidth = scorereset.get_rect().width
-        self.screen.blit(scorereset, (0.7*self.width + scorewidth / 2, self.height / 6))"""
         pygame.display.flip()
 
     def kickoffscreen(self, scoreleft, scoreright, i) -> None:  # can be shortened
@@ -96,11 +93,6 @@ class WINDOW:
             widths.append(objects[i].get_rect().width)
             self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / 6 * i) if i != 0 else (0.8 * self.width + widths[i] / 2, self.height / 6))
         pygame.display.flip()
-
-    def menuscreeninfo(self) -> None:
-        """All about the game you need to know. Who are the maintainers, How did this project happen? How did we
-        work? Why did we choose this? Are there other projects to check out? Which links to follow?"""
-        pass
 
     def menuscreenresolution(self, l, inputresolution) -> None:  # this method is a mess, needs cleanup
         pygame.mouse.set_visible(True)

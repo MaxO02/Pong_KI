@@ -240,21 +240,14 @@ class GAMECONTROL:
             self.spf.menuscreensettings(self.focus)
 
     def help(self) -> None:
-        """the screen specifically made for providing help, should point towards the github project
-
-        needs revision in WINDOW-class"""
+        """the screen specifically made for providing help, should point towards the github project"""
         self.screen = 'help'
         while True:
             self.eventsmenu()
             self.spf.menuscreenhelp(self.focus)
 
     def info(self) -> None:
-        """the screen for basic information about the game, credits
-
-        needs revision in WINDOW-class"""
-        self.screen = 'info'
-        while True:
-            self.spf.menuscreeninfo()
+        webbrowser.open("https://github.com/MaxO02/Pong_KI/blob/master/README.md")
 
     def resmenu(self) -> None:
         """the screen for changing the resolution"""
