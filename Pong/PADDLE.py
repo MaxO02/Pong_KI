@@ -1,45 +1,45 @@
 class PADDEL:
 
     def __init__(self, positionx, positiony) -> None:
-        self.posx = positionx
-        self.posy = positiony
-        self.mf = 2
-        self.canmoveup = True
-        self.canmovedown = True
-        self.height = 150
+        self.posx = positionx  # sets the x position
+        self.posy = positiony  # sets the y position
+        self.mf = 2    # sets the speed of movement
+        self.canmoveup = True    # can paddle go higher
+        self.canmovedown = True  # paddle go lower
+        self.height = 150  # sets the height of the paddle
 
     def getxpos(self) -> int:
-        return self.posx
+        return self.posx  # returns the x position
 
     def setxpos(self, newxpos) -> None:
-        self.posx = newxpos
+        self.posx = newxpos  # sets the x position to given value
 
     def getypos(self) -> int:
-        return self.posy
+        return self.posy  # returns the y position
 
     def setypos(self, newypos) -> None:
-        self.posy = newypos
+        self.posy = newypos  # sets the y position to given value
 
     def moveyup(self) -> None:
-        self.posy -= self.mf
+        self.posy -= self.mf  # moves the paddle up by one iteration
 
     def moveydown(self) -> None:
-        self.posy += self.mf
+        self.posy += self.mf  # moves the paddle down by one iteration
 
     def getmfy(self) -> float:
-        return self.mf
+        return self.mf  # returns the speed of movement
 
     def setcmd(self, boolean) -> None:
-        self.canmovedown = boolean
+        self.canmovedown = boolean  # sets the movement boolean down to given value
 
     def setcmu(self, boolean) -> None:
-        self.canmoveup = boolean
+        self.canmoveup = boolean  # sets the movement boolean up to given value
 
     def getcmd(self) -> bool:
-        return self.canmovedown
+        return self.canmovedown  # returns the movement down boolean
 
     def getcmu(self) -> bool:
-        return self.canmoveup
+        return self.canmoveup  # returns the movement up boolean
 
     def getheight(self) -> int:
-        return self.height
+        return self.height  # returns the paddle height
