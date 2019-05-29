@@ -83,17 +83,6 @@ class WINDOW:
             self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / 6 * i) if texts[i] != "BACK" else (0.8 * self.width + widths[i] / 2, self.height / 6))
         pygame.display.flip()
 
-    def menuscreenhelp(self, l) -> None:
-        """What to do if you need help? Go to GitHub and open a new issue with exact descriptions. We might be able to
-        help you. Keep in mind, that this is just a hobby school project and non-profit."""
-        self.screen.fill((0, 0, 0))
-        texts, widths, objects = ["BACK", "ONLINE SUPPORT PAGE"], [], []
-        for i in range(0, len(texts)):
-            objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if not l[i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))
-            widths.append(objects[i].get_rect().width)
-            self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / 6 * i) if i != 0 else (0.8 * self.width + widths[i] / 2, self.height / 6))
-        pygame.display.flip()
-
     def menuscreenresolution(self, l, inputresolution) -> None:  # this method is a mess, needs cleanup
         pygame.mouse.set_visible(True)
         self.screen.fill((0, 0, 0))
