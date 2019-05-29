@@ -99,7 +99,10 @@ class WINDOW:
         self.screen.fill((0, 0, 0))
         texts, objects, widths = ["BACK", "Type in new Resolution", "Format: WIDTHxHEIGHT", "Please Type in a valid Resolution" if self.resmenuerr else None], [], []
         for i in range(0, len(texts)):
-            objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if texts[i] != "BACK" or not l[i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))
+            if texts[i] == "Please Type in a valid Resolution":
+                objects.append(self.menu_font.render(texts[i], True, (255, 0, 0)))
+            else:
+                objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if texts[i] != "BACK" or not l[i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))
             widths.append(objects[i].get_rect().width)
             self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / (12 - i * i)) if texts[i] != "BACK" else (0.8 * self.width + widths[i] / 2, self.height / 6))
         input_box = pygame.Rect((self.width-self.offset) * 0.5, self.height / 6, 140, 32)
