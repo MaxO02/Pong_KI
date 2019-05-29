@@ -45,7 +45,7 @@ class GAMECONTROL:
         """creates a new screenFalse
            handles all objects floating on the screen
            waits for the first input to kickoff"""
-
+        self.screen == 'game'
         while self.scoreright < 10 and self.scoreleft < 10:  # make sure the game's not over yet
             self.spf.updategamescreen(self.scoreleft, self.scoreright)  # draw a frame of the game
             self.eventsingame()  # read the events
@@ -61,7 +61,7 @@ class GAMECONTROL:
         """wait for a the players to get ready"""
         pygame.mouse.set_visible(False)  # mouse won't show
         self.spf.kickoffscreen(self.scoreleft, self.scoreright, "PRESS SPACE")  # show the kickoff screen
-        self.screen = "game"
+        self.screen = "kickoff"
         while True:
             self.eventsingame()  # read the events
 
@@ -78,7 +78,7 @@ class GAMECONTROL:
         for event in pygame.event.get():  # get every event
             if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:  # all the key events
                 pressed_keys = pygame.key.get_pressed()
-                if pressed_keys[K_SPACE]:  # if space has been pressed
+                if pressed_keys[K_SPACE] and self.screen == 'kickoff':  # if space has been pressed
                     SOUNDS.play("soundfiles/start.wav")
                     self.clock = pygame.time.Clock()  # reset the clock to prevent ball movement in kickoff screen
                     self.matchstart()  # let the match start / continue
