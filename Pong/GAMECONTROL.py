@@ -45,7 +45,7 @@ class GAMECONTROL:
         """creates a new screenFalse
            handles all objects floating on the screen
            waits for the first input to kickoff"""
-        self.screen == 'game'
+        self.screen = 'game'
         while self.scoreright < 10 and self.scoreleft < 10:  # make sure the game's not over yet
             self.spf.updategamescreen(self.scoreleft, self.scoreright)  # draw a frame of the game
             self.eventsingame()  # read the events
