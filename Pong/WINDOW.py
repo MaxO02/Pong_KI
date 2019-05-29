@@ -5,9 +5,8 @@ import multitasking
 
 
 class WINDOW:
-    defaulttheme = ((254, 115, 1), (85, 57, 138), (1, 254, 240))  # the 3 colors  1st paddle 2nd ball 3rd background
 
-    def __init__(self, ball, leftpaddle, rightpaddle, res) -> None:
+    def __init__(self, ball, leftpaddle, rightpaddle, res, theme) -> None:
         pygame.init()  # initiates the pygame module
         self.resolution = res  # sets the resolution of the screen to given one
         self.width, self.height = self.resolution  # splits the resolution into width and height
@@ -21,7 +20,7 @@ class WINDOW:
         self.ball = ball  # gets the ball
         self.offset = 100  # sets the natural offset for the input boxes
         self.resmenuerr = False  # no error happened yet (hopefully)
-        self.changetheme(self.defaulttheme)  # sets the theme to the default one
+        self.changetheme(theme)  # sets the theme to the default one
         self.scoreresetv = False  # score can't be reset yet
 
     def updategamescreen(self, scoreleft, scoreright) -> None:
@@ -106,10 +105,29 @@ class WINDOW:
         self.screen.fill((0, 0, 0))  # fills the screen black
         texts, widths, objects = ["BACK", "DEFAULT", "EXPERIMENTAL", "BLACK AND WHITE", 'RANDOM'], [], []
         for i in range(0, len(texts)):
-            objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if not l[i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))  # creates all text objects
-            widths.append(objects[i].get_rect().width)  # calculates all the widths
-            self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / 6 * i) if texts[i] != "BACK" else (0.8 * self.width + widths[i] / 2, self.height / 6))  # draws all the text object
-        pygame.display.flip()  # updates the screen
+            objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if not l[i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))
+            widths.append(objects[i].get_rect().width)
+            self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / 6 * i) if texts[i] != "BACK" else (0.8 * self.width + widths[i] / 2, self.height / 6))
+        pygame.display.flip()
+
+    def menucustometheme(self, l, newcolors) -> None:
+        pygame.mouse.set_visible(True)
+        self.screen.fill((0, 0, 0))
+        texts, objects, widths = ["BACK", "PADDEL:", "BALL:", "BACKGROUND:"], [], []
+        for i in range(0, len(texts)):
+            objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if texts[i] != "BACK" or not l[
+                    i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))
+            widths.append(objects[i].get_rect().width)
+            self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / 6 * i) if texts[i] != "BACK" else (0.8 * self.width + widths[i] / 2, self.height / 6))
+        self.ins, widths, inputboxen, offsets, objects = newcolors, [], [], [100, 100, 100], []
+        for i in range(0, len(self.ins)):
+            inputboxen.append(pygame.Rect((self.width - offsets[i]) * 0.5, self.height / 6 * (i + 1.5), 140, 32))
+            objects.append(self.menu_font.render(self.ins[i], True, (254, 254, 254)))
+            offsets[i] = max(200, objects[i].get_width() + 10)
+            widths.append(max(200, objects[i].get_width() + 10))
+            self.screen.blit(objects[i], (inputboxen[i].x + 5, inputboxen[i].y + 5))
+            pygame.draw.rect(self.screen, (254, 254, 254)if not (self.activebox-1) == i else (0, 206, 209), inputboxen[i], 2)
+        pygame.display.flip()
 
     @multitasking.task
     def resmenuerror(self) -> None:
@@ -122,3 +140,9 @@ class WINDOW:
 
     def scorereset(self, boolean) -> None:
         self.scoreresetv = boolean  # sets the scorereset variable to given boolean
+
+    def setactivebox(self, i) -> None:
+        self.activebox = i
+
+    def getactivebox(self) -> int:
+        return self.activebox

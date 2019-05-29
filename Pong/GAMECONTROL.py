@@ -9,20 +9,24 @@ import random
 
 
 class GAMECONTROL:
-    def __init__(self, resolution=(1920, 1080), em='1v1', score=(0, 0)) -> None:
-        """defines important variables: height and width of the screen, arrays for the event-handling, enemymode, score
+    def __init__(self, resolution=(1920, 1080), gm='1v1', score=(0, 0)) -> None:
+        """defines important variables: height and width of the screen, arrays for the event-handling, gamemode, score
         defines objects of other classes: game's clock, paddles, ball, window
         initiates pygame and the menu"""
+
         # variables:
         self.width, self.height = resolution  # sets the variables depending on the current resolution
         self.inputMap = [False, False, False, False]  # tells wich control keys are pressed
         self.focus = [False, False, False, False, False, False]  # tells which area the mouse is hovering over
-        self.enemymode = em  # sets the enemymode: either player vs player or computer vs player
+        self.enemymode = gm  # sets the enemymode: either player vs player or computer vs player
         self.scoreleft, self.scoreright = score  # self explainatory, right? the score
         self.screens = {"game": False, "mainmenu": True, "settings": False, "help": False, "info": False, "resmenu": False, "thememenu": False}  # which screen is active
-        self.enemymodes = {"1v1": '1v1' == em, "1v0": '1v0' == em}  # wich enemy mode is active
+        self.enemymodes = {"1v1": '1v1' == gm, "1v0": '1v0' == gm}  # wich enemy mode is active
         self.inputresolution = ''  # which new resolution has been input
         self.screen = ''  # which screen is active
+        self.newcolors = ["", "", ""]
+        self.backgroundmusic = False
+        self.newcolor = [None, None, None]
 
         # themes
         self.experimentaltheme = ((255, 255, 0), (255, 0, 0), (0, 0, 255))  # strange looking  theme
@@ -33,11 +37,12 @@ class GAMECONTROL:
         self.leftpaddle = PADDEL(0.1 * self.width, self.height / 2)  # paddle is created depending on the screens resolution
         self.rightpaddle = PADDEL(0.9 * self.width, self.height / 2)  # paddle is created depending on the screens resolution
         self.ball = BALL(self.width / 2, self.height / 2, (270 / 0.6 * random.choice([-1, 1]), 270 / 0.6 * random.choice([-1, 1])))  # Ball is created depending on the screens resolution, speed has a random direction
-        self.spf = WINDOW(self.ball, self.leftpaddle, self.rightpaddle, resolution)  # WINDOW gets the objects to show aswell as the resolution
+        self.spf = WINDOW(self.ball, self.leftpaddle, self.rightpaddle, resolution, self.defaulttheme)  # WINDOW gets the objects to show aswell as the resolution
 
         # start the game
         pygame.init()  # initiates pygame
-        SOUNDS.backgroundmusicqueue()  # starts the annoying music in the background
+        # starts the annoying music in the background
+        if self.backgroundmusic: SOUNDS.backgroundmusicqueue()
         self.mainmenu()  # shows the menu screen
 
     def matchstart(self) -> None:
@@ -95,8 +100,13 @@ class GAMECONTROL:
         for event in pygame.event.get():  # get every event
             if event.type == pygame.MOUSEMOTION:  # if mouse has been moved you need to update the focused area
                 x, y = pygame.mouse.get_pos()  # get where the mouse is hovering
-                for i in range(0, len(self.focus)):  # counts through any position in the focus array
-                    self.focus[i] = self.height / 6 * i - self.height / 12 < y < self.height / 6 * i + self.height / 12 and self.width * 0.3 < x < self.width * 0.7 if not i == 0 else y < self.height * 0.25 and x > self.width * 0.7  # assigns the boolean whether being focused or not
+                if not self.screen == "custometheme":
+                    for i in range(0, len(self.focus)):
+                        self.focus[i] = self.height / 6 * i - self.height / 12 < y < self.height / 6 * i + self.height / 12 and self.width * 0.3 < x < self.width * 0.7 if not i == 0 else y < self.height * 0.25 and x > self.width * 0.7
+                else:
+                    for i in range(0, len(self.focus)):
+                        self.focus[i] = self.height / 6 * i+0.5 - self.height / 12 < y < self.height / 6 * (i+0.5) + self.height / 12 and self.width * 0.3 < x < self.width * 0.7 if not i == 0 else y < self.height * 0.25 and x > self.width * 0.7
+
             if event.type == pygame.MOUSEBUTTONDOWN:  # if mouse has been pressed, take action depending on the current mouse position
                 if self.screen == "mainmenu":  # depends on which screen you are
                     if self.focus[1]:
@@ -138,23 +148,54 @@ class GAMECONTROL:
                     elif self.focus[4]:
                         self.spf.changetheme(((random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))))  # actually changes the theme to a random one
                         self.settings()  # back to settings menu
-            if event.type == pygame.QUIT:  # in case one wants to close the window
-                exit()  # exits pygame and therefore close the window
-            if event.type == KEYDOWN:  # if a key is pressed
-                if self.screen == "resmenu":  # in the resolution changing screen
-                    if event.key == pygame.K_RETURN:  # if enter is pressed
-                        res = self.inputresolution.split("x")  # get the numbers from the input
-                        try:  # might throw an exception
-                            newres = int(res[0]), int(res[1])  # converts the input numbers to one tuple of ints
-                            self.spf.changeresolution(newres)  # changes the size of the screen
-                        except Exception as e:  # in case there is an exception
-                            print(e)  # print which exception happened
-                            self.spf.resmenuerror()  # tell user to type a  valid resolution
-                        self.inputresolution = ''  # reset the resolution
+                    elif self.focus[5]:
+                        self.spf.setactivebox(0)
+                        self.custometheme()
+                        self.settings()  # back to settings menu
+                elif self.screen == "custometheme":
+                    if self.focus[0]:
+                        self.thememenu()
+                    elif self.focus[1]:
+                        self.spf.setactivebox(1)
+                    elif self.focus[2]:
+                        self.spf.setactivebox(2)
+                    elif self.focus[3]:
+                        self.spf.setactivebox(3)
+            if event.type == pygame.QUIT:  # close the window
+                exit()
+            if event.type == KEYDOWN:
+                if self.screen == "resmenu":
+                    if event.key == pygame.K_RETURN:
+                        res = self.inputresolution.split("x")
+                        try:
+                            newres = int(res[0]), int(res[1])
+                            self.spf.changeresolution(newres)
+                        except Exception as e:
+                            print(e)
+                            self.spf.resmenuerror()
+                        self.inputresolution = ''
                     elif event.key == pygame.K_BACKSPACE:
                         self.inputresolution = self.inputresolution[:-1]  # delete the last input character
                     else:
-                        self.inputresolution += event.unicode  # add a newly input character
+                        self.inputresolution += event.unicode
+                elif self.screen == "custometheme":
+                    if event.key == pygame.K_RETURN:
+                        RGB = self.newcolors[self.spf.getactivebox()-1].split(",")
+                        try:
+                            self.newcolor[self.spf.getactivebox()-1] = (int(RGB[0]), int(RGB[1]), int(RGB[2]))
+
+                            if self.newcolor[0] != None and self.newcolor[1] != None and self.newcolor[2] != None:
+                                newtheme = self.newcolor[0], self.newcolor[1], self.newcolor[2]
+                                self.spf.changetheme(newtheme)
+                                self.newcolor = []
+                        except Exception as e:
+                            print(e)
+                        self.newcolors[self.spf.getactivebox()-1] = ''
+                        RGB = []
+                    elif event.key == pygame.K_BACKSPACE:
+                        self.newcolors[self.spf.getactivebox()-1] = self.newcolors[self.spf.getactivebox()-1][:-1]
+                    else:
+                        self.newcolors[self.spf.getactivebox()-1] += event.unicode
 
     def movepaddle1v1(self, inputmap) -> None:
         self.rightpaddle.setcmu(self.rightpaddle.getypos() > 1)  # blocks right movement on top of the screen
@@ -186,6 +227,7 @@ class GAMECONTROL:
 
     def ballhandling(self, clocktick) -> None:
         self.ball.move(clocktick / 1000.0)  # ball should relocate itself according to it's speed and the time
+
         if not 21 < self.ball.getypos() < self.height - 21:  # in case the ball touches the bottom or the top
             self.ball.changeydirection()  # change balls direction of movement in y
             SOUNDS.play(random.choice(['soundfiles/bing1.wav', 'soundfiles/bing2.wav']))  # play a bump sound
@@ -250,6 +292,12 @@ class GAMECONTROL:
         while True:
             self.eventsmenu()  # reads necessary events
             self.spf.menutheme(self.focus)  # draws the screen for changing the theme
+
+    def custometheme(self) -> None:
+        self.screen = "custometheme"
+        while True:
+            self.eventsmenu()
+            self.spf.menucustometheme(self.focus, self.newcolors)
 
     def goalright(self) -> None:
         """increases the right player's score by one"""
