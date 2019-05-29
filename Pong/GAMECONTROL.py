@@ -135,7 +135,10 @@ class GAMECONTROL:
                         self.spf.changetheme(self.experimentaltheme)
                         self.settings()  # back to settings menu
                     elif self.focus[3]:
-                        self.spf.changetheme(((254, 254, 254), (254, 254, 254), (0, 0, 0)))
+                        self.spf.changetheme(((255, 255, 255), (255, 255, 255), (0, 0, 0)))
+                        self.settings()  # back to settings menu
+                    elif self.focus[4]:
+                        self.spf.changetheme(((random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))))
                         self.settings()  # back to settings menu
                 elif self.screen == 'help':
                     if self.focus[0]:
@@ -207,7 +210,6 @@ class GAMECONTROL:
                 SOUNDS.play(random.choice(['soundfiles/bing2.wav', 'soundfiles/bing1.wav']))
                 if self.inputMap[0] or self.inputMap[1]:
                     self.increaseballspeed()
-
         if self.ball.getxpos() >= self.width:
             SOUNDS.play('soundfiles/win.ogg')
             self.resetpaddles()
@@ -291,3 +293,7 @@ class GAMECONTROL:
         self.scoreleft = 0
         self.scoreright = 0
         self.spf.scorereset(False)
+        self.resetpaddles()
+        self.ball.reset((0.25 * self.width * random.choice([-1, 1]), 0.25 * self.height * random.choice([-1, 1])))
+
+

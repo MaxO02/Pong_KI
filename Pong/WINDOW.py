@@ -76,7 +76,7 @@ class WINDOW:
         ??Theme??"""
         pygame.mouse.set_visible(True)
         self.screen.fill((0, 0, 0))
-        texts, objects, widths= ["BACK", "CHANGE GAMEMODE", "CHANGE RESOLUTION", "CHANGE THEME"], [], []
+        texts, objects, widths= ["BACK", "CHANGE ENEMY-MODE", "CHANGE RESOLUTION", "CHANGE THEME"], [], []
         for i in range(0, len(texts)):
             objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if not l[i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))
             widths.append(objects[i].get_rect().width)
@@ -112,7 +112,7 @@ class WINDOW:
     def menutheme(self, l) -> None:
         pygame.mouse.set_visible(True)
         self.screen.fill((0, 0, 0))
-        texts, widths, objects = ["BACK", "DEFAULT", "EXPERIMENTAL", "BLACK AND WHITE"], [], []
+        texts, widths, objects = ["BACK", "DEFAULT", "EXPERIMENTAL", "BLACK AND WHITE", 'RANDOM'], [], []
         for i in range(0, len(texts)):
             objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if not l[i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))
             widths.append(objects[i].get_rect().width)
