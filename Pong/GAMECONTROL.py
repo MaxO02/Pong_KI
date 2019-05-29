@@ -140,11 +140,6 @@ class GAMECONTROL:
                     elif self.focus[4]:
                         self.spf.changetheme(((random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))))
                         self.settings()  # back to settings menu
-                elif self.screen == 'help':
-                    if self.focus[0]:
-                        self.mainmenu()
-                    elif self.focus[1]:
-                        webbrowser.open('https://github.com/MaxO02/Pong_KI/issues')
             if event.type == pygame.QUIT:  # close the window
                 exit()
             if event.type == KEYDOWN:
@@ -243,10 +238,7 @@ class GAMECONTROL:
 
     def help(self) -> None:
         """the screen specifically made for providing help, should point towards the github project"""
-        self.screen = 'help'
-        while True:
-            self.eventsmenu()
-            self.spf.menuscreenhelp(self.focus)
+        webbrowser.open("https://github.com/MaxO02/Pong_KI/issues")
 
     def info(self) -> None:
         webbrowser.open("https://github.com/MaxO02/Pong_KI/blob/master/README.md")
