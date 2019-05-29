@@ -94,11 +94,11 @@ class WINDOW:
                 objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if texts[i] != "BACK" or not l[i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))  # creates all text objects
             widths.append(objects[i].get_rect().width)  # calculates all the widths
             self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / (12 - i * i)) if texts[i] != "BACK" else (0.8 * self.width + widths[i] / 2, self.height / 6))  # draws all the text object
-        input_box = pygame.Rect((self.width-self.offset) * 0.5, self.height / 6, 140, 32)
+        input_box = pygame.Rect((self.width-self.offset) * 0.5, self.height / 6, 140, 32)  # creates a rectangle for the input box
         txt_surface = pygame.font.Font(None, 32).render(inputresolution, True, (254, 254, 254))  # Render the current text inside the box
         input_box.w = self.offset = max(200, txt_surface.get_width() + 10)  # Resize the box if the resolution is too long.
-        self.screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
-        pygame.draw.rect(self.screen, (254, 254, 254), input_box, 2)
+        self.screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))  # draws the input text
+        pygame.draw.rect(self.screen, (254, 254, 254), input_box, 2)  # draws the input box
         pygame.display.flip()  # updates the screen
 
     def menutheme(self, l) -> None:
