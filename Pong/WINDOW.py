@@ -5,10 +5,10 @@ import multitasking
 
 
 class WINDOW:
-    defaulttheme = ((254, 115, 1), (85, 57, 138), (1, 254, 240)) #the 3 colors  1st paddle 2nd ball 3rd background
+    defaulttheme = ((254, 115, 1), (85, 57, 138), (1, 254, 240))  # the 3 colors  1st paddle 2nd ball 3rd background
 
     def __init__(self, ball, leftpaddle, rightpaddle, res) -> None:
-        pygame.init()
+        pygame.init()  # initiates the pygame module
         self.resolution = res
         self.width, self.height = self.resolution
         self.screen = pygame.display.set_mode(self.resolution)
