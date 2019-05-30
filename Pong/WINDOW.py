@@ -1,173 +1,147 @@
 import pygame
 import random
+from time import sleep
+import multitasking
 
 
 class WINDOW:
-    defaulttheme = ((254, 115, 1), (85, 57, 138), (1, 254, 240)) #the 3 colors  1st paddle 2nd ball 3rd background
 
-    def __init__(self, ball, leftpaddle, rightpaddle, res):
-        pygame.init()
-        self.resolution = res
-        self.width, self.height = self.resolution
-        self.screen = pygame.display.set_mode(self.resolution)
-        pygame.display.set_caption("Pong by Max and Linus")
-        self.score_font = pygame.font.SysFont("Clear Sans Regular", 80)
-        self.menu_font = pygame.font.SysFont("Clear Sans Regular", 30)
-        self.menu_font_focused = pygame.font.SysFont("Clear Sans Regular", 40)
-        self.leftpaddel = leftpaddle
-        self.rightpaddel = rightpaddle
-        self.ball = ball
-        self.offset = 100
-        self.resmenuerr = False
-        self.changetheme(self.defaulttheme)
+    def __init__(self, ball, leftpaddle, rightpaddle, res, theme) -> None:
+        pygame.init()  # initiates the pygame module
+        self.resolution = res  # sets the resolution of the screen to given one
+        self.width, self.height = self.resolution  # splits the resolution into width and height
+        self.screen = pygame.display.set_mode(res)  # creates screen with given measures
+        pygame.display.set_caption("Pong by Max and Linus")  # gives the window a name
+        self.score_font = pygame.font.SysFont("Clear Sans Regular", 80)  # Font for the score
+        self.menu_font = pygame.font.SysFont("Clear Sans Regular", 30)  # Font for the unfocused menu entries
+        self.menu_font_focused = pygame.font.SysFont("Clear Sans Regular", 40)  # Font for the focused menu entries
+        self.leftpaddel = leftpaddle  # gets the left  paddle
+        self.rightpaddel = rightpaddle  # gets the right paddle
+        self.ball = ball  # gets the ball
+        self.offset = 100  # sets the natural offset for the input boxes
+        self.resmenuerr = False  # no error happened yet (hopefully)
+        self.changetheme(theme)  # sets the theme to the default one
+        self.scoreresetv = False  # score can't be reset yet
 
-    def updategamescreen(self, scoreleft, scoreright):
-        pygame.mouse.set_visible(False)
-        self.screen.fill(self.background_color)
-        pygame.draw.rect(self.screen, self.paddle_color, [self.leftpaddel.getxpos(), self.leftpaddel.getypos(), 10,
-                                                          self.leftpaddel.getheight()])
-        pygame.draw.rect(self.screen, self.paddle_color, [self.rightpaddel.getxpos(), self.rightpaddel.getypos(), 10,
-                                                          self.rightpaddel.getheight()])
-        pygame.draw.rect(self.screen, self.ball_color, [self.ball.getxpos(), self.ball.getypos(), 20, 20])
-        self.screen.blit(self.score_font.render(str(scoreleft), True, self.font_color), (self.width / 4, 50))
-        self.screen.blit(self.score_font.render(str(scoreright), True, self.font_color), (self.width / 1.25, 50))
-        pygame.display.flip()
+    def updategamescreen(self, scoreleft, scoreright) -> None:
+        pygame.mouse.set_visible(False)  # mouse won't show
+        self.screen.fill(self.background_color)  # background is filled
+        pygame.draw.rect(self.screen, self.paddle_color, [self.leftpaddel.getxpos(), self.leftpaddel.getypos(), 10, self.leftpaddel.getheight()])  # left paddle is drawn
+        pygame.draw.rect(self.screen, self.paddle_color, [self.rightpaddel.getxpos(), self.rightpaddel.getypos(), 10, self.rightpaddel.getheight()])  # right paddle is drawn
+        pygame.draw.rect(self.screen, self.ball_color, [self.ball.getxpos(), self.ball.getypos(), 20, 20])  # ball is drawn
+        self.screen.blit(self.score_font.render(str(scoreleft), True, self.paddle_color), (self.width / 4, 50))  # left score is drawn
+        self.screen.blit(self.score_font.render(str(scoreright), True, self.paddle_color), (self.width / 1.25, 50))  # right score is drawn
+        pygame.display.flip()  # updates the screen
 
-    def giveresolution(self):
-        return self.resolution
+    def giveresolution(self) -> tuple:
+        return self.resolution  # returns the resolution
 
-    def changeresolution(self, newresolution):
-        self.resolution = newresolution
-        self.screen = pygame.display.set_mode(self.resolution)
-        self.width, self.height = self.resolution
-        self.leftpaddel.setypos(self.height / 2)
-        self.rightpaddel.setypos(self.height / 2)
-        self.leftpaddel.setxpos(0.1*self.width)
-        self.rightpaddel.setxpos(0.9 * self.width)
-        self.ball.setstartpos((self.width/2, self.height/2))
-        self.ball.reset((270 / 0.6 * random.choice([-1, 1]), 270 / 0.6 * random.choice([-1, 1])))
+    def changeresolution(self, newresolution) -> None:
+        self.resolution = newresolution  # gets new resolution
+        self.screen = pygame.display.set_mode(self.resolution)  # resizes the window
+        self.width, self.height = self.resolution  # splits the new resolution to both width and height
+        self.leftpaddel.setypos(self.height / 2)  # resets left paddle to the middle of the screen
+        self.rightpaddel.setypos(self.height / 2)  # resets right paddle to the middle of the screen
+        self.leftpaddel.setxpos(0.1*self.width)  # positions the left paddle in x direction
+        self.rightpaddel.setxpos(0.9 * self.width)  # positions the right paddle in x direction
+        self.ball.setstartpos((self.width/2, self.height/2))  # repositions the balls starting position
+        self.ball.reset((270 / 0.6 * random.choice([-1, 1]), 270 / 0.6 * random.choice([-1, 1])))    # resets the ball
 
-    def menuscreenmain(self, l):
-        pygame.mouse.set_visible(True)
-        text_obj, widths, titles, focus = [], [], ["ENTER THE ARENA", "SETTINGS", "HELP", "INFO", "EXIT GAME"], l
-        self.screen.fill((0, 0, 0))
+    def menuscreenmain(self, l) -> None:
+        pygame.mouse.set_visible(True)  # mouse should show
+        text_obj, widths, titles = [], [], ["RESET SCORE" if self.scoreresetv else '', "ENTER THE ARENA", "SETTINGS", "HELP", "INFO", "EXIT GAME"]  # assigns the arrays
+        self.screen.fill((0, 0, 0))  # fills the screen black
         for t in range(0, len(titles)):
-            text_obj.append(self.menu_font.render(titles[t], True, (254, 254, 254)) if not focus[t] else
-                            self.menu_font_focused.render(titles[t], True, (254, 254, 254)))
-            widths.append(text_obj[t].get_rect().width)
-            self.screen.blit(text_obj[t], ((self.width - widths[t]) / 2, self.height / 6 * (t + 1)))
-        scorereset = self.menu_font.render("RESET SCORE", True, (254, 254, 254)) if not focus[5] else self.\
-            menu_font_focused.render("RESET SCORE", True, (254, 254, 254))
-        scorewidth = scorereset.get_rect().width
-        self.screen.blit(scorereset, (0.7*self.width + scorewidth / 2, self.height / 6))
-        pygame.display.flip()
+            text_obj.append(self.menu_font.render(titles[t], True, (254, 254, 254)) if not l[t] else self.menu_font_focused.render(titles[t], True, (254, 254, 254)))  # creates all text objects
+            widths.append(text_obj[t].get_rect().width)  # calculates all the widths
+            self.screen.blit(text_obj[t], ((self.width - widths[t]) / 2, self.height / 6 * t) if titles[t] != "RESET SCORE" else (0.7 * self.width + widths[t] / 2, self.height / 6))  # draws all the text objects
+        pygame.display.flip()  # updates the screen
 
-    def kickoffscreen(self, scoreleft, scoreright, i):
-        pygame.mouse.set_visible(False)
-        self.screen.fill(self.background_color)
-        pygame.draw.rect(self.screen, self.paddle_color, [self.leftpaddel.getxpos(), self.leftpaddel.getypos(), 10,
-                                                          self.leftpaddel.getheight()])
-        pygame.draw.rect(self.screen, self.paddle_color, [self.rightpaddel.getxpos(), self.rightpaddel.getypos(), 10,
-                                                          self.rightpaddel.getheight()])
-        pygame.draw.rect(self.screen, self.ball_color, [self.ball.getxpos(), self.ball.getypos(), 20, 20])
-        self.screen.blit(self.score_font.render(str(scoreleft), True, self.font_color), (self.width / 4, 50))
-        self.screen.blit(self.score_font.render(str(scoreright), True, self.font_color), (self.width / 1.25, 50))
-        inputtext = self.menu_font_focused.render(str(i), True, self.font_color)
-        width = inputtext.get_rect().width
-        self.screen.blit(inputtext, ((self.width - width) / 2, 50))
-        pygame.display.flip()
+    def kickoffscreen(self, scoreleft, scoreright, i) -> None:  # can be shortened
+        pygame.mouse.set_visible(False)  # mouse should not show
+        self.screen.fill(self.background_color)  # fills the screen
+        pygame.draw.rect(self.screen, self.paddle_color, [self.leftpaddel.getxpos(), self.leftpaddel.getypos(), 10, self.leftpaddel.getheight()])  # left paddle is drawn
+        pygame.draw.rect(self.screen, self.paddle_color, [self.rightpaddel.getxpos(), self.rightpaddel.getypos(), 10, self.rightpaddel.getheight()])  # right paddle is drawn
+        pygame.draw.rect(self.screen, self.ball_color, [self.ball.getxpos(), self.ball.getypos(), 20, 20])  # ball is drawn
+        self.screen.blit(self.score_font.render(str(scoreleft), True, self.paddle_color), (self.width / 4, 50))  # left score is drawn
+        self.screen.blit(self.score_font.render(str(scoreright), True, self.paddle_color), (self.width / 1.25, 50))  # right score is drawn
+        inputtext = self.menu_font_focused.render(str(i), True, self.paddle_color)  # gets the message for the user
+        width = inputtext.get_rect().width  # gets the message width
+        self.screen.blit(inputtext, ((self.width - width) / 2, 50))  # draws the message
+        pygame.display.flip()  # updates the screen
 
-    def menuscreensettings(self, l):
+    def menuscreensettings(self, l) -> None:  # mess --> cleanup
         """Here we need to give a selection of all the options provided. Like Enemy-Skill, Window size, Ballspeed,
         ??Theme??"""
-        pygame.mouse.set_visible(True)
-        self.screen.fill((0, 0, 0))
-        focus = l
-        back = self.menu_font.render("BACK", True, (254, 254, 254)) if not focus[0] else self. \
-            menu_font_focused.render("BACK", True, (254, 254, 254))
-        backwidth = back.get_rect().width
-        self.screen.blit(back, (0.8 * self.width + backwidth / 2, self.height / 6))
+        pygame.mouse.set_visible(True)  # mouse should show
+        self.screen.fill((0, 0, 0))  # fills the screen black
+        texts, objects, widths = ["BACK", "CHANGE ENEMY-MODE", "CHANGE RESOLUTION", "CHANGE THEME"], [], []  # assigns the arrays
+        for i in range(0, len(texts)):
+            objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if not l[i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))  # creates all text objects
+            widths.append(objects[i].get_rect().width)  # calculates all the widths
+            self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / 6 * i) if texts[i] != "BACK" else (0.8 * self.width + widths[i] / 2, self.height / 6))  # draws all the text objects
+        pygame.display.flip()  # updates the screen
 
-        changegm = self.menu_font.render("CHANGE GAMEMODE", True, (254, 254, 254)) if not focus[1] else self. \
-            menu_font_focused.render("CHANGE GAMEMDOE", True, (254, 254, 254))
-        gmwidth = changegm.get_rect().width
-        self.screen.blit(changegm, ((self.width - gmwidth) / 2, self.height / 6 * 1))
+    def menuscreenresolution(self, l, inputresolution) -> None:  # this method is a mess, needs cleanup
+        pygame.mouse.set_visible(True)  # mouse should show
+        self.screen.fill((0, 0, 0))  # fills the screen black
+        texts, objects, widths = ["BACK", "Type in new Resolution", "Format: WIDTHxHEIGHT", "Please Type in a valid Resolution" if self.resmenuerr else None], [], []  # assigns the arrays
+        for i in range(0, len(texts)):
+            if texts[i] == "Please Type in a valid Resolution":
+                objects.append(self.menu_font.render(texts[i], True, (255, 0, 0)))  # creates the error message's text object
+            else:
+                objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if texts[i] != "BACK" or not l[i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))  # creates all text objects
+            widths.append(objects[i].get_rect().width)  # calculates all the widths
+            self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / (12 - i * i)) if texts[i] != "BACK" else (0.8 * self.width + widths[i] / 2, self.height / 6))  # draws all the text objects
+        input_box = pygame.Rect((self.width-self.offset) * 0.5, self.height / 6, 140, 32)  # creates a rectangle for the input box
+        txt_surface = pygame.font.Font(None, 32).render(inputresolution, True, (254, 254, 254))  # render the current text inside the box
+        input_box.w = self.offset = max(200, txt_surface.get_width() + 10)  # resize the box if the resolution is too long.
+        self.screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))  # draws the input text
+        pygame.draw.rect(self.screen, (254, 254, 254), input_box, 2)  # draws the input box
+        pygame.display.flip()  # updates the screen
 
-        changeres = self.menu_font.render("CHANGE RESOLUTION", True, (254, 254, 254)) if not focus[2] else self. \
-            menu_font_focused.render("CHANGE RESOLUTION", True, (254, 254, 254))
-        reswidth = changeres.get_rect().width
-        self.screen.blit(changeres, ((self.width - reswidth) / 2, self.height / 6 * 2))
+    def menutheme(self, l) -> None:
+        pygame.mouse.set_visible(True)  # mouse should show
+        self.screen.fill((0, 0, 0))  # fills the screen black
+        texts, widths, objects = ["BACK", "DEFAULT", "EXPERIMENTAL", "BLACK AND WHITE", 'RANDOM', 'CUSTOM'], [], []  # assigns the arrays
+        for i in range(0, len(texts)):
+            objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if not l[i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))
+            widths.append(objects[i].get_rect().width)  # calculates all the widths
+            self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / 6 * i) if texts[i] != "BACK" else (0.8 * self.width + widths[i] / 2, self.height / 6))  # draws all the text objects
+        pygame.display.flip()  # updates the screen
 
-        changetheme = self.menu_font.render("CHANGE THEME", True, (254, 254, 254)) if not focus[3] else self. \
-            menu_font_focused.render("CHANGE THEME", True, (254, 254, 254))
-        themewidth = changetheme.get_rect().width
-        self.screen.blit(changetheme, ((self.width - themewidth) / 2, self.height / 6 * 3))
+    def menucustometheme(self, l, newcolors) -> None:
+        pygame.mouse.set_visible(True)  # mouse should show
+        self.screen.fill((0, 0, 0))  # fills the screen black
+        texts, objects, widths = ["BACK", "PADDLE:", "BALL:", "BACKGROUND:"], [], []  # assigns the arrays for the texts
+        for i in range(0, len(texts)):  # loop for the static texts
+            objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if texts[i] != "BACK" or not l[
+                    i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))  # creates all text objects
+            widths.append(objects[i].get_rect().width)  # calculates all the widths
+            self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / 6 * i) if texts[i] != "BACK" else (0.8 * self.width + widths[i] / 2, self.height / 6))  # draws all the text objects
+        ins, widths, inputboxen, offsets, objects = newcolors, [], [], [100, 100, 100], []  # assigns more arrays (for the input boxes)
+        for i in range(0, len(ins)):  # loop for the dynamic texts
+            inputboxen.append(pygame.Rect((self.width - offsets[i]) * 0.5, self.height / 6 * (i + 1.5), 140, 32))  # creates all the input boxes
+            objects.append(self.menu_font.render(ins[i], True, (254, 254, 254)))  # creates all texts inside of the boxes
+            inputboxen[i].w = offsets[i] = max(200, objects[i].get_width() + 10)  # resize the input boxes to the input text
+            self.screen.blit(objects[i], (inputboxen[i].x + 5, inputboxen[i].y + 5))  # draws the input texts inside the boxes
+            pygame.draw.rect(self.screen, (254, 254, 254) if not (self.activebox-1) == i else (0, 206, 209), inputboxen[i], 2)  # draws the input boxes according to whether they are selected or not
+        pygame.display.flip()  # updates the screen
 
-        pygame.display.flip()
+    @multitasking.task
+    def resmenuerror(self) -> None:
+        self.resmenuerr = True  # will draw the error message
+        sleep(5)  # waits for 5 secs
+        self.resmenuerr = False  # hides the error message again
 
-    def menuscreenhelp(self):
-        """What to do if you need help? Go to GitHub and open a new issue with exact descriptions. We might be able to
-        help you. Keep in mind, that this is just a hobby school project and non-profit."""
-        pass
+    def changetheme(self, theme) -> None:
+        self.paddle_color, self.ball_color, self.background_color = theme  # splits the theme-tuple to the three colors
 
-    def menuscreeninfo(self):
-        """All about the game you need to know. Who are the maintainers, How did this project happen? How did we
-        work? Why did we choose this? Are there other projects to check out? Which links to follow?"""
-        pass
+    def scorereset(self, boolean) -> None:
+        self.scoreresetv = boolean  # sets the scorereset variable to given boolean
 
-    def menuscreenresolution(self, l, inputresolution):
-        pygame.mouse.set_visible(True)
-        self.screen.fill((0, 0, 0))
-        back = self.menu_font.render("BACK", True, (254, 254, 254)) if not l[0] else self. \
-            menu_font_focused.render("BACK", True, (254, 254, 254))
-        backwidth = back.get_rect().width
-        self.screen.blit(back, (0.8 * self.width + backwidth / 2, self.height / 6))
-        resinfo = self.menu_font.render("Type in new Resolution", True, (254, 254, 254))
-        resinfo2 = self.menu_font.render("Format: WIDTHxHEIGHT", True, (254, 254, 254))
-        resinfowidth = resinfo.get_rect().width
-        resinfowidth2 = resinfo2.get_rect().width
-        self.screen.blit(resinfo, (self.width*0.5-resinfowidth/2, self.height/10))
-        self.screen.blit(resinfo2, (self.width * 0.5 - resinfowidth2 / 2, self.height / 8))
-        reserr = self.menu_font.render("Please Type in a valid Resolution", True, (255, 0, 0))
-        reserrwidth = reserr.get_rect().width
-        if self.resmenuerr:
-            self.screen.blit(reserr, (0.5 * self.width - reserrwidth / 2, self.height / 2))
-        font = pygame.font.Font(None, 32)
-        color = (254, 254, 254)
-        input_box = pygame.Rect(self.width*0.5-self.offset, self.height / 6, 140, 32)
-        txt_surface = font.render(inputresolution, True, color)  # Render the current text inside the box
-        input_box.w = max(200, txt_surface.get_width() + 10)  # Resize the box if the resolution is too long.
-        self.offset = input_box.w / 2
-        self.screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
-        pygame.draw.rect(self.screen, color, input_box, 2)
-        pygame.display.flip()
+    def setactivebox(self, i) -> None:
+        self.activebox = i  # sets, which input box in custom theme is focused
 
-    def menutheme(self, l):
-        pygame.mouse.set_visible(True)
-        self.screen.fill((0, 0, 0))
-        back = self.menu_font.render("BACK", True, (254, 254, 254)) if not l[0] else self. \
-            menu_font_focused.render("BACK", True, (254, 254, 254))
-        backwidth = back.get_rect().width
-        self.screen.blit(back, (0.8 * self.width + backwidth / 2, self.height / 6))
-
-        default = self.menu_font.render("DEFAULT", True, (254, 254, 254)) if not l[1] else self. \
-            menu_font_focused.render("DEFAULT", True, (254, 254, 254))
-        dfwidth = default.get_rect().width
-        self.screen.blit(default, ((self.width - dfwidth) / 2, self.height / 6 * 1))
-
-        experimantel = self.menu_font.render("EXPERIMENTAL", True, (254, 254, 254)) if not l[2] else self. \
-            menu_font_focused.render("EXPERIMENTAL", True, (254, 254, 254))
-        exwidth = experimantel.get_rect().width
-        self.screen.blit(experimantel, ((self.width - exwidth) / 2, self.height / 6 * 2))
-
-        pygame.display.flip()
-
-    def resmenuerror(self):
-        self.resmenuerr = True
-
-    def resmenutop(self):
-        self.resmenuerr = False
-
-    def changetheme(self, theme):
-        self.paddle_color, self.ball_color, self.background_color = theme
-        self.font_color = self.paddle_color
+    def getactivebox(self) -> int:
+        return self.activebox  # returns the number of the currently active input box in custom theme
