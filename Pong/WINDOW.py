@@ -119,10 +119,10 @@ class WINDOW:
                     i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))
             widths.append(objects[i].get_rect().width)
             self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / 6 * i) if texts[i] != "BACK" else (0.8 * self.width + widths[i] / 2, self.height / 6))
-        self.ins, widths, inputboxen, offsets, objects = newcolors, [], [], [100, 100, 100], []
-        for i in range(0, len(self.ins)):
+        ins, widths, inputboxen, offsets, objects = newcolors, [], [], [100, 100, 100], []
+        for i in range(0, len(ins)):
             inputboxen.append(pygame.Rect((self.width - offsets[i]) * 0.5, self.height / 6 * (i + 1.5), 140, 32))
-            objects.append(self.menu_font.render(self.ins[i], True, (254, 254, 254)))
+            objects.append(self.menu_font.render(ins[i], True, (254, 254, 254)))
             offsets[i] = max(200, objects[i].get_width() + 10)
             widths.append(max(200, objects[i].get_width() + 10))
             self.screen.blit(objects[i], (inputboxen[i].x + 5, inputboxen[i].y + 5))
