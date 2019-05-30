@@ -88,14 +88,14 @@ class WINDOW:
         texts, objects, widths = ["BACK", "Type in new Resolution", "Format: WIDTHxHEIGHT", "Please Type in a valid Resolution" if self.resmenuerr else None], [], []  # assigns the arrays
         for i in range(0, len(texts)):
             if texts[i] == "Please Type in a valid Resolution":
-                objects.append(self.menu_font.render(texts[i], True, (255, 0, 0)))  # creates rhe error message's text object
+                objects.append(self.menu_font.render(texts[i], True, (255, 0, 0)))  # creates the error message's text object
             else:
                 objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if texts[i] != "BACK" or not l[i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))  # creates all text objects
             widths.append(objects[i].get_rect().width)  # calculates all the widths
-            self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / (12 - i * i)) if texts[i] != "BACK" else (0.8 * self.width + widths[i] / 2, self.height / 6))  # draws all the text object
+            self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / (12 - i * i)) if texts[i] != "BACK" else (0.8 * self.width + widths[i] / 2, self.height / 6))  # draws all the text objects
         input_box = pygame.Rect((self.width-self.offset) * 0.5, self.height / 6, 140, 32)  # creates a rectangle for the input box
-        txt_surface = pygame.font.Font(None, 32).render(inputresolution, True, (254, 254, 254))  # Render the current text inside the box
-        input_box.w = self.offset = max(200, txt_surface.get_width() + 10)  # Resize the box if the resolution is too long.
+        txt_surface = pygame.font.Font(None, 32).render(inputresolution, True, (254, 254, 254))  # render the current text inside the box
+        input_box.w = self.offset = max(200, txt_surface.get_width() + 10)  # resize the box if the resolution is too long.
         self.screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))  # draws the input text
         pygame.draw.rect(self.screen, (254, 254, 254), input_box, 2)  # draws the input box
         pygame.display.flip()  # updates the screen
@@ -103,31 +103,30 @@ class WINDOW:
     def menutheme(self, l) -> None:
         pygame.mouse.set_visible(True)  # mouse should show
         self.screen.fill((0, 0, 0))  # fills the screen black
-        texts, widths, objects = ["BACK", "DEFAULT", "EXPERIMENTAL", "BLACK AND WHITE", 'RANDOM', 'CUSTOM'], [], []
+        texts, widths, objects = ["BACK", "DEFAULT", "EXPERIMENTAL", "BLACK AND WHITE", 'RANDOM', 'CUSTOM'], [], []  # assigns the arrays
         for i in range(0, len(texts)):
             objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if not l[i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))
-            widths.append(objects[i].get_rect().width)
-            self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / 6 * i) if texts[i] != "BACK" else (0.8 * self.width + widths[i] / 2, self.height / 6))
-        pygame.display.flip()
+            widths.append(objects[i].get_rect().width)  # calculates all the widths
+            self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / 6 * i) if texts[i] != "BACK" else (0.8 * self.width + widths[i] / 2, self.height / 6))  # draws all the text objects
+        pygame.display.flip()  # updates the screen
 
     def menucustometheme(self, l, newcolors) -> None:
-        pygame.mouse.set_visible(True)
-        self.screen.fill((0, 0, 0))
-        texts, objects, widths = ["BACK", "PADDLE:", "BALL:", "BACKGROUND:"], [], []
-        for i in range(0, len(texts)):
+        pygame.mouse.set_visible(True)  # mouse should show
+        self.screen.fill((0, 0, 0))  # fills the screen black
+        texts, objects, widths = ["BACK", "PADDLE:", "BALL:", "BACKGROUND:"], [], []  # assigns the arrays for the texts
+        for i in range(0, len(texts)):  # loop for the static texts
             objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if texts[i] != "BACK" or not l[
-                    i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))
-            widths.append(objects[i].get_rect().width)
-            self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / 6 * i) if texts[i] != "BACK" else (0.8 * self.width + widths[i] / 2, self.height / 6))
-        ins, widths, inputboxen, offsets, objects = newcolors, [], [], [100, 100, 100], []
-        for i in range(0, len(ins)):
-            inputboxen.append(pygame.Rect((self.width - offsets[i]) * 0.5, self.height / 6 * (i + 1.5), 140, 32))
-            objects.append(self.menu_font.render(ins[i], True, (254, 254, 254)))
-            offsets[i] = max(200, objects[i].get_width() + 10)
-            widths.append(max(200, objects[i].get_width() + 10))
-            self.screen.blit(objects[i], (inputboxen[i].x + 5, inputboxen[i].y + 5))
-            pygame.draw.rect(self.screen, (254, 254, 254) if not (self.activebox-1) == i else (0, 206, 209), inputboxen[i], 2)
-        pygame.display.flip()
+                    i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))  # creates all text objects
+            widths.append(objects[i].get_rect().width)  # calculates all the widths
+            self.screen.blit(objects[i], ((self.width - widths[i]) / 2, self.height / 6 * i) if texts[i] != "BACK" else (0.8 * self.width + widths[i] / 2, self.height / 6))  # draws all the text objects
+        ins, widths, inputboxen, offsets, objects = newcolors, [], [], [100, 100, 100], []  # assigns more arrays (for the input boxes)
+        for i in range(0, len(ins)):  # loop for the dynamic texts
+            inputboxen.append(pygame.Rect((self.width - offsets[i]) * 0.5, self.height / 6 * (i + 1.5), 140, 32))  # creates all the input boxes
+            objects.append(self.menu_font.render(ins[i], True, (254, 254, 254)))  # creates all texts inside of the boxes
+            inputboxen[i].w = offsets[i] = max(200, objects[i].get_width() + 10)  # resize the input boxes to the input text
+            self.screen.blit(objects[i], (inputboxen[i].x + 5, inputboxen[i].y + 5))  # draws the input texts inside the boxes
+            pygame.draw.rect(self.screen, (254, 254, 254) if not (self.activebox-1) == i else (0, 206, 209), inputboxen[i], 2)  # draws the input boxes according to whether they are selected or not
+        pygame.display.flip()  # updates the screen
 
     @multitasking.task
     def resmenuerror(self) -> None:
@@ -142,7 +141,7 @@ class WINDOW:
         self.scoreresetv = boolean  # sets the scorereset variable to given boolean
 
     def setactivebox(self, i) -> None:
-        self.activebox = i
+        self.activebox = i  # sets, which input box in custom theme is focused
 
     def getactivebox(self) -> int:
-        return self.activebox
+        return self.activebox  # returns the number of the currently active input box in custom theme
