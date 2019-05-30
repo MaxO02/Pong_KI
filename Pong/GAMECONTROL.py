@@ -8,7 +8,7 @@ import webbrowser
 import random
 import configparser
 
-#reading the config
+# reading the config
 config = configparser.ConfigParser()
 config.read("config.cfg")
 
@@ -17,8 +17,6 @@ class GAMECONTROL:
         """defines important variables: height and width of the screen, arrays for the event-handling, gamemode, score
         defines objects of other classes: game's clock, paddles, ball, window
         initiates pygame and the menu"""
-
-
 
         # variables:
         self.width, self.height = resolution  # sets the variables depending on the current resolution
@@ -38,7 +36,7 @@ class GAMECONTROL:
         self.experimentaltheme = ((255, 255, 0), (255, 0, 0), (0, 0, 255))  # strange looking  theme
         self.defaulttheme = ((254, 115, 1), (85, 57, 138), (1, 254, 240))  # best looking  theme
 
-        #creates the starttheme from the config file
+        # creates the starttheme from the config file
         colors = list(filter(None, config.get("Settings", "theme").replace(")", "(").replace(",", "(").replace(" ", "(").split("(")))
         starttheme = ((int(colors[0]), int(colors[1]), int(colors[2])), (int(colors[3]), int(colors[4]), int(colors[5])), (int(colors[6]), int(colors[7]), int(colors[8])))
 
@@ -184,8 +182,8 @@ class GAMECONTROL:
                         try:
                             newres = int(res[0]), int(res[1])
                             self.spf.changeresolution(newres)
-                            config['Settings']["reswidth"] = res[0] # saves the width to the config
-                            config['Settings']['reslength'] = res[1] # saves the length to the config
+                            config['Settings']["reswidth"] = res[0]  # saves the width to the config
+                            config['Settings']['reslength'] = res[1]  # saves the length to the config
                             with open('config.cfg', 'w') as configfile:  # opens the config file
                                 config.write(configfile)  # writes to the file
                         except Exception as e:
@@ -201,8 +199,7 @@ class GAMECONTROL:
                         RGB = self.newcolors[self.spf.getactivebox()-1].split(",")
                         try:
                             self.newcolor[self.spf.getactivebox()-1] = (int(RGB[0]), int(RGB[1]), int(RGB[2]))
-
-                            if self.newcolor[0] != None and self.newcolor[1] != None and self.newcolor[2] != None:
+                            if self.newcolor[0] is not None and self.newcolor[1] is not None and self.newcolor[2] is not None:
                                 newtheme = self.newcolor[0], self.newcolor[1], self.newcolor[2]
                                 self.spf.changetheme(newtheme)
                                 self.newcolor = [None, None, None]
@@ -341,6 +338,6 @@ class GAMECONTROL:
         used to rematch or to restart a running game"""
         self.scoreleft = 0  # sets back the left score to zero
         self.scoreright = 0  # sets back the left score to zero
-        self.spf.scorereset(False)  # no score to be reset anymore
+        self.spf.scorereset(False)  # no scoreFalse to be reset anymore
         self.resetpaddles()  # resets the paddles to middle position
         self.ball.reset((0.25 * self.width * random.choice([-1, 1]), 0.25 * self.height * random.choice([-1, 1])))  # puts ball back to it's original position
