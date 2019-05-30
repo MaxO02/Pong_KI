@@ -103,7 +103,7 @@ class WINDOW:
     def menutheme(self, l) -> None:
         pygame.mouse.set_visible(True)  # mouse should show
         self.screen.fill((0, 0, 0))  # fills the screen black
-        texts, widths, objects = ["BACK", "DEFAULT", "EXPERIMENTAL", "BLACK AND WHITE", 'RANDOM', 'Custome'], [], []
+        texts, widths, objects = ["BACK", "DEFAULT", "EXPERIMENTAL", "BLACK AND WHITE", 'RANDOM', 'CUSTOM'], [], []
         for i in range(0, len(texts)):
             objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if not l[i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))
             widths.append(objects[i].get_rect().width)
@@ -113,7 +113,7 @@ class WINDOW:
     def menucustometheme(self, l, newcolors) -> None:
         pygame.mouse.set_visible(True)
         self.screen.fill((0, 0, 0))
-        texts, objects, widths = ["BACK", "PADDEL:", "BALL:", "BACKGROUND:"], [], []
+        texts, objects, widths = ["BACK", "PADDLE:", "BALL:", "BACKGROUND:"], [], []
         for i in range(0, len(texts)):
             objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if texts[i] != "BACK" or not l[
                     i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))
@@ -126,7 +126,7 @@ class WINDOW:
             offsets[i] = max(200, objects[i].get_width() + 10)
             widths.append(max(200, objects[i].get_width() + 10))
             self.screen.blit(objects[i], (inputboxen[i].x + 5, inputboxen[i].y + 5))
-            pygame.draw.rect(self.screen, (254, 254, 254)if not (self.activebox-1) == i else (0, 206, 209), inputboxen[i], 2)
+            pygame.draw.rect(self.screen, (254, 254, 254) if not (self.activebox-1) == i else (0, 206, 209), inputboxen[i], 2)
         pygame.display.flip()
 
     @multitasking.task
