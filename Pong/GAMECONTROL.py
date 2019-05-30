@@ -25,7 +25,7 @@ class GAMECONTROL:
         self.inputresolution = ''  # which new resolution has been input
         self.screen = ''  # which screen is active
         self.newcolors = ["", "", ""]
-        self.backgroundmusic = False
+        self.backgroundmusic = True
         self.newcolor = [None, None, None]
 
         # themes
@@ -83,7 +83,7 @@ class GAMECONTROL:
             if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:  # all the key events
                 pressed_keys = pygame.key.get_pressed()  # gets which keys are  being pressed
                 if pressed_keys[K_SPACE] and self.screen == 'kickoff':  # if space has been pressed
-                    SOUNDS.play("soundfiles/start.wav")
+                    SOUNDS.play("soundfiles/start2.wav")
                     self.clock = pygame.time.Clock()  # reset the clock to prevent ball movement in kickoff screen
                     self.matchstart()  # let the match start / continue
                 if pressed_keys[K_ESCAPE]:   # if escape has been pressed
@@ -232,27 +232,27 @@ class GAMECONTROL:
 
         if not 21 < self.ball.getypos() < self.height - 21:  # in case the ball touches the bottom or the top
             self.ball.changeydirection()  # change balls direction of movement in y
-            SOUNDS.play(random.choice(['soundfiles/bing1.wav', 'soundfiles/bing2.wav']))  # play a bump sound
+            SOUNDS.play('soundfiles/Jump1.wav')  # random.choice(['soundfiles/bing1.wav', 'soundfiles/bing2.wav']))  # play a bump sound
         if self.leftpaddle.getxpos() + 10 < self.ball.getxpos() < self.leftpaddle.getxpos() + 16:  # in case the ball is in left paddles x-range
             if self.leftpaddle.getypos() - 10 < self.ball.getypos() < self.leftpaddle.getypos() + self.leftpaddle.getheight() + 10:  # in case the ball is in left paddles y-range
                 self.ball.changexdirection()  # make ball jump
-                SOUNDS.play(random.choice(['soundfiles/bing2.wav', 'soundfiles/bing1.wav']))  # play jumping shot
+                SOUNDS.play('soundfiles/Jump1.wav')  # random.choice(['soundfiles/bing2.wav', 'soundfiles/bing1.wav']))  # play jumping shot
                 if self.inputMap[2] or self.inputMap[3]:  # if left paddle is moving
                     self.increaseballspeed()  # speed up the ball
         if self.rightpaddle.getxpos() - 16 < self.ball.getxpos() < self.rightpaddle.getxpos() - 10:  # in case the ball is in right paddles x-range
             if self.rightpaddle.getypos() - 10 < self.ball.getypos() < self.rightpaddle.getypos() + self.rightpaddle.getheight() + 10:  # in case the ball is in right paddles y-range
                 self.ball.changexdirection()  # make ball jump
-                SOUNDS.play(random.choice(['soundfiles/bing2.wav', 'soundfiles/bing1.wav']))  # play jumping shot
+                SOUNDS.play('soundfiles/Jump1.wav')  # random.choice(['soundfiles/bing2.wav', 'soundfiles/bing1.wav']))  # play jumping shot
                 if self.inputMap[0] or self.inputMap[1]:  # if right paddle is moving
                     self.increaseballspeed()  # speed up the ball
         if self.ball.getxpos() >= self.width:  # if the ball is touching the right side of the screen
-            SOUNDS.play('soundfiles/win.ogg')  # play goal sound
+            SOUNDS.play('soundfiles/win2.wav')  # play goal sound
             self.resetpaddles()  # replace paddles to the middle
             self.goalleft()  # add a goal for left
             self.ball.reset((0.25 * self.width * random.choice([-1, 1]), 0.25 * self.height * random.choice([-1, 1])))  # reset the balls position
             self.kickoff()  # wait for input to play another round
         if self.ball.getxpos() < 1:  # if the ball is touching the left side of the screen
-            SOUNDS.play('soundfiles/win.ogg')  # play goal sound
+            SOUNDS.play('soundfiles/win2.wav')  # play goal sound
             self.resetpaddles()  # replace paddles to the middle
             self.goalright()  # add a goal for left
             self.ball.reset((0.25 * self.width * random.choice([-1, 1]), 0.25 * self.height * random.choice([-1, 1])))  # reset the balls position
