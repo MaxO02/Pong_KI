@@ -138,8 +138,8 @@ class GAMECONTROL:
                         self.mainmenu()  # back to main menu
                     elif self.focus[1]:
                         config['Settings']['gamemode'] = self.enemymode = "1v1" if self.enemymode != "1v1" else "1v0"  # switch the enemymode
-                        with open('config.cfg', 'w') as configfile:
-                            config.write(configfile)
+                        with open('config.cfg', 'w') as configfile:  # opens the config file
+                            config.write(configfile)  # writes to the file
                     elif self.focus[2]:
                         self.resmenu()  # here you can switch the screen's resolution
                     elif self.focus[3]:
@@ -184,10 +184,10 @@ class GAMECONTROL:
                         try:
                             newres = int(res[0]), int(res[1])
                             self.spf.changeresolution(newres)
-                            config['Settings']["reswidth"] = res[0]
-                            config['Settings']['reslength'] = res[1]
-                            with open('config.cfg', 'w') as configfile:
-                                config.write(configfile)
+                            config['Settings']["reswidth"] = res[0] # saves the width to the config
+                            config['Settings']['reslength'] = res[1] # saves the length to the config
+                            with open('config.cfg', 'w') as configfile:  # opens the config file
+                                config.write(configfile)  # writes to the file
                         except Exception as e:
                             print(e)
                             self.spf.resmenuerror()
