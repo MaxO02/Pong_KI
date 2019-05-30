@@ -64,10 +64,10 @@ class GAMECONTROL:
     def kickoff(self) -> None:
         """wait for a the players to get ready"""
         pygame.mouse.set_visible(False)  # mouse won't show
-        self.spf.kickoffscreen(self.scoreleft, self.scoreright, "PRESS SPACE")  # show the kickoff screen
         self.screen = "kickoff"  # sets the screen to 'kickoff'
         while True:
             self.eventsingame()  # read the events
+            self.spf.kickoffscreen(self.scoreleft, self.scoreright, "PRESS SPACE")  # show the kickoff screen
 
     def mainmenu(self) -> None:
         """handles any settings, game pauses etc"""
@@ -88,6 +88,8 @@ class GAMECONTROL:
                     self.matchstart()  # let the match start / continue
                 if pressed_keys[K_ESCAPE]:   # if escape has been pressed
                         self.mainmenu() # start the menu screen
+                if pressed_keys[K_r]:
+                    self.spf.changetheme(((random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))))  # actually changes the theme to a random one
                 """now fill the input map for any paddle controlling keystroke"""
                 self.inputMap[0] = pressed_keys[K_DOWN]  # right player: move down
                 self.inputMap[1] = pressed_keys[K_UP]  # right player: move up
