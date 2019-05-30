@@ -187,11 +187,10 @@ class GAMECONTROL:
                             if self.newcolor[0] != None and self.newcolor[1] != None and self.newcolor[2] != None:
                                 newtheme = self.newcolor[0], self.newcolor[1], self.newcolor[2]
                                 self.spf.changetheme(newtheme)
-                                self.newcolor = []
+                                self.newcolor = [None, None, None]
                         except Exception as e:
                             print(e)
                         self.newcolors[self.spf.getactivebox()-1] = ''
-                        RGB = []
                     elif event.key == pygame.K_BACKSPACE:
                         self.newcolors[self.spf.getactivebox()-1] = self.newcolors[self.spf.getactivebox()-1][:-1]
                     else:
