@@ -13,3 +13,11 @@ To-Do's
 -> Durchkommentieren
 -> Screen für Custom Theme verschönern + error message
 ------------------------------------------------------------------------------------------------------------------------
+
+
+possible game modes:
+    1 vs wall
+    paddle moves while there is no input
+    rainbow mode (theme will randomly change and cause epileptic seizures)
+    hard mode (speeds are incredibly high)
+    ball hiding for some timespans
