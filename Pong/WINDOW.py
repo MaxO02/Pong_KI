@@ -2,7 +2,11 @@ import pygame
 import random
 from time import sleep
 import multitasking
+import configparser
 
+#reading the config
+config = configparser.ConfigParser()
+config.read("config.cfg")
 
 class WINDOW:
 
@@ -136,6 +140,9 @@ class WINDOW:
 
     def changetheme(self, theme) -> None:
         self.paddle_color, self.ball_color, self.background_color = theme  # splits the theme-tuple to the three colors
+        config["Settings"]["theme"] = str(theme) #sets the theme config to the theme we changed to
+        with open('config.cfg', 'w') as configfile: # opens the config file
+            config.write(configfile) # writes to the file
 
     def scorereset(self, boolean) -> None:
         self.scoreresetv = boolean  # sets the scorereset variable to given boolean

@@ -6,13 +6,19 @@ from Pong.WINDOW import WINDOW
 from Pong.SOUNDS import SOUNDS
 import webbrowser
 import random
+import configparser
 
+#reading the config
+config = configparser.ConfigParser()
+config.read("config.cfg")
 
 class GAMECONTROL:
-    def __init__(self, resolution=(1920, 1080), gm='1v1', score=(0, 0)) -> None:
+    def __init__(self, resolution=(int(config.get("Settings", "reswidth")), int(config.get("Settings", "reslength"))), gm=config.get("Settings", "gamemode"), score=(0, 0)) -> None:
         """defines important variables: height and width of the screen, arrays for the event-handling, gamemode, score
         defines objects of other classes: game's clock, paddles, ball, window
         initiates pygame and the menu"""
+
+
 
         # variables:
         self.width, self.height = resolution  # sets the variables depending on the current resolution
@@ -25,19 +31,23 @@ class GAMECONTROL:
         self.inputresolution = ''  # which new resolution has been input
         self.screen = ''  # which screen is active
         self.newcolors = ["", "", ""]
-        self.backgroundmusic = True
+        self.backgroundmusic = config.get("Settings", "bgmusic") == "True"
         self.newcolor = [None, None, None]
 
         # themes
         self.experimentaltheme = ((255, 255, 0), (255, 0, 0), (0, 0, 255))  # strange looking  theme
         self.defaulttheme = ((254, 115, 1), (85, 57, 138), (1, 254, 240))  # best looking  theme
 
+        #creates the starttheme from the config file
+        colors = list(filter(None, config.get("Settings", "theme").replace(")", "(").replace(",", "(").replace(" ", "(").split("(")))
+        starttheme = ((int(colors[0]), int(colors[1]), int(colors[2])), (int(colors[3]), int(colors[4]), int(colors[5])), (int(colors[6]), int(colors[7]), int(colors[8])))
+
         # objects
         self.clock = pygame.time.Clock()  # handles the timespans passing between operations,
         self.leftpaddle = PADDEL(0.1 * self.width, self.height / 2)  # paddle is created depending on the screens resolution
         self.rightpaddle = PADDEL(0.9 * self.width, self.height / 2)  # paddle is created depending on the screens resolution
         self.ball = BALL(self.width / 2, self.height / 2, (270 / 0.6 * random.choice([-1, 1]), 270 / 0.6 * random.choice([-1, 1])))  # Ball is created depending on the screens resolution, speed has a random direction
-        self.spf = WINDOW(self.ball, self.leftpaddle, self.rightpaddle, resolution, self.defaulttheme)  # WINDOW gets the objects to show aswell as the resolution
+        self.spf = WINDOW(self.ball, self.leftpaddle, self.rightpaddle, resolution, starttheme)  # WINDOW gets the objects to show aswell as the resolution
 
         # start the game
         pygame.init()  # initiates pygame
@@ -127,7 +137,9 @@ class GAMECONTROL:
                     if self.focus[0]:
                         self.mainmenu()  # back to main menu
                     elif self.focus[1]:
-                        self.enemymode = "1v1" if self.enemymode != "1v1" else "1v0"  # switch the enemymode
+                        config['Settings']['gamemode'] = self.enemymode = "1v1" if self.enemymode != "1v1" else "1v0"  # switch the enemymode
+                        with open('config.cfg', 'w') as configfile:  # opens the config file
+                            config.write(configfile)  # writes to the file
                     elif self.focus[2]:
                         self.resmenu()  # here you can switch the screen's resolution
                     elif self.focus[3]:
@@ -172,6 +184,10 @@ class GAMECONTROL:
                         try:
                             newres = int(res[0]), int(res[1])
                             self.spf.changeresolution(newres)
+                            config['Settings']["reswidth"] = res[0] # saves the width to the config
+                            config['Settings']['reslength'] = res[1] # saves the length to the config
+                            with open('config.cfg', 'w') as configfile:  # opens the config file
+                                config.write(configfile)  # writes to the file
                         except Exception as e:
                             print(e)
                             self.spf.resmenuerror()
