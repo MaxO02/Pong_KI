@@ -140,11 +140,9 @@ class WINDOW:
 
     def changetheme(self, theme) -> None:
         self.paddle_color, self.ball_color, self.background_color = theme  # splits the theme-tuple to the three colors
-        #config["Settings"]["theme"]["paddelcolor"] = self.paddle_color[1]
-        #config["Settings"]["theme"]["ball_color"] = self.paddle_color[1]
-        #config["Settings"]["theme"]["background_color"] = self.paddle_color[1]
-        #with open('config.cfg', 'w') as configfile:
-         #   config.write(configfile)
+        config["Settings"]["theme"] = str(theme)
+        with open('config.cfg', 'w') as configfile:
+            config.write(configfile)
 
     def scorereset(self, boolean) -> None:
         self.scoreresetv = boolean  # sets the scorereset variable to given boolean

@@ -31,19 +31,23 @@ class GAMECONTROL:
         self.inputresolution = ''  # which new resolution has been input
         self.screen = ''  # which screen is active
         self.newcolors = ["", "", ""]
-        self.backgroundmusic = True
+        self.backgroundmusic = config.get("Settings", "bgmusic") == "True"
         self.newcolor = [None, None, None]
 
         # themes
         self.experimentaltheme = ((255, 255, 0), (255, 0, 0), (0, 0, 255))  # strange looking  theme
         self.defaulttheme = ((254, 115, 1), (85, 57, 138), (1, 254, 240))  # best looking  theme
 
+        #creates the starttheme from the config file
+        colors = list(filter(None, config.get("Settings", "theme").replace(")", "(").replace(",", "(").replace(" ", "(").split("(")))
+        starttheme = ((int(colors[0]), int(colors[1]), int(colors[2])), (int(colors[3]), int(colors[4]), int(colors[5])), (int(colors[6]), int(colors[7]), int(colors[8])))
+
         # objects
         self.clock = pygame.time.Clock()  # handles the timespans passing between operations,
         self.leftpaddle = PADDEL(0.1 * self.width, self.height / 2)  # paddle is created depending on the screens resolution
         self.rightpaddle = PADDEL(0.9 * self.width, self.height / 2)  # paddle is created depending on the screens resolution
         self.ball = BALL(self.width / 2, self.height / 2, (270 / 0.6 * random.choice([-1, 1]), 270 / 0.6 * random.choice([-1, 1])))  # Ball is created depending on the screens resolution, speed has a random direction
-        self.spf = WINDOW(self.ball, self.leftpaddle, self.rightpaddle, resolution, self.defaulttheme)  # WINDOW gets the objects to show aswell as the resolution
+        self.spf = WINDOW(self.ball, self.leftpaddle, self.rightpaddle, resolution, starttheme)  # WINDOW gets the objects to show aswell as the resolution
 
         # start the game
         pygame.init()  # initiates pygame
