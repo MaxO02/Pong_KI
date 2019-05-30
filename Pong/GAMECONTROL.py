@@ -6,13 +6,19 @@ from Pong.WINDOW import WINDOW
 from Pong.SOUNDS import SOUNDS
 import webbrowser
 import random
+import configparser
 
+#reading the config
+config = configparser.ConfigParser()
+config.read("config.cfg")
 
 class GAMECONTROL:
-    def __init__(self, resolution=(1920, 1080), gm='1v1', score=(0, 0)) -> None:
+    def __init__(self, resolution=(int(config.get("Settings", "reswidth")), int(config.get("Settings", "reslength"))), gm=config.get("Settings", "gamemode"), score=(0, 0)) -> None:
         """defines important variables: height and width of the screen, arrays for the event-handling, gamemode, score
         defines objects of other classes: game's clock, paddles, ball, window
         initiates pygame and the menu"""
+
+
 
         # variables:
         self.width, self.height = resolution  # sets the variables depending on the current resolution
@@ -25,7 +31,7 @@ class GAMECONTROL:
         self.inputresolution = ''  # which new resolution has been input
         self.screen = ''  # which screen is active
         self.newcolors = ["", "", ""]
-        self.backgroundmusic = False
+        self.backgroundmusic = True
         self.newcolor = [None, None, None]
 
         # themes
@@ -127,7 +133,9 @@ class GAMECONTROL:
                     if self.focus[0]:
                         self.mainmenu()  # back to main menu
                     elif self.focus[1]:
-                        self.enemymode = "1v1" if self.enemymode != "1v1" else "1v0"  # switch the enemymode
+                        config['Settings']['gamemode'] = self.enemymode = "1v1" if self.enemymode != "1v1" else "1v0"  # switch the enemymode
+                        with open('config.cfg', 'w') as configfile:
+                            config.write(configfile)
                     elif self.focus[2]:
                         self.resmenu()  # here you can switch the screen's resolution
                     elif self.focus[3]:
@@ -172,6 +180,10 @@ class GAMECONTROL:
                         try:
                             newres = int(res[0]), int(res[1])
                             self.spf.changeresolution(newres)
+                            config['Settings']["reswidth"] = res[0]
+                            config['Settings']['reslength'] = res[1]
+                            with open('config.cfg', 'w') as configfile:
+                                config.write(configfile)
                         except Exception as e:
                             print(e)
                             self.spf.resmenuerror()
