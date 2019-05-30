@@ -13,7 +13,11 @@ in our code, please open a new issue and describe it. Also if there is
 an extra you've always wanted in a pong clone, you can open an issue and
 suggest your feature.
 
-If you only want to play, you will need to install the __PyCharm IDE__ at first. We are using it for development and as we haven't put together a standalone, this will be the only was to actually run the game. Just open the project with PyCharm and run the __init.py__ file
+If you only want to play, you will need to install the
+[__PyCharm IDE__](https://www.jetbrains.com/pycharm/) at first. We are using it for development and as we
+haven't put together a standalone, this will be the only was to actually
+run the game. Just open the project with PyCharm and run the __init.py__
+file
 
 To create this game, we made use of the
 [__pygame__](https://www.pygame.org/wiki/GettingStarted) repository.
