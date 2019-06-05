@@ -22,9 +22,12 @@ class SOUNDS:
         del sound  # removes the variable
 
     @staticmethod
-    def backgroundmusicqueue() -> None:
+    def backgroundmusicqueue(bool) -> None:
         pygame.init()  # initiates the pygame mixer
         pygame.mixer.init(22100, 16, 2, 64)  # initiates the pygame mixer
         pygame.mixer.music.load('soundfiles/background.mp3')  # loads soundfile from path
         pygame.mixer.music.set_volume(0.2)  # sets the volume
-        pygame.mixer.music.play(-1)  # plays endless loop
+        if bool:
+            pygame.mixer.music.play(-1)  # plays endless loop
+        else:
+            return

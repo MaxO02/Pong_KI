@@ -79,7 +79,7 @@ class WINDOW:
         ??Theme??"""
         pygame.mouse.set_visible(True)  # mouse should show
         self.screen.fill((0, 0, 0))  # fills the screen black
-        texts, objects, widths = ["BACK", "CHANGE ENEMY-MODE", "CHANGE RESOLUTION", "CHANGE THEME"], [], []  # assigns the arrays
+        texts, objects, widths = ["BACK", "CHANGE ENEMY-MODE", "CHANGE RESOLUTION", "CHANGE THEME", "TOGGLE BACKGROUND MUSIC"], [], []  # assigns the arrays
         for i in range(0, len(texts)):
             objects.append(self.menu_font.render(texts[i], True, (254, 254, 254)) if not l[i] else self.menu_font_focused.render(texts[i], True, (254, 254, 254)))  # creates all text objects
             widths.append(objects[i].get_rect().width)  # calculates all the widths

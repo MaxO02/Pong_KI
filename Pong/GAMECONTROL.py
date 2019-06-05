@@ -50,7 +50,7 @@ class GAMECONTROL:
         # start the game
         pygame.init()  # initiates pygame
         # starts the annoying music in the background
-        if self.backgroundmusic: SOUNDS.backgroundmusicqueue()
+        SOUNDS.backgroundmusicqueue(self.backgroundmusic)
         self.mainmenu()  # shows the menu screen
 
     def matchstart(self) -> None:
@@ -142,6 +142,12 @@ class GAMECONTROL:
                         self.resmenu()  # here you can switch the screen's resolution
                     elif self.focus[3]:
                         self.thememenu()  # here you can switch the theme of the game screen
+                    elif self.focus[4]:
+                        self.backgroundmusic = not self.backgroundmusic
+                        config['Settings']['bgmusic'] = "True" if self.backgroundmusic else "False"
+                        SOUNDS.backgroundmusicqueue(self.backgroundmusic)
+                        with open('config.cfg', 'w') as configfile:  # opens the config file
+                            config.write(configfile)  # writes to the file
                 elif self.screen == "resmenu":
                     if self.focus[0]:
                         self.settings()  # back to settings menu
