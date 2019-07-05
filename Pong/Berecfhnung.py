@@ -3,6 +3,7 @@ from math import atan, tan
 a = 0.001
 
 # m muss -xbeschleunigung durch -ybeschleunigung sein
+# xsp isdd der kollisionspunkt des balls mit dem paddel linkes paddel ab mitte nach oben pos mitte nach unten neg rechtes paddel spiegel verkehrt
 
 def Berechnung(m, xsp):
     mtangente=2*a*xsp
