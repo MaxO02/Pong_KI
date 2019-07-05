@@ -49,6 +49,15 @@ class BALL:
     def add_mfy(self, deltav) -> None:
         self.mfy += deltav  # adds y movement speed
 
+    def give_mfx(self) -> int:
+        return self.mfx
+
+    def give_mfy(self) -> int:
+        return self.mfy
+
+    def set_mf(self, mf):
+        self.mfx, self.mfy = mf
+
     @multitasking.task
     def resetturnedx(self) -> None:
         sleep(0.5)  # waits for half a second
