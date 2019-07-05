@@ -2,6 +2,8 @@ from math import atan, tan
 
 a = 0.001
 
+# m muss -xbeschleunigung durch -ybeschleunigung sein
+
 def Berechnung(m, xsp):
     mtangente=2*a*xsp
     ml = -1/mtangente
