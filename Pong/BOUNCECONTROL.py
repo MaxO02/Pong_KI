@@ -21,11 +21,11 @@ class BOUNCECONTROL():
             a = 0.001
             mtangente = 2 * a * xsp
             ml = -1 / mtangente
-            BETA = math.atan(ml)
-            ALPHA = math.atan(m)
-            GAMMA = ALPHA - BETA
-            GAMMASTRICH = BETA - GAMMA
-            mn = math.tan(GAMMASTRICH)
+            beta = math.atan(ml)
+            alpha = math.atan(m)
+            gamma = alpha - beta
+            gammastrich = beta - gamma
+            mn = math.tan(gammastrich)
             return mn
         
         def left():
