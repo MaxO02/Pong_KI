@@ -1,4 +1,4 @@
-import multithreating
+import multitasking
 import math
 import configparser
 from Pong.SOUNDS import SOUNDS
@@ -14,7 +14,7 @@ class BOUNCECONTROL():
     pass
   
   @staticmethod
-  @multithreating.task
+  @multitasking.task
   def bounce(ball, leftpaddle, rightpaddle):
     def Berechnung(m, xsp) -> float:
       a = 0.001
@@ -51,7 +51,7 @@ class BOUNCECONTROL():
       ball.set_mf(mfxnew, mfynew)
     
     def bottomtop():
-      
+      pass
     while config.get("Stuff", "running") == "True":
       if leftpaddle.getxpos() + 10 < ball.getxpos() < leftpaddle.getxpos() + 16:  # in case the ball is in left paddles x-range
         if leftpaddle.getypos() - 10 < ball.getypos() < leftpaddle.getypos() + leftpaddle.getheight() + 10:  # in case the ball is in left paddles y-range
