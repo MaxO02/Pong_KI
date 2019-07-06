@@ -20,6 +20,11 @@ class GAMECONTROL:
         defines objects of other classes: game's clock, paddles, ball, window
         initiates pygame and the menu"""
 
+        #setting the running var in the sys.cfg to true
+        config2['Stuff']['running'] = "True"
+        with open('sys.cfg', 'w') as configfile:  # opens the config file
+            config2.write(configfile)  # writes to the file
+
         # variables:
         self.width, self.height = resolution  # sets the variables depending on the current resolution
         self.inputMap = [False, False, False, False]  # tells wich control keys are pressed
