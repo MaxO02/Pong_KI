@@ -8,5 +8,5 @@ setup(
     license='GNU GPL',
     author='linus, max',
     author_email='',
-    description='This pong clone has been designed as a school project.', install_requires=['pygame']
+    description='This pong clone has been designed as a school project.', install_requires=['pygame', 'multitasking']
 )
