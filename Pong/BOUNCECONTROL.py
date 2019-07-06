@@ -11,6 +11,7 @@ config.read("sys.cfg")
 class BOUNCECONTROL():
   
     def __init__(self):
+        print("started")
         pass
   
     @staticmethod
@@ -34,11 +35,12 @@ class BOUNCECONTROL():
             if xsp == 0:
                 mn = -m
             else:
-                mn = berechnung(m,xsp)
-            factor = -math.sqrt((ball.give_mfx()^2+leftpaddle.getheight()^2)/(mn^2+1))
+                mn = berechnung(m, xsp)
+            factor = -math.sqrt((ball.give_mfx()**2+leftpaddle.getheight()**2)/(mn**2+1))
             mfxnew = int(mn*factor)
             mfynew = int(factor)
-            ball.set_mf(mfxnew, mfynew)
+            mfnew = mfxnew, mfynew
+            ball.set_mf(mfnew)
             SOUNDS.play('soundfiles/Jump1.wav')
       
         def right():
@@ -48,10 +50,11 @@ class BOUNCECONTROL():
                 mn = -m
             else:
                 mn = berechnung(m, xsp)
-            factor = -math.sqrt((ball.give_mfx() ^ 2 + leftpaddle.getheight() ^ 2) / (mn ^ 2 + 1))
+            factor = -math.sqrt((ball.give_mfx() ** 2 + leftpaddle.getheight() ** 2) / (mn ** 2 + 1))
             mfxnew = int(mn * factor)
             mfynew = int(factor)
-            ball.set_mf(mfxnew, mfynew)
+            mfnew = mfxnew,mfynew
+            ball.set_mf(mfnew)
             SOUNDS.play('soundfiles/Jump1.wav')
 
         def bottomtop():
@@ -61,10 +64,18 @@ class BOUNCECONTROL():
         while config.get("Stuff", "running") == "True":
             if leftpaddle.getxpos() + 10 < ball.getxpos() < leftpaddle.getxpos() + 16:  # in case the ball is in left paddles x-range
                 if leftpaddle.getypos() - 10 < ball.getypos() < leftpaddle.getypos() + leftpaddle.getheight() + 10:  # in case the ball is in left paddles y-range
+                    print("left")
                     left()
+                    ball.add_mfy(45 * ball.mfy / abs(
+                        ball.mfy))  # speeds up the  ball in y direction, always increases speed
+                    ball.add_mfx(30 * ball.mfx / abs(ball.mfx))
             if rightpaddle.getxpos() - 16 < ball.getxpos() < rightpaddle.getxpos() - 10:  # in case the ball is in right paddles x-range
                 if rightpaddle.getypos() - 10 < ball.getypos() < rightpaddle.getypos() + rightpaddle.getheight() + 10:  # in case the ball is in right paddles y-range
+                    print("right")
                     right()
+                    ball.add_mfy(45 * ball.mfy / abs(
+                        ball.mfy))  # speeds up the  ball in y direction, always increases speed
+                    ball.add_mfx(30 * ball.mfx / abs(ball.mfx))
             if not 21 < ball.getypos() < height - 21:  # in case the ball touches the bottom or the top
                 bottomtop()
 

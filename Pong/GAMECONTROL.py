@@ -4,6 +4,7 @@ from Pong.BALL import BALL
 from Pong.PADDLE import PADDEL
 from Pong.WINDOW import WINDOW
 from Pong.SOUNDS import SOUNDS
+from Pong.BOUNCECONTROL import BOUNCECONTROL
 import webbrowser
 import random
 import configparser
@@ -53,8 +54,10 @@ class GAMECONTROL:
         self.rightpaddle = PADDEL(0.9 * self.width, self.height / 2)  # paddle is created depending on the screens resolution
         self.ball = BALL(self.width / 2, self.height / 2, (270 / 0.6 * random.choice([-1, 1]), 270 / 0.6 * random.choice([-1, 1])))  # Ball is created depending on the screens resolution, speed has a random direction
         self.spf = WINDOW(self.ball, self.leftpaddle, self.rightpaddle, resolution, starttheme)  # WINDOW gets the objects to show aswell as the resolution
+        self.bcontrol = BOUNCECONTROL()
 
         # start the game
+        self.bcontrol.bounce(self.ball,self.leftpaddle,self.rightpaddle,self.height) # starts a parallel threat with the bouncecontrol
         pygame.init()  # initiates pygame
         # starts the annoying music in the background
         SOUNDS.backgroundmusicqueue(self.backgroundmusic)
@@ -264,7 +267,7 @@ class GAMECONTROL:
     def ballhandling(self, clocktick) -> None:
         self.ball.move(clocktick / 1000.0)  # ball should relocate itself according to it's speed and the time
 
-        if not 21 < self.ball.getypos() < self.height - 21:  # in case the ball touches the bottom or the top
+        """if not 21 < self.ball.getypos() < self.height - 21:  # in case the ball touches the bottom or the top
             self.ball.changeydirection()  # change balls direction of movement in y
             SOUNDS.play('soundfiles/Jump1.wav')  # random.choice(['soundfiles/bing1.wav', 'soundfiles/bing2.wav']))  # play a bump sound
         if self.leftpaddle.getxpos() + 10 < self.ball.getxpos() < self.leftpaddle.getxpos() + 16:  # in case the ball is in left paddles x-range
@@ -278,7 +281,7 @@ class GAMECONTROL:
                 self.ball.changexdirection()  # make ball jump
                 SOUNDS.play('soundfiles/Jump1.wav')  # random.choice(['soundfiles/bing2.wav', 'soundfiles/bing1.wav']))  # play jumping shot
                 if self.inputMap[0] or self.inputMap[1]:  # if right paddle is moving
-                    self.increaseballspeed()  # speed up the ball
+                    self.increaseballspeed()  # speed up the ball"""
         if self.ball.getxpos() >= self.width:  # if the ball is touching the right side of the screen
             SOUNDS.play('soundfiles/win2.wav')  # play goal sound
             self.resetpaddles()  # replace paddles to the middle
