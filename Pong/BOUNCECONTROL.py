@@ -20,7 +20,7 @@ class BOUNCECONTROL():
         blockedl = 0
         blockedr = 0
         def berechnung(m, xsp) -> float:
-            a = 0.01
+            a = 0.005
             mtangente = 2 * a * xsp
             ml = -1 / mtangente
             beta = math.atan(ml)
