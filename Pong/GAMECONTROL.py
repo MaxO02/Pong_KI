@@ -12,6 +12,8 @@ import configparser
 config = configparser.ConfigParser()
 config.read("config.cfg")
 
+config2 = configparser.ConfigParser()
+config2.read("sys.cfg")
 class GAMECONTROL:
     def __init__(self, resolution=(int(config.get("Settings", "reswidth")), int(config.get("Settings", "reslength"))), gm=config.get("Settings", "gamemode"), score=(0, 0)) -> None:
         """defines important variables: height and width of the screen, arrays for the event-handling, gamemode, score
@@ -104,6 +106,9 @@ class GAMECONTROL:
                 self.inputMap[2] = pressed_keys[K_s]  # left player: move down
                 self.inputMap[3] = pressed_keys[K_w]  # left player: move up
             if event.type == pygame.QUIT:  # in case one wants to close the window
+                config2['Stuff']['running'] = "False"
+                with open('sys.cfg', 'w') as configfile:  # opens the config file
+                    config2.write(configfile)  # writes to the file
                 exit()  # exit pygame and therefore close the window
 
     def eventsmenu(self) -> None:
@@ -128,6 +133,9 @@ class GAMECONTROL:
                     elif self.focus[4]:
                         self.info()  # will enter the github readme file
                     elif self.focus[5]:
+                        config2['Stuff']['running'] = "False"
+                        with open('sys.cfg', 'w') as configfile:  # opens the config file
+                            config2.write(configfile)  # writes to the file
                         exit()  # will close the game
                     elif self.focus[0]:
                         self.resetscore()  # will reset the score
@@ -180,6 +188,9 @@ class GAMECONTROL:
                     elif self.focus[3]:
                         self.spf.setactivebox(3)
             if event.type == pygame.QUIT:  # close the window
+                config2['Stuff']['running'] = "False"
+                with open('sys.cfg', 'w') as configfile:  # opens the config file
+                    config2.write(configfile)  # writes to the file
                 exit()
             if event.type == KEYDOWN:
                 if self.screen == "resmenu":
