@@ -15,7 +15,7 @@ class BOUNCECONTROL():
   
   @staticmethod
   @multitasking.task
-  def bounce(ball, leftpaddle, rightpaddle):
+  def bounce(ball, leftpaddle, rightpaddle, height):
     def Berechnung(m, xsp) -> float:
       a = 0.001
       mtangente = 2 * a * xsp
@@ -37,6 +37,7 @@ class BOUNCECONTROL():
       mfxnew = int(mn*factor)
       mfynew = int(factor)
       ball.set_mf(mfxnew, mfynew)
+      SOUNDS.play('soundfiles/Jump1.wav')
       
     def right():
       xsp = ball.getypos() - (rightpaddle.getypos() + rightpaddle.getheight() / 2)
@@ -49,9 +50,11 @@ class BOUNCECONTROL():
       mfxnew = int(mn * factor)
       mfynew = int(factor)
       ball.set_mf(mfxnew, mfynew)
+      SOUNDS.play('soundfiles/Jump1.wav')
     
     def bottomtop():
-      pass
+        ball.changeydirection()
+        SOUNDS.play('soundfiles/Jump1.wav')
     while config.get("Stuff", "running") == "True":
       if leftpaddle.getxpos() + 10 < ball.getxpos() < leftpaddle.getxpos() + 16:  # in case the ball is in left paddles x-range
         if leftpaddle.getypos() - 10 < ball.getypos() < leftpaddle.getypos() + leftpaddle.getheight() + 10:  # in case the ball is in left paddles y-range
@@ -59,5 +62,7 @@ class BOUNCECONTROL():
       if rightpaddle.getxpos() - 16 < ball.getxpos() < rightpaddle.getxpos() - 10:  # in case the ball is in right paddles x-range
         if rightpaddle.getypos() - 10 < ball.getypos() < rightpaddle.getypos() + rightpaddle.getheight() + 10:  # in case the ball is in right paddles y-range
           right()
+      if not 21 < ball.getypos() < height - 21:  # in case the ball touches the bottom or the top
+        bottomtop()
 
 
