@@ -3,7 +3,7 @@ class PADDEL:
     def __init__(self, positionx, positiony) -> None:
         self.posx = positionx  # sets the x position
         self.posy = positiony  # sets the y position
-        self.mf = 2    # sets the speed of movement
+        self.mf = 4    # sets the speed of movement
         self.canmoveup = True    # can paddle go higher
         self.canmovedown = True  # paddle go lower
         self.height = 150  # sets the height of the paddle

@@ -1,3 +1,5 @@
+import time
+
 import pygame
 from pygame.locals import *
 from Pong.BALL import BALL
@@ -57,6 +59,7 @@ class GAMECONTROL:
         self.bcontrol = BOUNCECONTROL()
 
         # start the game
+        time.sleep(1)
         self.bcontrol.bounce(self.ball,self.leftpaddle,self.rightpaddle,self.height) # starts a parallel threat with the bouncecontrol
         pygame.init()  # initiates pygame
         # starts the annoying music in the background
