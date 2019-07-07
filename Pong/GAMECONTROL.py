@@ -1,5 +1,4 @@
 import time
-
 import pygame
 from pygame.locals import *
 from Pong.BALL import BALL
@@ -10,23 +9,23 @@ from Pong.BOUNCECONTROL import BOUNCECONTROL
 import webbrowser
 import random
 import configparser
+import multiprocessing
 
 # reading the config
 config = configparser.ConfigParser()
 config.read("config.cfg")
 
-config2 = configparser.ConfigParser()
-config2.read("sys.cfg")
+
 class GAMECONTROL:
     def __init__(self, resolution=(int(config.get("Settings", "reswidth")), int(config.get("Settings", "reslength"))), gm=config.get("Settings", "gamemode"), score=(0, 0)) -> None:
         """defines important variables: height and width of the screen, arrays for the event-handling, gamemode, score
         defines objects of other classes: game's clock, paddles, ball, window
         initiates pygame and the menu"""
 
-        #setting the running var in the sys.cfg to true
-        config2['Stuff']['running'] = "True"
+        # setting the running var in the sys.cfg to true
+        """config2['Stuff']['running'] = "True"
         with open('sys.cfg', 'w') as configfile:  # opens the config file
-            config2.write(configfile)  # writes to the file
+            config2.write(configfile)  # writes to the file"""
 
         # variables:
         self.width, self.height = resolution  # sets the variables depending on the current resolution
@@ -46,7 +45,7 @@ class GAMECONTROL:
         self.experimentaltheme = ((255, 255, 0), (255, 0, 0), (0, 0, 255))  # strange looking  theme
         self.defaulttheme = ((254, 115, 1), (85, 57, 138), (1, 254, 240))  # best looking  theme
 
-        # creates the starttheme from the config file
+        # creates the starting theme from the config file
         colors = list(filter(None, config.get("Settings", "theme").replace(")", "(").replace(",", "(").replace(" ", "(").split("(")))
         starttheme = ((int(colors[0]), int(colors[1]), int(colors[2])), (int(colors[3]), int(colors[4]), int(colors[5])), (int(colors[6]), int(colors[7]), int(colors[8])))
 
@@ -56,11 +55,11 @@ class GAMECONTROL:
         self.rightpaddle = PADDEL(0.9 * self.width, self.height / 2)  # paddle is created depending on the screens resolution
         self.ball = BALL(self.width / 2, self.height / 2, (270 / 0.6 * random.choice([-1, 1]), 270 / 0.6 * random.choice([-1, 1])))  # Ball is created depending on the screens resolution, speed has a random direction
         self.spf = WINDOW(self.ball, self.leftpaddle, self.rightpaddle, resolution, starttheme)  # WINDOW gets the objects to show aswell as the resolution
-        self.bcontrol = BOUNCECONTROL()
+        self.bc = BOUNCECONTROL()
+        self.bc.bounce(self.ball, self.leftpaddle, self.rightpaddle, resolution)
 
         # start the game
         time.sleep(2)
-        self.bcontrol.bounce(self.ball,self.leftpaddle,self.rightpaddle,self.height) # starts a parallel threat with the bouncecontrol
         pygame.init()  # initiates pygame
         # starts the annoying music in the background
         SOUNDS.backgroundmusicqueue(self.backgroundmusic)
@@ -117,9 +116,7 @@ class GAMECONTROL:
                 self.inputMap[2] = pressed_keys[K_s]  # left player: move down
                 self.inputMap[3] = pressed_keys[K_w]  # left player: move up
             if event.type == pygame.QUIT:  # in case one wants to close the window
-                config2['Stuff']['running'] = "False"
-                with open('sys.cfg', 'w') as configfile:  # opens the config file
-                    config2.write(configfile)  # writes to the file
+                self.bc.stopall()
                 exit()  # exit pygame and therefore close the window
 
     def eventsmenu(self) -> None:
@@ -144,9 +141,7 @@ class GAMECONTROL:
                     elif self.focus[4]:
                         self.info()  # will enter the github readme file
                     elif self.focus[5]:
-                        config2['Stuff']['running'] = "False"
-                        with open('sys.cfg', 'w') as configfile:  # opens the config file
-                            config2.write(configfile)  # writes to the file
+                        self.bc.stopall()
                         exit()  # will close the game
                     elif self.focus[0]:
                         self.resetscore()  # will reset the score
@@ -199,9 +194,7 @@ class GAMECONTROL:
                     elif self.focus[3]:
                         self.spf.setactivebox(3)
             if event.type == pygame.QUIT:  # close the window
-                config2['Stuff']['running'] = "False"
-                with open('sys.cfg', 'w') as configfile:  # opens the config file
-                    config2.write(configfile)  # writes to the file
+                self.bc.stopall()
                 exit()
             if event.type == KEYDOWN:
                 if self.screen == "resmenu":
@@ -269,22 +262,6 @@ class GAMECONTROL:
 
     def ballhandling(self, clocktick) -> None:
         self.ball.move(clocktick / 1000.0)  # ball should relocate itself according to it's speed and the time
-
-        """if not 21 < self.ball.getypos() < self.height - 21:  # in case the ball touches the bottom or the top
-            self.ball.changeydirection()  # change balls direction of movement in y
-            SOUNDS.play('soundfiles/Jump1.wav')  # random.choice(['soundfiles/bing1.wav', 'soundfiles/bing2.wav']))  # play a bump sound
-        if self.leftpaddle.getxpos() + 10 < self.ball.getxpos() < self.leftpaddle.getxpos() + 16:  # in case the ball is in left paddles x-range
-            if self.leftpaddle.getypos() - 10 < self.ball.getypos() < self.leftpaddle.getypos() + self.leftpaddle.getheight() + 10:  # in case the ball is in left paddles y-range
-                self.ball.changexdirection()  # make ball jump
-                SOUNDS.play('soundfiles/Jump1.wav')  # random.choice(['soundfiles/bing2.wav', 'soundfiles/bing1.wav']))  # play jumping shot
-                if self.inputMap[2] or self.inputMap[3]:  # if left paddle is moving
-                    self.increaseballspeed()  # speed up the ball
-        if self.rightpaddle.getxpos() - 16 < self.ball.getxpos() < self.rightpaddle.getxpos() - 10:  # in case the ball is in right paddles x-range
-            if self.rightpaddle.getypos() - 10 < self.ball.getypos() < self.rightpaddle.getypos() + self.rightpaddle.getheight() + 10:  # in case the ball is in right paddles y-range
-                self.ball.changexdirection()  # make ball jump
-                SOUNDS.play('soundfiles/Jump1.wav')  # random.choice(['soundfiles/bing2.wav', 'soundfiles/bing1.wav']))  # play jumping shot
-                if self.inputMap[0] or self.inputMap[1]:  # if right paddle is moving
-                    self.increaseballspeed()  # speed up the ball"""
         if self.ball.getxpos() >= self.width:  # if the ball is touching the right side of the screen
             SOUNDS.play('soundfiles/win2.wav')  # play goal sound
             self.resetpaddles()  # replace paddles to the middle
