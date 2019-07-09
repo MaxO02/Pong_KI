@@ -9,7 +9,6 @@ from Pong.BOUNCECONTROL import BOUNCECONTROL
 import webbrowser
 import random
 import configparser
-import multiprocessing
 
 # reading the config
 config = configparser.ConfigParser()
@@ -21,11 +20,6 @@ class GAMECONTROL:
         """defines important variables: height and width of the screen, arrays for the event-handling, gamemode, score
         defines objects of other classes: game's clock, paddles, ball, window
         initiates pygame and the menu"""
-
-        # setting the running var in the sys.cfg to true
-        """config2['Stuff']['running'] = "True"
-        with open('sys.cfg', 'w') as configfile:  # opens the config file
-            config2.write(configfile)  # writes to the file"""
 
         # variables:
         self.width, self.height = resolution  # sets the variables depending on the current resolution
@@ -55,11 +49,9 @@ class GAMECONTROL:
         self.rightpaddle = PADDEL(0.9 * self.width, self.height / 2)  # paddle is created depending on the screens resolution
         self.ball = BALL(self.width / 2, self.height / 2, (270 / 0.6 * random.choice([-1, 1]), 270 / 0.6 * random.choice([-1, 1])))  # Ball is created depending on the screens resolution, speed has a random direction
         self.spf = WINDOW(self.ball, self.leftpaddle, self.rightpaddle, resolution, starttheme)  # WINDOW gets the objects to show aswell as the resolution
-        self.bc = BOUNCECONTROL()
-        self.bc.bounce(self.ball, self.leftpaddle, self.rightpaddle, resolution)
+        self.bc = BOUNCECONTROL(self.ball, self.leftpaddle, self.rightpaddle)
 
         # start the game
-        time.sleep(2)
         pygame.init()  # initiates pygame
         # starts the annoying music in the background
         SOUNDS.backgroundmusicqueue(self.backgroundmusic)
@@ -274,6 +266,8 @@ class GAMECONTROL:
             self.goalright()  # add a goal for left
             self.ball.reset((0.25 * self.width * random.choice([-1, 1]), 0.25 * self.height * random.choice([-1, 1])))  # reset the balls position
             self.kickoff()  # wait for input to play another round
+        self.bc.bounce((self.width, self.height))
+
 
     @staticmethod
     def clearlist(l, data) -> None:
