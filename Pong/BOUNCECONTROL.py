@@ -65,7 +65,7 @@ class BOUNCECONTROL:
             mn = self.berechnung(m, xsp)
             if (mn > 0 and m > 0) or (mn < 0 and m < 0):
                 mn = -mn
-        factor = math.sqrt((self.ball.give_mfx() ** 2 + self.leftpaddle.getheight() ** 2) / (mn ** 2 + 1))
+        factor = self.ball.give_mfx()/mn
         mfxnew = int(mn * factor)
         mfynew = int(-factor)
         if (self.ball.give_mfx() < 0 and mfxnew < 0) or (self.ball.give_mfx() > 0 and mfxnew > 0):
@@ -84,7 +84,7 @@ class BOUNCECONTROL:
             mn = self.berechnung(m, xsp)
             if (mn > 0 and m > 0) or (mn < 0 and m < 0):
                 mn = -mn
-        factor = math.sqrt((self.ball.give_mfx() ** 2 + self.leftpaddle.getheight() ** 2) / (mn ** 2 + 1))
+        factor = self.ball.give_mfx()/mn
         mfxnew = int(mn * -factor)
         mfynew = int(-factor)
         if (self.ball.give_mfx() < 0 and mfxnew < 0) or (self.ball.give_mfx() > 0 and mfxnew > 0):
