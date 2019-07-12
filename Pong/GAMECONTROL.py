@@ -40,6 +40,8 @@ class GAMECONTROL:
         self.newcolors = ["", "", ""]
         self.backgroundmusic = config.get("Settings", "bgmusic") == "True"
         self.newcolor = [None, None, None]
+        self.mbu2 = self.mbd2 = False
+        self.mbu1 = self.mbd1 = False
 
         # themes
         self.experimentaltheme = ((255, 255, 0), (255, 0, 0), (0, 0, 255))  # strange looking  theme
@@ -239,12 +241,28 @@ class GAMECONTROL:
         self.leftpaddle.setcmd(self.leftpaddle.getypos() < self.height - self.rightpaddle.getheight())  # blocks left's movement on the bottom of the screen
         if self.rightpaddle.getcmd() and inputmap[0]:  # in case K_DOWN is pressed
             self.rightpaddle.moveydown()  # move rightpaddle down
+            self.mbd1 = True
+        elif self.mbd1:
+            self.rightpaddle.reset()
+            self.mbd1 = False
         elif self.rightpaddle.getcmu() and inputmap[1]:  # in case K_UP is pressed
             self.rightpaddle.moveyup()  # move rightpaddle up
+            self.mbu1 = True
+        elif self.mbu1:
+            self.rightpaddle.reset()
+            self.mbu1 = False
         if self.leftpaddle.getcmd() and inputmap[2]:  # in case K_S is pressed
             self.leftpaddle.moveydown()  # move leftpaddle down
+            self.mbd2 = True
+        elif self.mbd2:
+            self.leftpaddle.reset()
+            self.mbd2 = False
         elif self.leftpaddle.getcmu() and inputmap[3]:  # in case K_W is pressed
             self.leftpaddle.moveyup()  # move leftpaddle up
+            self.mbu2 = True
+        elif self.mbu2:
+            self.leftpaddle.reset()
+            self.mbu2 = False
 
     def movepaddlesingleplayer(self, inputmap) -> None:
         self.rightpaddle.setcmu(self.rightpaddle.getypos() > 1)  # blocks right movement on top of the screen
@@ -253,12 +271,28 @@ class GAMECONTROL:
         self.leftpaddle.setcmd(self.leftpaddle.getypos() < self.height - self.rightpaddle.getheight())  # blocks left's movement on the bottom of the screen
         if self.rightpaddle.getcmd() and inputmap[0]:  # in case K_DOWN is pressed
             self.rightpaddle.moveydown()  # move rightpaddle down
+            self.mbd1 =True
+        elif self.mbd1:
+            self.rightpaddle.reset()
+            self.mbd1 = False
         elif self.rightpaddle.getcmu() and inputmap[1]:  # in case K_UP is pressed
             self.rightpaddle.moveyup()  # move rightpaddle up
+            self.mbu1 = True
+        elif self.mbu1:
+            self.rightpaddle.reset()
+            self.mbu1 = False
         if self.leftpaddle.getcmd() and self.ball.getypos() > self.leftpaddle.getypos()+self.leftpaddle.getheight()/2:  # in case the ball is lower than the left paddle
             self.leftpaddle.moveydown()  # move leftpaddle down
+            self.mbd2 = True
+        elif self.mbd2:
+            self.leftpaddle.reset()
+            self.mbd2 = False
         elif self.leftpaddle.getcmu() and self.ball.getypos() < self.leftpaddle.getypos()+self.leftpaddle.getheight()/2:  # in case the ball is higher than the left paddle
             self.leftpaddle.moveyup()  # move leftpaddle up
+            self.mbu2 = True
+        elif self.mbu2:
+            self.leftpaddle.reset()
+            self.mbu2 = False
 
     def ballhandling(self, clocktick) -> None:
         self.ball.move(clocktick / 1000.0)  # ball should relocate itself according to it's speed and the time

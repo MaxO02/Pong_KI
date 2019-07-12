@@ -3,7 +3,7 @@ class PADDEL:
     def __init__(self, positionx, positiony) -> None:
         self.posx = positionx  # sets the x position
         self.posy = positiony  # sets the y position
-        self.mf = 4    # sets the speed of movement
+        self.mf =self.basemf = 1   # sets the speed of movement
         self.canmoveup = True    # can paddle go higher
         self.canmovedown = True  # paddle go lower
         self.height = 150  # sets the height of the paddle
@@ -22,9 +22,11 @@ class PADDEL:
 
     def moveyup(self) -> None:
         self.posy -= self.mf  # moves the paddle up by one iteration
+        self.mf +=1
 
     def moveydown(self) -> None:
         self.posy += self.mf  # moves the paddle down by one iteration
+        self.mf +=1
 
     def getmfy(self) -> float:
         return self.mf  # returns the speed of movement
@@ -43,3 +45,6 @@ class PADDEL:
 
     def getheight(self) -> int:
         return self.height  # returns the paddle height
+
+    def reset(self):
+        self.mf = self.basemf
