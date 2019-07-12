@@ -1,4 +1,3 @@
-import time
 import pygame
 from pygame.locals import *
 from Pong.BALL import BALL

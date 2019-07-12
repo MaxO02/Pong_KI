@@ -18,7 +18,6 @@ class BOUNCECONTROL:
         self.leftpaddle = lpaddle
         self.rightpaddle = rpaddle
 
-    @multitasking.task
     def bounce(self, resolution):
         if self.leftpaddle.getxpos() + 10 < self.ball.getxpos() < self.leftpaddle.getxpos() + 16 and not self.blockedl:  # in case the self.ball is in left paddles x-range
             if self.leftpaddle.getypos() - 10 < self.ball.getypos() < self.leftpaddle.getypos() + self.leftpaddle.getheight() + 10:  # in case the self.ball is in left paddles y-range
