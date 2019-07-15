@@ -100,7 +100,7 @@ class GAMECONTROL:
                     self.clock = pygame.time.Clock()  # reset the clock to prevent ball movement in kickoff screen
                     self.matchstart()  # let the match start / continue
                 if pressed_keys[K_ESCAPE]:   # if escape has been pressed
-                        self.mainmenu() # start the menu screen
+                        self.mainmenu()  # start the menu screen
                 if pressed_keys[K_r]:
                     self.spf.changetheme(((random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))))  # actually changes the theme to a random one
                 """now fill the input map for any paddle controlling keystroke"""
@@ -187,7 +187,6 @@ class GAMECONTROL:
                     elif self.focus[3]:
                         self.spf.setactivebox(3)
             if event.type == pygame.QUIT:  # close the window
-                self.bc.stopall()
                 exit()
             if event.type == KEYDOWN:
                 if self.screen == "resmenu":

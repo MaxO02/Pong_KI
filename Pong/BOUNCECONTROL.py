@@ -48,8 +48,6 @@ class BOUNCECONTROL:
         sleep(0.5)
         self.blockedr = False
 
-    def stopall(self):
-        self.running = False
 
     def bottomtop(self):
         self.ball.changeydirection()
