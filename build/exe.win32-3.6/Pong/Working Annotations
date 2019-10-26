@@ -1,0 +1,24 @@
+To-Do's
+
+-> Dem Ball ein abwechslungsreicheres Bewegungsverhalten geben. Optionen:
+        - Drall einführen
+        - Drag durch y-Bewegung der Paddel hat einfluss auf Ball (Aktuell)
+        - Trapez-Hitbox
+        - x-Bewegung der Paddel
+-> Menüpunkte formulieren  ------ aktuell in Arbeit
+-> Gegner einfügen:
+        - nur noch KI einfügen
+-> Interaktives Menü schreiben, gemachte Änderungen sollten auch in irgendeiner Weise ausgegeben werden. Aktuell nur bei Enemy mode der Fall
+-> Spielmodi einführen!!
+-> Durchkommentieren
+-> Screen für Custom Theme verschönern + error message
+-> ust  wantd o test something
+------------------------------------------------------------------------------------------------------------------------
+
+
+possible game modes:
+    1 vs wall
+    paddle moves while there is no input
+    rainbow mode (theme will randomly change and cause epileptic seizures)
+    hard mode (speeds are incredibly high)
+    ball hiding for some timespans
