@@ -8,13 +8,13 @@ executables = [cx_Freeze.Executable("ALLINONE.py")]
 
 cx_Freeze.setup(
     name="Pong_clone",
-    options = {
+    options={
         "build_exe":{
-            "packages":["pygame","multitasking"],
-            "include_files": ["soundfiles","config.cfg"]
+            "packages":["pygame", "multitasking"],
+            "include_files": ["soundfiles", "config.cfg"]
         }
     },
-    executables = executables
+    executables=executables
 )
 
 

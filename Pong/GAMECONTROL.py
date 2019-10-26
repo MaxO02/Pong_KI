@@ -109,7 +109,6 @@ class GAMECONTROL:
                 self.inputMap[2] = pressed_keys[K_s]  # left player: move down
                 self.inputMap[3] = pressed_keys[K_w]  # left player: move up
             if event.type == pygame.QUIT:  # in case one wants to close the window
-                self.bc.stopall()
                 exit()  # exit pygame and therefore close the window
 
     def eventsmenu(self) -> None:
@@ -134,7 +133,6 @@ class GAMECONTROL:
                     elif self.focus[4]:
                         self.info()  # will enter the github readme file
                     elif self.focus[5]:
-                        self.bc.stopall()
                         exit()  # will close the game
                     elif self.focus[0]:
                         self.resetscore()  # will reset the score
