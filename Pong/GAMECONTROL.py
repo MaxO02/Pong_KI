@@ -7,15 +7,16 @@ from Pong.SOUNDS import SOUNDS
 from Pong.BOUNCECONTROL import BOUNCECONTROL
 import webbrowser
 import random
-import configparser
+from configparser import ConfigParser
 
 # reading the config
-config = configparser.ConfigParser()
-config.read("config.cfg")
+config = ConfigParser()
+config.read("Pong/config.cfg")
 
 
 class GAMECONTROL:
-    def __init__(self, resolution=(int(config.get("Settings", "reswidth")), int(config.get("Settings", "reslength"))), gm=config.get("Settings", "gamemode"), score=(0, 0)) -> None:
+    def __init__(self, resolution=(int(config.get('Settings', 'reswidth')), int(config.get('Settings', 'reslength'))),
+                 gm=config.get('Settings', 'gamemode'), score=(0, 0)) -> None:
         """defines important variables: height and width of the screen, arrays for the event-handling, gamemode, score
         defines objects of other classes: game's clock, paddles, ball, window
         initiates pygame and the menu"""
@@ -56,6 +57,7 @@ class GAMECONTROL:
         pygame.init()  # initiates pygame
         # starts the annoying music in the background
         SOUNDS.backgroundmusicqueue(self.backgroundmusic)
+
         self.mainmenu()  # shows the menu screen
 
     def matchstart(self) -> None:
@@ -141,7 +143,7 @@ class GAMECONTROL:
                         self.mainmenu()  # back to main menu
                     elif self.focus[1]:
                         config['Settings']['gamemode'] = self.enemymode = "1v1" if self.enemymode != "1v1" else "1v0"  # switch the enemymode
-                        with open('config.cfg', 'w') as configfile:  # opens the config file
+                        with open('Pong/config.cfg', 'w') as configfile:  # opens the config file
                             config.write(configfile)  # writes to the file
                     elif self.focus[2]:
                         self.resmenu()  # here you can switch the screen's resolution
@@ -151,7 +153,7 @@ class GAMECONTROL:
                         self.backgroundmusic = not self.backgroundmusic
                         config['Settings']['bgmusic'] = "True" if self.backgroundmusic else "False"
                         SOUNDS.backgroundmusicqueue(self.backgroundmusic)
-                        with open('config.cfg', 'w') as configfile:  # opens the config file
+                        with open('Pong/config.cfg', 'w') as configfile:  # opens the config file
                             config.write(configfile)  # writes to the file
                 elif self.screen == "resmenu":
                     if self.focus[0]:
@@ -195,7 +197,7 @@ class GAMECONTROL:
                             self.spf.changeresolution(newres)
                             config['Settings']["reswidth"] = res[0]  # saves the width to the config
                             config['Settings']['reslength'] = res[1]  # saves the length to the config
-                            with open('config.cfg', 'w') as configfile:  # opens the config file
+                            with open('pong/config.cfg', 'w') as configfile:  # opens the config file
                                 config.write(configfile)  # writes to the file
                         except Exception as e:
                             print(e)
